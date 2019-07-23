@@ -3,10 +3,10 @@ import xmlrpc.client
 import csv
 import os
 
-url = "http://localhost:8069"
-db = "luck_test1"
+url = "http://197.51.64.243"
+db = "Lucky_Live_Master_Data"
 username = 'admin'
-password = 'iti'
+password = 'Access@2019'
 
 # Authenticate admin user
 common = xmlrpc.client.ServerProxy('{}/xmlrpc/2/common'.format(url))
@@ -27,7 +27,7 @@ def create_category(name, parent_id=False):
 categories = {}
 missed = []
 # Load csv file
-with open('products.csv') as csv_file:
+with open('All_Products.csv') as csv_file:
     reader = csv.reader(csv_file)
     for i, row in enumerate(reader):
         if i == 0:
@@ -48,7 +48,7 @@ with open('products.csv') as csv_file:
             categories[level3_full_name] = create_category(level3.strip(), categories[level2_full_name])
         image = ""
         if row[8].lower().endswith("jpg"):
-            path = "/home/abdulrahman/Downloads/pictures/Pictures/Sec {}/{}".format(row[8][:2], row[8].lower())
+            path = "Pictures/Sec {}/{}".format(row[8][:2], row[8].lower())
             if os.path.isfile(path):
                 with open(path, 'rb') as f:
                     image = f.read()

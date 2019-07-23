@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_lucky_vessel,lucky.vessel,model_lucky_vessel,base.group_user,1,1,1,1
+access_lucky_airway,lucky.airway,model_lucky_airway,base.group_user,1,1,1,1
+access_lucky_parcel,lucky.parcel,model_lucky_parcel,base.group_user,1,1,1,1
+access_lucky_crew,lucky.crew,model_lucky_crew,base.group_user,1,1,1,1
+access_lucky_service,lucky.service,model_lucky_service,base.group_user,1,1,1,1
+access_lucky_parcel_config,lucky.parcel.config,model_lucky_parcel_config,base.group_user,1,1,1,1
+access_lucky_crew_config,lucky.crew.config,model_lucky_crew_config,base.group_user,1,1,1,1
+access_lucky_service_config,lucky.service.config,model_lucky_service_config,base.group_user,1,1,1,1
+access_lucky_port,lucky.port,model_lucky_port,base.group_user,1,1,1,1
+access_sale_order_batch,sale.order.batch,model_sale_order_batch,base.group_user,1,1,1,0

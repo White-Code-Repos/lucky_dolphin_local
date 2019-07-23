@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="lucky_order_batch_tree" model="ir.ui.view">
+            <field name="name">Lucky Order Batch tree view</field>
+            <field name="model">sale.order.batch</field>
+            <field name="arch" type="xml">
+                <tree create="0" editable="top">
+                    <field name="name"/>
+                    <!--<field name="partner_id"/>-->
+                    <field name="vessel_id"/>
+                    <field name="arrival_port_id"/>
+                    <field name="delivery_port_id"/>
+                    <field name="vessel_agent_id"/>
+                    <field name="eta"/>
+                    <field name="commit_delivery_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="operation_tree" model="ir.ui.view">
+            <field name="name">Operatrion tree view</field>
+            <field name="model">sale.order.batch</field>
+            <field name="inherit_id" ref="lucky_order_batch_tree"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="editable"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="operation_form" model="ir.ui.view">
+            <field name="name">Operatrion form view</field>
+            <field name="model">sale.order.batch</field>
+            <field name="arch" type="xml">
+                <form create="0" edit="0">
+                    <sheet>
+                        <group string="Main Data">
+                            <group>
+                                <field name="name"/>
+                                <!--<field name="partner_id"/>-->
+                                <field name="vessel_id"/>
+                                <field name="vessel_agent_id"/>
+                            </group>
+                            <group>
+                                <field name="delivery_port_id"/>
+                                <field name="arrival_port_id"/>
+                                <field name="eta"/>
+                                <field name="commit_delivery_date"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Parcels">
+                                <field name="parcels_in"/>
+                                <field name="parcels_out"/>
+                            </group>
+                            <group string="Crew">
+                                <field name="crew_in"/>
+                                <field name="crew_out"/>
+                            </group>
+                        </group>
+                        <group string="Repair">
+                            <field name="is_repair"/>
+                        </group>
+                        <group string="Warehouse Products">
+                            <field name="wh_summary"/>
+                        </group>
+                        <group string="Drop shipping Products">
+                            <field name="drop_ship_summary"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_operation" model="ir.actions.act_window">
+            <field name="name">Operation</field>
+            <field name="res_model">sale.order.batch</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', '!=', 'done')]</field>
+        </record>
+
+        <record id="action_operation_view_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="operation_tree"/>
+            <field name="act_window_id" ref="action_operation"/>
+        </record>
+
+
+        <record id="action_navigation" model="ir.actions.act_window">
+            <field name="name">Navigation</field>
+            <field name="res_model">sale.order.batch</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[('state', '!=', 'done')]</field>
+        </record>
+
+        <menuitem id="menu_operation_root" name="Operation" groups="base.group_user"
+                  web_icon="lucky_sales,static/description/parcel.png"/>
+        <menuitem parent="menu_operation_root" id="menu_eta"
+                  action="action_navigation" name="ETA Update" sequence="1"/>
+
+        <menuitem parent="menu_operation_root" id="menu_operation"
+                  action="action_operation" name="Operation" sequence="1"/>
+    </data>
+</odoo>

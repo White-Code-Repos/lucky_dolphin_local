@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <report id="sale_order_xls_report"
+                model="sale.order" report_type="xlsx"
+                string="Quotation / Order XLS"
+                name="lucky_sale_reports.sale_order_xls_report"
+                file="lucky_sale_reports.sale_order_xls_report"
+                attachment_use="False"
+                menu="True"/>
+    </data>
+</odoo>

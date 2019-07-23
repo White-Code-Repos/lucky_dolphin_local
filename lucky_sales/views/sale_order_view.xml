@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="lucky_view_order_form" model="ir.ui.view">
+            <field name="name">Lucky Sale form view</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="vessel_id"/>
+                    <field name="vessel_agent_id" domain="[('company_type', '=', 'company')]"/>
+                    <field name="arrival_port_id"/>
+                    <field name="delivery_port_id"/>
+                </xpath>
+
+                <xpath expr="//field[@name='validity_date']" position="after">
+                    <field name="eta"/>
+                    <field name="commit_delivery_date"/>
+                    <field name="batch_id" attrs="{'invisible': [('batch_id', '=', False)]}"/>
+                    <field name="order_internal_type" readonly="True"/>
+                    <field name="parcel_type" attrs="{'invisible': [('order_internal_type', '!=', 'parcel')]}"/>
+                    <field name="service_type" attrs="{'invisible': [('order_internal_type', '!=', 'service')]}"/>
+                    <field name="crew_type" attrs="{'invisible': [('order_internal_type', '!=', 'crew_ch')]}"/>
+                    <field name="client_order_ref"/>
+                </xpath>
+
+                <xpath expr="//page[1]" position="before">
+                    <page string="Parcels" attrs="{'invisible': [('order_internal_type', '!=', 'parcel')]}">
+                        <button type="object" name="create_parcel_order_lines" string="Convert to Order Lines"/>
+                        <field name="parcel_ids">
+                            <tree editable="bottom">
+                                <field name="bill_no"/>
+                                <field name="airway_id"/>
+                                <field name="customs_site"/>
+                                <field name="weight"/>
+                                <field name="pieces_no"/>
+                                <field name="flight_no"/>
+                                <field name="flight_date"/>
+                                <field name="vendor_id"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Crew" attrs="{'invisible': [('order_internal_type', '!=', 'crew_ch')]}">
+                        <button type="object" name="create_crew_order_lines" string="Convert to Order Lines"/>
+                        <field name="crew_ids">
+                            <tree editable="bottom">
+                                <field name="crew_name"/>
+                                <field name="nationality"/>
+                                <field name="ticket_no"/>
+                                <field name="passport"/>
+                                <field name="airway_id"/>
+                                <field name="flight_no"/>
+                                <field name="flight_date"/>
+                                <field name="vendor_id"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Service" attrs="{'invisible': [('order_internal_type', '!=', 'service')]}">
+                        <button type="object" name="create_service_order_lines" string="Convert to Order Lines"/>
+                        <field name="service_ids">
+                            <tree editable="bottom">
+                                <field name="report"/>
+                                <field name="vendor_id"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>
+

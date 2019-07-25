@@ -7,7 +7,7 @@ class SaleOrderInherit(models.Model):
 
     batch_id = fields.Many2one("sale.order.batch", string="Operation#")
     vessel_agent_id = fields.Many2one("res.partner")
-    vessel_id = fields.Many2one("lucky.vessel")
+    vessel_id = fields.Many2one("res.partner", string="Vessel", domain="[('is_vessel', '=', True)]")
     arrival_port_id = fields.Many2one("lucky.port")
     delivery_port_id = fields.Many2one("lucky.port")
     order_internal_type = fields.Selection(ORDER_TYPES, default="normal")

@@ -70,7 +70,7 @@ class SaleOrderBatch(models.Model):
     name = fields.Char(default=lambda s: s.env['ir.sequence'].next_by_code('sale.order.batch'),
                        readonly=True, string="Operation#")
     partner_id = fields.Many2one('res.partner', readonly=True)
-    vessel_id = fields.Many2one("lucky.vessel", readonly=True)
+    vessel_id = fields.Many2one("res.partner", readonly=True)
     vessel_agent_id = fields.Many2one("res.partner")
     arrival_port_id = fields.Many2one("lucky.port")
     delivery_port_id = fields.Many2one("lucky.port")

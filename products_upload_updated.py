@@ -29,11 +29,11 @@ missed = []
 # Load csv file
 with open('All_Products.csv') as csv_file:
     reader = csv.reader(csv_file)
-    for i, row in enumerate(reader):
+    for i, col in enumerate(reader):
         if i == 0:
             continue
         print("Creating product: ", i, end=" ... ")
-        level1, level2, level3 = row[:3]
+        level1, level2, level3 = col[:3]
 
         level1_full_name = level1.strip()
         if level1 not in categories:
@@ -47,22 +47,25 @@ with open('All_Products.csv') as csv_file:
         if level3_full_name not in categories:
             categories[level3_full_name] = create_category(level3.strip(), categories[level2_full_name])
         image = ""
-        if row[8].lower().endswith("jpg"):
-            path = "Pictures/Sec {}/{}".format(row[8][:2], row[8].lower())
+        if col[8].lower().endswith("jpg"):
+            path = "Pictures/Sec {}/{}".format(col[8][:2], col[8].lower())
             if os.path.isfile(path):
                 with open(path, 'rb') as f:
                     image = f.read()
                     image = base64.encodebytes(image).decode()
             else:
-                print("Failed to find : ", row[8])
-                missed.append(row[8])
+                print("Failed to find : ", col[8])
+                missed.append(col[8])
         data = {
+            'id' : col[3]
             'categ_id': categories[level3_full_name],
-            'default_code': row[3],
-            'name': row[4],
-            'description': row[7],
-            'description_sale': row[7],
-            'description_purchase': row[7],
+            'default_code': col[3],
+            'name': col[4],
+            'description': col[7],
+            'description_sale': col[7],
+            'description_purchase': col[7],
+            'uom_id': col[5],
+            'uom_po_id': col[6],
             'image': image,
             'type': 'product'
         }

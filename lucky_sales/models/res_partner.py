@@ -9,3 +9,4 @@ class ResPartnerInherit(models.Model):
     partner_id = fields.Many2one('res.partner', string='Partner')
     partner_ids = fields.One2many('res.partner','partner_id',string='Vessel Agents')
     code = fields.Char(string='Code')
+    code_2 = fields.Char(string='Code')

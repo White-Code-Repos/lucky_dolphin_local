@@ -14,6 +14,7 @@
                     <field name="partner_ids">
                         <tree editable="bottom">
                             <field name="partner_id" domain="[('is_vessel', '=', False)]"/>
+                            <field name="code_2" string="Name"/>
                         </tree>
                     </field>
                 </page>

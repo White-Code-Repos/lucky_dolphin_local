@@ -48,7 +48,7 @@ with open('IMPA7_MTMLUoM_updated_1901.csv') as csv_file:
             categories[level3_full_name] = create_category(level3.strip(), categories[level2_full_name])
         image = ""
         if col[8].lower().endswith("jpg"):
-            path = "Pictures/Sec {}/{}".format(col[8][:2], col[8].lower())
+            path = "/opt/Pictures/Sec {}/{}".format(col[8][:2], col[8].lower())
             if os.path.isfile(path):
                 with open(path, 'rb') as f:
                     image = f.read()

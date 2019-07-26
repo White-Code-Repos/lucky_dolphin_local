@@ -32,12 +32,22 @@
                     <field name="code"/>
                 </group>
             </xpath>
-            <xpath expr="//field[@name='mobile']" position="after">
-                <field name="phone_2"/>
-                <field name="phone_3"/>
+            <xpath expr="//field[@name='phone']" position="after">
+                <field name="phone2"/>
+                <field name="phone3"/>
+                <field name="phone4"/>
+                <group>
                 <field name="fax_number" string="Fax Number"/>
                 <field name='port' string="Port"/>
+                </group>
             </xpath>
+             <xpath expr="//field[@name='mobile']" position="after">
+                <group>
+                <field name="fax_number" string="Fax Number"/>
+                <field name='port' string="Port"/>
+                </group>
+            </xpath>
+
         </field>
     </record>
 </data>

@@ -47,21 +47,21 @@ with open('IMPA7_MTMLUoM_updated_1901.csv') as csv_file:
         if level3_full_name not in categories:
             categories[level3_full_name] = create_category(level3.strip(), categories[level2_full_name])
         image = ""
-        if col[8].lower().endswith("jpg"):
-            path = "Pictures/Sec {}/{}".format(col[8][:2], col[8].lower())
+        if col[9].lower().endswith("jpg"):
+            path = "Pictures/Sec {}/{}".format(col[9][:2], col[9].lower())
             if os.path.isfile(path):
                 with open(path, 'rb') as f:
                     image = f.read()
                     image = base64.encodebytes(image).decode()
             else:
-                print("Failed to find : ", col[8])
-                missed.append(col[8])
+                print("Failed to find : ", col[9])
+                missed.append(col[9])
         data = {
             'id' : col[3],
             'categ_id': categories[level3_full_name],
             'default_code': col[3],
             'name': col[4],
-            'description': col[7],
+            'description': col[8],
             'description_sale': col[4],
             'description_purchase': col[4],
             'uom_id': col[6],
@@ -73,4 +73,4 @@ with open('IMPA7_MTMLUoM_updated_1901.csv') as csv_file:
         }
         product_id = models.execute_kw(db, uid, password, 'product.template', 'create', [data])
         print("created with id: ", product_id)
-        print("Successful By Mostafa Abd El Fattah :)")
+        print("----------------------------------------")

@@ -4,7 +4,7 @@ import csv
 import os
 
 url = "http://197.51.64.243"
-db = "Lucky_Live_Master_Data"
+db = "Lucky_Live"
 username = 'admin'
 password = 'Access@2019'
 
@@ -27,7 +27,7 @@ def create_category(name, parent_id=False):
 categories = {}
 missed = []
 # Load csv file
-with open('All_Products.csv') as csv_file:
+with open('IMPA7_MTMLUoM_updated_1901.csv') as csv_file:
     reader = csv.reader(csv_file)
     for i, col in enumerate(reader):
         if i == 0:
@@ -67,8 +67,10 @@ with open('All_Products.csv') as csv_file:
             'uom_id': col[5],
             'uom_po_id': col[6],
             'image': image,
+            'taxes_id': '',
+            'supplier_taxes_id': '',
             'type': 'product'
         }
         product_id = models.execute_kw(db, uid, password, 'product.template', 'create', [data])
         print("created with id: ", product_id)
-
+        print("Successful By Mostafa Abd El Fattah :)")

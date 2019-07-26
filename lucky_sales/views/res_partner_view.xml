@@ -8,6 +8,7 @@
         <field name="arch" type="xml">
             <xpath expr="//page[@name='sales_purchases']/group/group[@name='purchase']/field[@name='supplier']" position="after">
                 <field name="is_vessel"/>
+                <field name="is_agent"/>
             </xpath>
             <xpath expr="//page[@name='accounting_disabled']" position="after">
                 <page name='vessel_agents' string='Vessel Agents' attrs="{'invisible': [('is_vessel', '=', False)]}">

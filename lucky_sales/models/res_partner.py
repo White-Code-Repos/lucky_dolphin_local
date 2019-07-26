@@ -10,3 +10,4 @@ class ResPartnerInherit(models.Model):
     partner_ids = fields.One2many('res.partner','partner_id',string='Vessel Agents')
     code = fields.Char(string='Code')
     code_2 = fields.Char(string='Code')
+    is_Agent = fields.Boolean(string="Is Agent")

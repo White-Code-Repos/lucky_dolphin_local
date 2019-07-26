@@ -11,3 +11,7 @@ class ResPartnerInherit(models.Model):
     code = fields.Char(string='Code')
     code_2 = fields.Char(string='Code')
     is_agent = fields.Boolean(string="Is Agent")
+    fax_number = fields.Char(string='Fax Number')
+    phone_2 = fields.Char(string="Phone 2")
+    phone_3 = fields.Char(string="Phone 3")
+    port = fields.Char(string="Port")

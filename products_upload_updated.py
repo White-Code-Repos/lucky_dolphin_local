@@ -57,7 +57,7 @@ with open('IMPA7_MTMLUoM_updated_1901.csv') as csv_file:
                 print("Failed to find : ", col[8])
                 missed.append(col[8])
         data = {
-            'id' : col[3]
+            'id' : col[3],
             'categ_id': categories[level3_full_name],
             'default_code': col[3],
             'name': col[4],

@@ -7,6 +7,7 @@
         <field name="inherit_id" ref="base.view_partner_form" />
         <field name="arch" type="xml">
             <xpath expr="//page[@name='sales_purchases']/group/group[@name='purchase']/field[@name='supplier']" position="after">
+                <field name="is_courier"/>
                 <field name="is_vessel"/>
                 <field name="is_agent"/>
             </xpath>
@@ -41,7 +42,10 @@
                 <field name="fax_number" string="Fax Number"/>
                 <field name='port' string="Port"/>
             </xpath>
-
+            <xpath expr="//field[@name='vat']" position="after">
+                <field name="egypt_port_id"/>
+                <field name="customs_site"/>
+            </xpath>
         </field>
     </record>
 </data>

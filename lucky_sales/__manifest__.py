@@ -11,5 +11,6 @@
         'views/purchase_order_view.xml',
         'views/sale_order_batch_view.xml',
         'views/res_partner_view.xml',
+        'views/egypt_ports_view.xml'
     ]
 }

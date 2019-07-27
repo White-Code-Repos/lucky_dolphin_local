@@ -1,7 +1,7 @@
 {
     'name': 'Product Alternatives',
-    'author': 'Abdulrahman Hamdy',
-    'website': 'https://www.linkedin.com/in/arahmanhamdy/',
+    'author': 'Mostafa Abd El Fattah',
+    'website': 'https://www.linkedin.com/in/mabdelfattah/',
     'sequence': 1,
     'depends': ['sale_stock'],
     'data': [

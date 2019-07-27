@@ -76,3 +76,9 @@ class ServiceConfig(models.Model):
         if not service_config:
             raise UserError('No crew configurations found for Service Type: {}'.format(service_type))
         return service_config[0]
+
+class DeliveryCarrier(models.Model):
+    _inherit = 'delivery.carrier'
+
+    port_id = fields.Many2one('egypt.ports')
+    currency_id = fields.Many2one('res.currency')

@@ -13,7 +13,9 @@ class ProductInherit(models.Model):
     _inherit = 'product.product'
 
     alternative_ids = fields.One2many("product.alternative.line", "product_id")
-
+    price1 = fields.Char(string="Price 1")
+    price2 = fields.Char(string="Price 2")
+    price3 = fields.Char(string="Price 3")
     @api.multi
     @api.constrains('alternative_ids')
     def _check_alternatives(self):

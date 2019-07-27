@@ -6,6 +6,13 @@
             <field name="model">product.product</field>
             <field name="inherit_id" ref="product.product_normal_form_view"/>
             <field name="arch" type="xml">
+                <xpath expr="//field[@name='item_ids']">
+                <group>
+                    <field name="price1"/>
+                    <field name="price2"/>
+                    <field name="price3"/>
+                </group>
+                </xpath>
                 <xpath expr="//page[last()]" position="after">
                     <page string="Alternatives">
                         <field name="alternative_ids">

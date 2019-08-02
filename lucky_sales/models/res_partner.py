@@ -19,3 +19,6 @@ class ResPartnerInherit(models.Model):
     egypt_port_id = fields.Many2one('egypt.ports',string='Egypt Port')
     is_courier = fields.Boolean(string='Is Courier')
     customs_site = fields.Char(string='Customs Site')
+    response_time = fields.Char(string='Response Time')
+    price_computation = fields.Char(string='Price Computation')
+    quality_of_service = fields.Char(string='Quality of Service')

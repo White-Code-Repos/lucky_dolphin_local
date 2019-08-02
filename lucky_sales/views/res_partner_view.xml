@@ -45,6 +45,9 @@
             <xpath expr="//field[@name='vat']" position="after">
                 <field name="egypt_port_id"/>
                 <field name="customs_site"/>
+                <field name="response_time" attrs="{'invisible': [('supplier', '!=', True)]}"/>
+                <field name="price_computation" attrs="{'invisible': [('supplier', '!=', True)]}"/>
+                <field name="quality_of_service" attrs="{'invisible': [('supplier', '!=', True)]}"/>
             </xpath>
         </field>
     </record>

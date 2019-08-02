@@ -1,5 +1,5 @@
-from odoo import models, fields
-
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
 
 class ResPartnerInherit(models.Model):
     _inherit = "res.partner"
@@ -22,3 +22,17 @@ class ResPartnerInherit(models.Model):
     response_time = fields.Char(string='Response Time')
     price_computation = fields.Char(string='Price Computation')
     quality_of_service = fields.Char(string='Quality of Service')
+
+    @api.model
+    def create(self, vals):
+        if vals.get('supplier', False):
+            if not (self.user_has_groups('purchase.group_purchase_manager') or self.user_has_groups('purchase.group_purchase_manager')):
+                raise UserError(_("You are not allowed to add a vendor, only purchase team can add vendors."))
+        return super(ResPartnerInherit, self).create(vals)
+
+    @api.multi
+    def write(self, vals):
+        if vals.get('supplier', False):
+            if not (self.user_has_groups('purchase.group_purchase_manager') or self.user_has_groups('purchase.group_purchase_manager')):
+                raise UserError(_("You are not allowed to add a vendor, only purchase team can add vendors."))
+        return super(ResPartnerInherit, self).write(vals)

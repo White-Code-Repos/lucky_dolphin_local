@@ -26,13 +26,13 @@ class ResPartnerInherit(models.Model):
     @api.model
     def create(self, vals):
         if vals.get('supplier', False):
-            if not (self.user_has_groups('purchase.group_purchase_manager') or self.user_has_groups('purchase.group_purchase_manager')):
+            if not (self.user_has_groups('purchase.group_purchase_manager') or self.user_has_groups('purchase.group_purchase_user')):
                 raise UserError(_("You are not allowed to add a vendor, only purchase team can add vendors."))
         return super(ResPartnerInherit, self).create(vals)
 
     @api.multi
     def write(self, vals):
         if vals.get('supplier', False):
-            if not (self.user_has_groups('purchase.group_purchase_manager') or self.user_has_groups('purchase.group_purchase_manager')):
+            if not (self.user_has_groups('purchase.group_purchase_manager') or self.user_has_groups('purchase.group_purchase_user')):
                 raise UserError(_("You are not allowed to add a vendor, only purchase team can add vendors."))
         return super(ResPartnerInherit, self).write(vals)

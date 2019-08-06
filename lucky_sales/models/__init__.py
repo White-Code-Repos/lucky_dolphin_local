@@ -31,3 +31,4 @@ from . import sale_order
 from . import sale_order_batch
 from . import purchase_order
 from . import egypt_ports
+from . import account_invoice

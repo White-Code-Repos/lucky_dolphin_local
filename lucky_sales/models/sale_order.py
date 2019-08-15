@@ -8,8 +8,8 @@ class SaleOrderInherit(models.Model):
     batch_id = fields.Many2one("sale.order.batch", string="Operation#")
     vessel_agent_id = fields.Many2one("res.partner")
     vessel_id = fields.Many2one("res.partner", string="Vessel", domain="[('is_vessel', '=', True)]")
-    arrival_port_id = fields.Many2one("lucky.port")
-    delivery_port_id = fields.Many2one("lucky.port")
+    arrival_port_id = fields.Many2one("delivery.carrier")
+    delivery_port_id = fields.Many2one("delivery.carrier")
     order_internal_type = fields.Selection(ORDER_TYPES, default="normal")
     parcel_type = fields.Selection(PARCEL_ORDER_TYPES)
     crew_type = fields.Selection(CREW_ORDER_TYPES)
@@ -103,3 +103,7 @@ class SaleOrderInherit(models.Model):
                     'price_unit': service_config.sale_price,
                     'order_id': order.id,
                 })
+
+    @api.onchange('delivery_port_id')
+    def _onchange_delivery_port_id(self):
+        self.carrier_id = self.delivery_port_id.id

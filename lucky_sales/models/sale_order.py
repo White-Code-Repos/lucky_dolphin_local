@@ -93,7 +93,7 @@ class SaleOrderInherit(models.Model):
         for order in self:
             order.order_line.unlink()
             for line in order.service_ids:
-                service_config = self.env['lucky.service.config'].get_service_config(order.parcel_type)
+                service_config = self.env['lucky.service.config'].get_service_config(order.service_type)
                 # Create Sale order line for each parcel line
                 self.env['sale.order.line'].create({
                     'name': service_config.product_id.name,

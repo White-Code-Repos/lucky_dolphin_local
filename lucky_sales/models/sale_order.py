@@ -25,32 +25,37 @@ class SaleOrderInherit(models.Model):
     def create(self, vals_list):
         order = super().create(vals_list)
 
-        # link order to a previous batch or create a new one
-        batch_model = self.env['sale.order.batch']
-        batches = batch_model.search([
-            ('vessel_id', '=', order.vessel_id.id),
-            ('partner_id', '=', order.partner_id.id),
-            ('eta', '=', order.eta),
-        ])
-        if batches:
-            order.batch_id = batches[0].id
-        else:
-            new_batch = batch_model.create({
-                'vessel_id': order.vessel_id.id,
-                'vessel_agent_id': order.vessel_agent_id.id,
-                'eta': order.eta,
-                'partner_id': order.partner_id.id,
-                'delivery_port_id': order.delivery_port_id.id,
-                'arrival_port_id': order.arrival_port_id.id,
-                'commit_delivery_date': order.commit_delivery_date,
-            })
-            order.batch_id = new_batch.id
-
         # Add Parcels lines into sale order lines
         if order.order_internal_type == 'parcel':
             for parcel in order.parcel_ids:
                 pass
         return order
+
+    @api.multi
+    def _action_confirm(self):
+        res = super(SaleOrderInherit, self)._action_confirm()
+
+        # link order to a previous batch or create a new one
+        batch_model = self.env['sale.order.batch']
+        batches = batch_model.search([
+            ('vessel_id', '=', self.vessel_id.id),
+            ('partner_id', '=', self.partner_id.id),
+            ('eta', '=', self.eta),
+        ])
+        if batches:
+            self.batch_id = batches[0].id
+        else:
+            new_batch = batch_model.create({
+                'vessel_id': self.vessel_id.id,
+                'vessel_agent_id': self.vessel_agent_id.id,
+                'eta': self.eta,
+                'partner_id': self.partner_id.id,
+                'delivery_port_id': self.delivery_port_id.id,
+                'arrival_port_id': self.arrival_port_id.id,
+                'commit_delivery_date': self.commit_delivery_date,
+            })
+            self.batch_id = new_batch.id
+        return res
 
     @api.onchange("eta")
     def change_commit_date(self):

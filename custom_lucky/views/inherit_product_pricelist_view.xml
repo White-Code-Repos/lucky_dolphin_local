@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+   <record id="view_product_pricelist_item_lucky_inherit" model="ir.ui.view">
+        <field name="name">product.pricelist</field>
+        <field name="model">product.pricelist.item</field>
+        <field name="inherit_id" ref="product.product_pricelist_item_form_view"/>
+        <field name="arch" type="xml">
+	    <field name="base" position='after'>
+	        <field name="last_po_to_market"  attrs="{'invisible':[('base', 'in', ['list_price','standard_price','pricelist'])]}"/>
+		<field name="req_to_min" attrs="{'invisible':[('base', 'in', ['list_price','standard_price','pricelist'])]}"/>
+		<field name="min_to_available" attrs="{'invisible':[('base', 'in', ['list_price','standard_price','pricelist'])]}"/>
+	     </field>
+              <!--<xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="before">
+		<field name="price_state"/>
+	    </xpath>-->
+        </field>
+    </record>
+
+</odoo>

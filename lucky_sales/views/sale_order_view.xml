@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='partner_id']" position="after">
                     <field name="vessel_id"/>
-                    <field name="vessel_agent_id" domain="[('company_type', '=', 'company'), ('is_vessel', '=', False)]"/>
+                    <field name="vessel_agent_id" domain="[ ('is_vessel', '=', False)]"/>
                     <field name="arrival_port_id"/>
                     <field name="delivery_port_id"/>
                 </xpath>

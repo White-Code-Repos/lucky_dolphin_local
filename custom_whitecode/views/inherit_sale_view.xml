@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_sale_order_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.sale.image</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="note" position="after">
+		<field name="before_fixed_price" />
+		<!--<field name="after_fixed_price" placeholder="After Fixed PriceComment..."/>-->
+                <field name="comment" placeholder="Comment..."/>
+		<div class="oe_clear"/>
+            </field>
+             <xpath expr="//field[@name='order_line']/tree" position="replace">
+ 		      <tree string="Sales Order Lines" editable="bottom" decoration-info="(not display_type and invoice_status == 'to invoice')" colors="red:product_speed_state == 'dead_product'; yellow:product_speed_state == 'slow_product'">
+                                    <control>
+                                        <create string="Add a product"/>
+                                        <create string="Configure a product" context="{'open_product_configurator': True}" groups="product.group_product_variant"/>
+                                        <create string="Add a section" context="{'default_display_type': 'line_section'}"/>
+                                        <create string="Add a note" context="{'default_display_type': 'line_note'}"/>
+                                    </control>
+
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="display_type" invisible="1"/>
+
+                                    <field name="product_updatable" invisible="1"/>
+                                    <field name="product_id"  attrs="{                                             'readonly': [('product_updatable', '=', False)],                                             'required': [('display_type', '=', False)],                                         }" force_save="1" context="{                                             'partner_id': parent.partner_id,                                             'quantity': product_uom_qty,                                             'pricelist': parent.pricelist_id,                                             'uom':product_uom,                                             'company_id': parent.company_id,                                             'default_lst_price': price_unit,                                             'default_description_sale': name                                         }"
+
+	
+/>
+                                    <field name="product_custom_attribute_value_ids" invisible="1"/>
+                                    <field name="product_no_variant_attribute_value_ids" invisible="1"/>
+                                    <field name="name" widget="section_and_note_text"/>
+                                    <field name="product_uom_qty" string="Ordered Qty" context="{                                             'partner_id': parent.partner_id,                                             'quantity': product_uom_qty,                                             'pricelist': parent.pricelist_id,                                             'uom': product_uom,                                             'company_id': parent.company_id                                         }"/>
+                                    <field name="qty_delivered" attrs="{                                             'column_invisible': [('parent.state', 'not in', ['sale', 'done'])],                                             'readonly': [('qty_delivered_method', '!=', 'manual')]                                         }"/>
+                                    <field name="qty_delivered_manual" invisible="1"/>
+                                    <field name="qty_delivered_method" invisible="1"/>
+                                    <field name="qty_invoiced" attrs="{'column_invisible': [('parent.state', 'not in', ['sale', 'done'])]}"/>
+                                    <field name="qty_to_invoice" invisible="1"/>
+                                    <field name="product_uom" force_save="1" attrs="{                                             'readonly': [('state', 'in', ('sale','done', 'cancel'))],                                             'required': [('display_type', '=', False)],                                         }" context="{'company_id': parent.company_id}" groups="uom.group_uom" options="{&quot;no_open&quot;: True}"/>
+                                    <field name="analytic_tag_ids" groups="analytic.group_analytic_tags" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                    <field name="price_unit" attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
+                                    <field name="price_state"/>
+                                    <field name="tax_id" widget="many2many_tags" options="{'no_create': True}" domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id)]" attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
+                                    <field name="discount" groups="sale.group_discount_per_so_line"/>
+                                    <field name="price_subtotal" widget="monetary" groups="account.group_show_line_subtotals_tax_excluded"/>
+                                    <field name="price_total" widget="monetary" groups="account.group_show_line_subtotals_tax_included"/>
+                                    <field name="state" invisible="1"/>
+                                    <field name="invoice_status" invisible="1"/>
+                                    <field name="customer_lead" invisible="1"/>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="price_tax" invisible="1"/>
+				   <button name="get_reprice" string="Re-price"  type="object"/>
+                                </tree>
+
+                 </xpath>
+        </field>
+    </record>
+
+
+      <record id="view_sale_order_lucky_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.sale.image</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="lucky_sales.lucky_view_order_form"/>
+        <field name="arch" type="xml">
+              <field name="order_internal_type" position="after">
+		<field name="profit_margin" attrs="{'invisible': [('order_internal_type', 'in', ['normal','repair','service'])]}"/>
+	    </field>
+        </field>
+    </record>
+
+   <!-- <record id="view_sale_order_line_lucky_inherit" model="ir.ui.view">
+        <field name="name">sale.order.line</field>
+        <field name="model">sale.order.line</field>
+        <field name="inherit_id" ref="sale.sale_order_line_view_form_readonly"/>
+        <field name="arch" type="xml">
+              <field name="order_id" position="after">
+		 <field name="product_speed_state" invisible="1"/>
+	    </field>
+        </field>
+    </record>-->
+
+
+</odoo>

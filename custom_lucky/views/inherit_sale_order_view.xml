@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+   <record id="view_sale_stage_order_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.sale.image</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+	    <field name="state" position='replace'>
+	        <field name="state" widget="statusbar" statusbar_visible="draft,sent,waiting_price,sale"/>
+	     </field>
+              <!--<xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="before">
+		<field name="price_state"/>
+	    </xpath>-->
+        </field>
+    </record>
+
+    
+
+<record id="view_sale_order_line_lucky_inherit" model="ir.ui.view">
+        <field name="name">sale.order.line</field>
+        <field name="model">sale.order.line</field>
+        <field name="inherit_id" ref="sale.sale_order_line_view_form_readonly"/>
+        <field name="arch" type="xml">
+              <field name="order_id" position="after">
+		 <field name="price_state" invisible="1"/>
+	    </field>
+        </field>
+</record>
+</odoo>

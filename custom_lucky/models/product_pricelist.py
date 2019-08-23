@@ -28,4 +28,5 @@ class ProductPricelistItem(models.Model):
 
     min_price_diff =  fields.Float("Min Price Diff")
     max_price_diff = fields.Float("Max Price Diff")
-    market_type = fields.Selection([('last_po','Last Purchase Price'),('market_price','Market Price')], string='Type')
+    market_type = fields.Selection([('last_purchase_price','Last Purchase Price'),('market_price','Market Price')], string='Type')
+    factor = fields.Float(string='Factor')

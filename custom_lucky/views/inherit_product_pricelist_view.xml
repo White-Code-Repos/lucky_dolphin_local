@@ -14,6 +14,20 @@
               <!--<xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="before">
 		<field name="price_state"/>
 	    </xpath>-->
+      <field name="price_min_margin" position="attributes">
+        <attribute name="attrs">{'invisible': [('base','=','market_price')]}</attribute>
+      </field>
+      <field name="price_max_margin" position="attributes">
+        <attribute name="attrs">{'invisible': [('base','=','market_price')]}</attribute>
+      </field>
+      <!-- <field name="price_min_margin" position="after">
+      </field> -->
+      <field name="price_max_margin" position="after">
+        <field name="factor" attrs="{'invisible': [('base','!=','market_price')]}"/>
+        <field name="min_price_diff" attrs="{'invisible': [('base','!=','market_price')]}"/>
+        <field name="max_price_diff" attrs="{'invisible': [('base','!=','market_price')]}"/>
+        <field name="market_type" attrs="{'invisible': [('base','!=','market_price')]}"/>
+      </field>
         </field>
     </record>
 

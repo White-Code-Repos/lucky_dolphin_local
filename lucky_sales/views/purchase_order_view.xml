@@ -56,5 +56,8 @@
 
             </field>
         </record>
+        <record id="base.action_partner_supplier_form" model="ir.actions.act_window">
+            <field name="domain">[('supplier','=',True)]</field>
+        </record>
     </data>
 </odoo>

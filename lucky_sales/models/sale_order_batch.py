@@ -86,6 +86,17 @@ class SaleOrderBatch(models.Model):
     wh_summary = fields.Html("Warehouses Summary", compute=_get_warehouse_summary)
     drop_ship_summary = fields.Html("Drop Shipping Summary", compute=_get_warehouse_summary)
     remark = fields.Boolean('Remark')
+    parcel_awb = fields.Char('Parcel AWB',compute='_parcel_awb')
+
+
+    def _parcel_awb(self):
+        self.parcel_awb = ""
+        for sale_id in self.order_ids:
+            for parcel_awb_id in sale_id.parcel_ids:
+                self.parcel_awb += parcel_awb_id[0]['bill_no']
+                self.parcel_awb += ','
+        self.parcel_awb = self.parcel_awb[:-1] #removing last comma
+
     @api.multi
     def write(self, vals):
         super().write(vals)

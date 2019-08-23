@@ -59,6 +59,7 @@
                             <group string="Crew">
                                 <field name="crew_in"/>
                                 <field name="crew_out"/>
+                                <field name="parcel_awb" readonly="1"/>
                             </group>
                         </group>
                         <group string="Repair">
@@ -130,7 +131,7 @@
         <record id="action_operation_view_calendar" model="ir.actions.act_window.view">
             <field eval="3" name="sequence"/>
             <field name="view_mode">calendar</field>
-            <field name="view_id" ref="lucky_sales.operation_calendar"/>
+            <field name="view_id" ref="operation_calendar"/>
             <field name="act_window_id" ref="action_operation"/>
         </record>
 

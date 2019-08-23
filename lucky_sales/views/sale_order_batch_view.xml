@@ -14,6 +14,7 @@
                     <field name="vessel_agent_id"/>
                     <field name="eta"/>
                     <field name="commit_delivery_date"/>
+                    <field name="remark"/>
                 </tree>
             </field>
         </record>

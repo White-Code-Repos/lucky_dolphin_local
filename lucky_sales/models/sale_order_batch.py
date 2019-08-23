@@ -85,7 +85,7 @@ class SaleOrderBatch(models.Model):
     is_repair = fields.Boolean("Repair?", compute=_get_orders_count)
     wh_summary = fields.Html("Warehouses Summary", compute=_get_warehouse_summary)
     drop_ship_summary = fields.Html("Drop Shipping Summary", compute=_get_warehouse_summary)
-
+    remark = fields.Boolean('Remark')
     @api.multi
     def write(self, vals):
         super().write(vals)

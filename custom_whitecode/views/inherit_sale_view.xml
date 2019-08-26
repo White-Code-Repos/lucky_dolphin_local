@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-    <record id="view_sale_order_inherit" model="ir.ui.view">
+    <!--<record id="view_sale_order_inherit" model="ir.ui.view">
         <field name="name">sale.order.form.sale.image</field>
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <field name="note" position="after">
 		<field name="before_fixed_price" />
-		<!--<field name="after_fixed_price" placeholder="After Fixed PriceComment..."/>-->
                 <field name="comment" placeholder="Comment..."/>
 		<div class="oe_clear"/>
             </field>
@@ -56,7 +55,7 @@
 
                  </xpath>
         </field>
-    </record>
+    </record>-->
 
 
       <record id="view_sale_order_lucky_inherit" model="ir.ui.view">

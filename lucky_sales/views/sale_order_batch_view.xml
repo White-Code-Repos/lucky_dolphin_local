@@ -15,7 +15,6 @@
                     <field name="eta"/>
                     <field name="commit_delivery_date"/>
                     <field name="remark"/>
-                    <field name="remark_checkbox"/>
                 </tree>
             </field>
         </record>
@@ -44,7 +43,6 @@
                                 <!--<field name="partner_id"/>-->
                                 <field name="vessel_id"/>
                                 <field name="vessel_agent_id"/>
-                                <field name="remark"/>
                             </group>
                             <group>
                                 <field name="delivery_port_id"/>
@@ -57,11 +55,11 @@
                             <group string="Parcels">
                                 <field name="parcels_in"/>
                                 <field name="parcels_out"/>
-                                <field name="parcel_awb" readonly="1"/>
                             </group>
                             <group string="Crew">
                                 <field name="crew_in"/>
                                 <field name="crew_out"/>
+                                <field name="parcel_awb" readonly="1"/>
                             </group>
                         </group>
                         <group string="Repair">

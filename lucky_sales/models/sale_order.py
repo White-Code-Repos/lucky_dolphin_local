@@ -20,16 +20,8 @@ class SaleOrderInherit(models.Model):
     service_ids = fields.One2many("lucky.service", 'order_id')
     commit_delivery_date = fields.Datetime("Commitment Delivery Date")
     client_order_ref = fields.Char("INQ/PO")
-    remark_checkbox = fields.Boolean()
-    remark = fields.Text('Remark')
-
-    # remark is shown if the checkbox is checked in operation
-    @api.depends('remark_checkbox')
-    def _check_remark(self):
-        if self.batch_id:
-            self.remark_checkbox = self.batch_id.remark_checkbox
-            if self.remark_checkbox == True:
-                self.remark = self.batch_id.remark
+    remark_checkbox_saleorder = fields.Boolean(related='batch_id.remark_checkbox')
+    remark_saleorder = fields.Text('Remark',related='batch_id.remark')
 
     @api.model
     def create(self, vals_list):

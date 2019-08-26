@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+      <record id="delivery_carrier_addition" model="ir.ui.view">
+            <field name="name">Delivery Carrier Addition</field>
+            <field name="model">delivery.carrier</field>
+            <field name="inherit_id" ref="delivery.view_delivery_carrier_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='fixed_price']" position="after">
+                    <field name="currency_id" string="Currency"/>
+                    <field name="port_id" string="Port"/>
+                </xpath>
+
+            </field>
+
+        </record>
+        <record model='ir.ui.view' id='egypt_ports_tree'>
+            <field name='name'>egypt.ports.tree</field>
+            <field name='model'>egypt.ports</field>
+            <field name='arch' type='xml'>
+                <tree string='Egypt Ports'>
+                    <field name='name'/>
+                    <field name='code'/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="egypt_ports_form">
+            <field name="name">egypt.ports.form</field>
+            <field name="model">egypt.ports</field>
+            <field name="arch" type="xml">
+                <form string="Egypt Ports">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name='name'/>
+                                <field name='code'/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="egypt_ports_action" model="ir.actions.act_window">
+            <field name="name">Egypt Ports</field>
+            <field name="res_model">egypt.ports</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="egypt_ports_menu" name="Egypt Ports" parent="contacts.res_partner_menu_config" action="egypt_ports_action" sequence="5"/>
+    </data>
+</odoo>

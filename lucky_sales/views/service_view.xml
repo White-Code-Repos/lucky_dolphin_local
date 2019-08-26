@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="lucky_service_items_tree" model="ir.ui.view">
+            <field name="name">Lucky service item tree view</field>
+            <field name="model">lucky.service</field>
+            <field name="arch" type="xml">
+                <tree create="0" edit="0">
+                    <field name="name"/>
+                    <field name="report"/>
+                    <field name="service_type"/>
+                    <field name="vessel_id"/>
+                    <field name="eta"/>
+                    <field name="delivery_port_id"/>
+                    <field name="arrival_port_id"/>
+                    <field name="partner_id"/>
+                    <field name="state"/>
+                    <field name="order_id"/>
+                    <field name="vendor_id"/>
+                    <field name="purchase_order_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="lucky_service_config_tree" model="ir.ui.view">
+            <field name="name">Lucky service config tree view</field>
+            <field name="model">lucky.service.config</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="product_id"/>
+                    <field name="cost_price"/>
+                    <field name="sale_price"/>
+                    <field name="service_type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="lucky_service_config_form" model="ir.ui.view">
+            <field name="name">Lucky service config form view</field>
+            <field name="model">lucky.service.config</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="product_id"/>
+                            <field name="cost_price"/>
+                            <field name="sale_price"/>
+                            <field name="service_type"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_create_service_po" model="ir.actions.server">
+            <field name="name">Create PO</field>
+            <field name="model_id" ref="model_lucky_service"/>
+            <field name="binding_model_id" ref="model_lucky_service"/>
+            <field name="state">code</field>
+            <field name="code">action = records.create_po()</field>
+        </record>
+
+        <record id="action_service_items" model="ir.actions.act_window">
+            <field name="name">Services Items</field>
+            <field name="res_model">lucky.service</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <!--<field name="context">{'search_default_group_by_order_id':True}</field>-->
+            <!--<field name="domain">[('state', '!=', 'done')]</field>-->
+        </record>
+
+        <record id="action_service_config" model="ir.actions.act_window">
+            <field name="name">service Configurations</field>
+            <field name="res_model">lucky.service.config</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="action_service" model="ir.actions.act_window">
+            <field name="name">services Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'default_order_internal_type': 'service'}</field>
+            <field name="domain">[('order_internal_type', '=', 'service')]</field>
+        </record>
+
+        <menuitem parent="sale.sale_order_menu" id="menu_sale_service"
+                  action="action_service" name="Repair Works"/>
+
+        <menuitem parent="sale.sale_order_menu" id="menu_sale_service_items"
+                  action="action_service_items" name="Repair Items"/>
+
+        <menuitem parent="sale.menu_sale_config" id="menu_service_config"
+                  action="action_service_config" name="Repair Configurations"/>
+    </data>
+</odoo>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_package_barcode" inherit_id="stock.report_package_barcode">
+            <xpath expr="//div[@class='row o_packaging_type']" position="after">
+                <div class="row">
+                    <div class="col-6">
+                        <h3>
+                            <span t-field="o.picking_id.vessel_id.name"/>
+                        </h3>
+                        <h5>
+                            <span t-field="o.picking_id.sale_id.batch_id.name"/>
+                        </h5>
+                        <h5>Delivery#:
+                            <span t-field="o.picking_id.sale_id.name"/>
+                        </h5>
+
+                    </div>
+                    <div class="col-6">
+                        <h5>INQ/P.O.:
+                            <span t-field="o.client_order_ref"/>
+                        </h5>
+                        <h5>Delivery Port:
+                            <span t-field="o.delivery_port_id"/>
+                        </h5>
+                        <h5>Packaged By:
+                            <span t-field="o.create_uid"/>
+                        </h5>
+                    </div>
+                </div>
+                <br/>
+            </xpath>
+            <xpath expr="//thead/tr/th" position="before">
+                <th>Image</th>
+                <th>Code</th>
+            </xpath>
+            <xpath expr="//tbody/tr/td" position="before">
+                <td>
+                    <img t-attf-src="data:image/*;base64,{{l.product_id.image_small}}"/>
+                </td>
+                <td>
+                    <span t-field="l.product_id.default_code"/>
+                </td>
+            </xpath>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="product_pricelist_line_form_view" model="ir.ui.view">
+            <field name="name">product.pricelist.line.form.view</field>
+            <field name="model">product.pricelist.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" invisible="1"/>
+                                <field name="applied_on"/>
+                                <field name="categ_id"
+                                       attrs="{'invisible': [('applied_on', '!=', 'product_category')],'required': [('applied_on', '=', 'product_category')]}"/>
+                                <field name="product_id"
+                                       attrs="{'invisible': [('applied_on', '!=', 'product')],'required': [('applied_on', '=', 'product')]}"/>
+                            </group>
+                            <group>
+                                <field name="percentage_from"/>
+                                <field name="percentage_to"/>
+                                <field name="apply_sign"/>
+                                <field name="apply_percentage"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="product_pricelist_line_tree_view" model="ir.ui.view">
+            <field name="name">product.pricelist.line.tree.view</field>
+            <field name="model">product.pricelist.line</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="applied_on"/>
+                    <field name="product_id"/>
+                    <field name="categ_id"/>
+                    <field name="percentage_from"/>
+                    <field name="percentage_to"/>
+                    <field name="apply_sign"/>
+                    <field name="apply_percentage"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="product_pricelist_line_action" model="ir.actions.act_window">
+            <field name="name">Pricelist Lines</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.pricelist.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

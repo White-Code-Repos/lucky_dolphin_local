@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="product_pricelist_view_inherit" model="ir.ui.view">
+            <field name="name">product.pricelist.view.inherit</field>
+            <field name="model">product.pricelist</field>
+            <field name="inherit_id" ref="product.product_pricelist_view"/>
+            <field name="arch" type="xml">
+                <div groups="product.group_pricelist_item" position="after">
+                    <div name="pricelist_lines">
+                        <group col="4">
+                            <field name="qty_applied_on"/>
+                            <field name="updated_range"
+                                   attrs="{'invisible': [('qty_applied_on', '=', False)],'required': [('qty_applied_on', '!=', False)]}"/>
+
+                        </group>
+                        <group>
+                            <field name="product_pricelist_line_ids"
+                                   attrs="{'invisible': [('qty_applied_on', '=', False)]}"/>
+                        </group>
+                    </div>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

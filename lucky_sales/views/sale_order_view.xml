@@ -17,7 +17,8 @@
                     <field name="eta"/>
                     <field name="commit_delivery_date"/>
                     <field name="batch_id" attrs="{'invisible': [('batch_id', '=', False)]}"/>
-                    <field name="remark" attrs="{'invisible': [('batch_id', '=', False)]}" readonly="True"/>
+                    <field name="remark_checkbox" invisible="1"/>
+                    <field name="remark" attrs="{'invisible': [('remark_checkbox', '=', False)]}" readonly="1"/>
                     <field name="order_internal_type" readonly="True"/>
                     <field name="parcel_type" attrs="{'invisible': [('order_internal_type', '!=', 'parcel')]}"/>
                     <field name="service_type" attrs="{'invisible': [('order_internal_type', '!=', 'service')]}"/>

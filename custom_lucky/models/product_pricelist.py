@@ -22,7 +22,7 @@ class ProductPricelistItem(models.Model):
              'Other Pricelist : Computation of the base price based on another Pricelist.')
 
 
-    last_po_to_market = fields.Selection([('less_market','PO > Market'),('less_po','PO =< Market')], string='Last Po To Market') 
+    last_po_to_market = fields.Selection([('less_market','PO > Market'),('less_po','PO =< Market')], string='Last Po To Market',default="less_po")
     req_to_min = fields.Selection([('less_min','Requested > Minimum'),('less_req','Requested =< Minimum')], string='Requested to Minimum') 
     min_to_available = fields.Selection([('less_available','Minimum > Available'),('less_min','Minimum =< Available')], string='Minimum to Available') 
 

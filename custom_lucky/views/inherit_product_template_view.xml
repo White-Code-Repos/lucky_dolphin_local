@@ -12,7 +12,7 @@
             <field name="list_price" position="after">
 		<field name="market_price" />
                 <field name="last_purchase_price" />
-		<field name="min_qty" />
+		<field name="min_qty" string="Safety Stock" />
 		<field name="price_diff" />
             </field>
 	   

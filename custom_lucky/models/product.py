@@ -10,25 +10,27 @@ from odoo.exceptions import UserError, ValidationError
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
-
     
     def _get_product_speed_state(self):
         for product in self:
-            today = fields.Date.today() 
-            before_365_date = today - timedelta(days=365)
-            before_90_date = today - timedelta(days=90)
+            today = fields.Date.today()
+            dead_days = self.env['ir.config_parameter'].sudo().get_param('dead_product_days')
+            slow_days = self.env['ir.config_parameter'].sudo().get_param('slow_product_days')
+            before_365_date = today - timedelta(days=float(dead_days))
+            before_90_date = today - timedelta(days=float(slow_days))
             convert_before_datetime = datetime.strptime(before_365_date.strftime('%Y-%m-%d'), '%Y-%m-%d')
             convert_90_datetime =  datetime.strptime(before_90_date.strftime('%Y-%m-%d'), '%Y-%m-%d')
             today_datetime = fields.datetime.now()
             product_ids = self.env['product.product'].search([('product_tmpl_id','=',product.id )])
             if product_ids:
-                stock_365_move_ids = self.env['stock.move'].search([('product_id','=',product_ids[0].id),('date','>=',convert_before_datetime),('date','<=',today_datetime)])
-                stock_90_move_ids = self.env['stock.move'].search([('product_id','=',product_ids[0].id),('date','>=',convert_before_datetime),('date','<=',convert_90_datetime)])
-                if not stock_90_move_ids:
-                    product.product_speed_state = 'slow_product'
+                stock_365_move_ids = self.env['stock.move'].search([('product_id','=',product_ids[0].id),('date','>=',convert_before_datetime),('date','<=',today_datetime),('state','=','done')])
+                stock_90_move_ids = self.env['stock.move'].search([('product_id','=',product_ids[0].id),('date','>=',convert_90_datetime),('date','<=',today_datetime),('state','=','done')])
+                bet_365_to_90_move_ids = self.env['stock.move'].search([('product_id','=',product_ids[0].id),('date','>=',convert_before_datetime),('date','<=',convert_90_datetime),('state','=','done')])
                 if not stock_365_move_ids:
                     product.product_speed_state = 'dead_product'
-                if stock_365_move_ids or stock_90_move_ids:
+                if not stock_90_move_ids and  bet_365_to_90_move_ids :
+                    product.product_speed_state = 'slow_product'
+                if stock_365_move_ids and stock_90_move_ids:
                     product.product_speed_state = 'fast_product'
         return 
  

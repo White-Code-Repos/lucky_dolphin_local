@@ -53,6 +53,28 @@ class SaleOrder(models.Model):
                             self.write({'state':'waiting_price'})
         return result
 
+    @api.multi
+    def action_confirm(self):
+        if self._get_forbidden_state_confirm() & set(self.mapped('state')):
+            raise UserError(_(
+                'It is not allowed to confirm an order in the following states: %s'
+            ) % (', '.join(self._get_forbidden_state_confirm())))
+
+        for order in self.filtered(lambda order: order.partner_id not in order.message_partner_ids):
+            order.message_subscribe([order.partner_id.id])
+        self.write({
+            'state': 'sale',
+            'confirmation_date': fields.Datetime.now()
+        })
+        self._action_confirm()
+        if self.env['ir.config_parameter'].sudo().get_param('sale.auto_done_setting'):
+            self.action_done()
+        for line in self.order_line:
+            print ("><<<<<<<<<<<<<<<<<<<",line)
+            if line.product_id:
+                line.product_id.product_tmpl_id._get_product_speed_state()
+        return True
+
     state = fields.Selection([
         ('draft', 'Quotation'),
         ('sent', 'Quotation Sent'),
@@ -61,6 +83,7 @@ class SaleOrder(models.Model):
         ('done', 'Locked'),
         ('cancel', 'Cancelled'),
         ], string='Status', readonly=True, copy=False, index=True, track_visibility='onchange', track_sequence=3,default='draft')
+    
 
     
 
@@ -81,7 +104,7 @@ class SaleOrderLine(models.Model):
 			'currency_id' :self.currency_id.id,
 				}
                 self.product_id.write({'variant_seller_ids': [(0,0,vals)]})
-            self.write({'price_unit':self.overall_cost,'price_state':'price'})
+            self.write({'purchase_price':self.overall_cost,'price_state':'price'})
             if self.order_id:
                 request = False
                 for line in self.order_id.order_line:
@@ -108,7 +131,8 @@ class SaleOrderLine(models.Model):
             else: 
                 line.overall_cost = 0.0
         return 
-  
+
+
     price_state = fields.Selection([('price','Priced'),('request','Requested')],'Price State', compute='_get_line_price_state',store=True, readonly=True)
     vendor_id = fields.Many2one('res.partner','Vendor')
     overhead_cost =  fields.Float('Overhead Cost',defaults=0.0)

@@ -92,6 +92,7 @@
                                 <th name="lot_serial" t-if="has_serial_number" groups="stock.group_lot_on_delivery_slip">
                                     Lot/Serial Number
                                 </th>
+                                <th></th>
                                 <th name="package" t-if="has_package" >
                                     Package
                                 </th>

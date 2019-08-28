@@ -20,10 +20,9 @@ class SaleOrderInherit(models.Model):
     service_ids = fields.One2many("lucky.service", 'order_id')
     commit_delivery_date = fields.Datetime("Commitment Delivery Date")
     client_order_ref = fields.Char("INQ/PO")
-    remark = fields.Boolean(string="Remark", compute='_check_remark')
-
-    def _check_remark(self):
-        self.remark = self.batch_id.remark
+    remark_checkbox_saleorder = fields.Boolean(related='batch_id.remark_checkbox')
+    remark_saleorder = fields.Text('Remark',related='batch_id.remark')
+    print_invoice = fields.Boolean(string='allow print invoice if cash')
 
     @api.model
     def create(self, vals_list):

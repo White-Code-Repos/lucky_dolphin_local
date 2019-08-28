@@ -17,7 +17,9 @@
                     <field name="eta"/>
                     <field name="commit_delivery_date"/>
                     <field name="batch_id" attrs="{'invisible': [('batch_id', '=', False)]}"/>
-                    <field name="remark" attrs="{'invisible': [('batch_id', '=', False)]}" readonly="True"/>
+                    <field name="remark_checkbox_saleorder" invisible="1"/>
+                    <field name="remark_saleorder" attrs="{'invisible': [('remark_checkbox_saleorder', '=', False)]}" readonly="1"/>
+                    <field name="print_invoice" attrs="{'invisible': [('batch_id', '=', False)]}" groups="base.group_erp_manager"/>
                     <field name="order_internal_type" readonly="True"/>
                     <field name="parcel_type" attrs="{'invisible': [('order_internal_type', '!=', 'parcel')]}"/>
                     <field name="service_type" attrs="{'invisible': [('order_internal_type', '!=', 'service')]}"/>
@@ -69,6 +71,25 @@
 
             </field>
         </record>
+        <!-- <report
+            string="Delivery Slip"
+            id="action_report_delivery_batch"
+            model="sale.order.batch"
+            report_type="qweb-pdf"
+            name="stock.report_deliveryslip"
+            file="stock.report_deliveryslip"
+            print_report_name="'Delivery Slip - %s - %s' % (object.partner_id.name or '', object.name)"
+        />
+        <report
+            string="Invoices"
+            id="account_invoice_operation"
+            model="sale.order.batch"
+            report_type="qweb-pdf"
+            name="lucky_sales.report_invoice_operation"
+            file="lucky_sales.report_invoice_operation"
+            print_report_name="'Account Invoices - %s - %s' % (object.partner_id.name or '', object.name)"
+            groups="account.group_account_invoice"
+        /> -->
 
     </data>
 </odoo>

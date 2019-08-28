@@ -1,5 +1,5 @@
-from odoo import models, fields, api
-
+from odoo import models, fields, api,exceptions
+from odoo.http import request
 
 class SaleOrderBatch(models.Model):
     _name = "sale.order.batch"
@@ -85,7 +85,8 @@ class SaleOrderBatch(models.Model):
     is_repair = fields.Boolean("Repair?", compute=_get_orders_count)
     wh_summary = fields.Html("Warehouses Summary", compute=_get_warehouse_summary)
     drop_ship_summary = fields.Html("Drop Shipping Summary", compute=_get_warehouse_summary)
-    remark = fields.Boolean('Remark')
+    remark_checkbox = fields.Boolean('Remark')
+    remark = fields.Text(string='Remark')
     parcel_awb = fields.Char('Parcel AWB',compute='_parcel_awb')
 
 
@@ -104,3 +105,22 @@ class SaleOrderBatch(models.Model):
             for order in rec.order_ids:
                 for changed_attr in vals:
                     setattr(order, changed_attr, vals[changed_attr])
+
+    @api.multi
+    def delivery_action_pdf(self):
+        return {
+             'type' : 'ir.actions.act_url',
+             'url': '/opening/delivery/%s' % (self.id),
+             'target' :'new'
+             }
+
+    @api.multi
+    def invoice_action_pdf(self):
+        if False in self.order_ids.mapped('print_invoice'):
+            raise exceptions.UserError("you are not allowed to print invoices")
+        else:
+            return {
+                'type' : 'ir.actions.act_url',
+                'url': '/opening/invoice/%s' % (self.id),
+                'target' :'new'
+                }

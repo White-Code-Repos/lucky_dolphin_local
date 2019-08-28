@@ -28,6 +28,14 @@
         <field name="max_price_diff" attrs="{'invisible': [('base','!=','market_price')]}"/>
         <field name="market_type" attrs="{'invisible': [('base','!=','market_price')]}"/>
       </field>
+
+            <!--Zienab Edits -->
+            <field name="min_quantity" position="attributes">
+                <attribute name="string">Safety Stock</attribute>
+            </field>
+            <field name="factor" position="attributes">
+                <attribute name="string">Margin</attribute>
+            </field>
         </field>
     </record>
 

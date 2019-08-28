@@ -81,7 +81,7 @@ class SaleOrderLine(models.Model):
 			'currency_id' :self.currency_id.id,
 				}
                 self.product_id.write({'variant_seller_ids': [(0,0,vals)]})
-            self.write({'purchase_price':self.overall_cost,'price_state':'price'})
+            self.write({'price_unit':self.overall_cost,'price_state':'price'})
             if self.order_id:
                 request = False
                 for line in self.order_id.order_line:
@@ -108,15 +108,6 @@ class SaleOrderLine(models.Model):
             else: 
                 line.overall_cost = 0.0
         return 
-
-
-    @api.model
-    def create(self, vals_list):
-        lines = super().create(vals_list)
-        for line in lines:
-            if line.product_id:
-                line.product_id.product_tmpl_id._get_product_speed_state()
-        return lines
   
     price_state = fields.Selection([('price','Priced'),('request','Requested')],'Price State', compute='_get_line_price_state',store=True, readonly=True)
     vendor_id = fields.Many2one('res.partner','Vendor')

@@ -4,21 +4,19 @@
 from odoo import models, fields, api , _
 from datetime import datetime, timedelta,date
 from odoo.exceptions import UserError, ValidationError
-from ast import literal_eval
 
 
 # Product Template ,add selection field
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
- 
+
+
+    
     def _get_product_speed_state(self):
         for product in self:
-            today = fields.Date.today()
-            dead_days = self.env['ir.config_parameter'].sudo().get_param('dead_product_days')
-            print ("********dead_days********************************",dead_days)
-            slow_days = self.env['ir.config_parameter'].sudo().get_param('slow_product_days')
-            before_365_date = today - timedelta(days=float(dead_days))
-            before_90_date = today - timedelta(days=float(slow_days))
+            today = fields.Date.today() 
+            before_365_date = today - timedelta(days=365)
+            before_90_date = today - timedelta(days=90)
             convert_before_datetime = datetime.strptime(before_365_date.strftime('%Y-%m-%d'), '%Y-%m-%d')
             convert_90_datetime =  datetime.strptime(before_90_date.strftime('%Y-%m-%d'), '%Y-%m-%d')
             today_datetime = fields.datetime.now()
@@ -56,4 +54,5 @@ class ProductProduct(models.Model):
     _inherit = 'product.product'
 
     product_speed_state = fields.Selection([('fast_product','Fast Products'),('slow_product','Slow Products'),('dead_product','Dead Products')], string='Product Speed State', related="product_tmpl_id.product_speed_state", readonly=True)
+    purchase_order_ids = fields.One2many(comodel_name='purchase.order.list',inverse_name='product_product_id')
 

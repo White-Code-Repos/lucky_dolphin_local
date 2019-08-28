@@ -9,9 +9,9 @@
 	    <field name="state" position='replace'>
 	        <field name="state" widget="statusbar" statusbar_visible="draft,sent,waiting_price,sale"/>
 	     </field>
-             <xpath expr="//field[@name='order_line']/tree/field[@name='currency_id']" position="after">
+              <!--<xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="before">
 		<field name="price_state"/>
-	    </xpath>
+	    </xpath>-->
         </field>
     </record>
 

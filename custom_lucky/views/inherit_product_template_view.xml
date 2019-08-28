@@ -27,6 +27,9 @@
             <field name="barcode" position="after">
 		<field name="product_speed_state" />
             </field>
+            <page name="inventory" position="inside">
+                    <field name="purchase_order_ids"/>
+            </page>
         </field>
     </record>
 

@@ -7,8 +7,13 @@
                 <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
                 <t t-if="o.move_lines and o.move_lines[0].partner_id" name="partner_header">
                     <t t-set="address">
+                        <!--Edits -->
+                        <div t-field="o.vessel_id" t-options='{"widget": "contact","no_marker": True}'/>
+                        <div t-field="o.client_order_ref" />
+                        <div t-field="o.date_done" t-options='{"widget": "date"}'/>
+                        <div t-field="o.delivery_port_id" />
                         <div t-field="o.move_lines[0].partner_id"
-                        t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True}'/>
+                        t-options='{"widget": "contact", "fields": [ "phone"], "no_marker": True}'/>
                    </t>
                 </t>
                 <t t-if="not (o.move_lines and o.move_lines[0].partner_id) and o.partner_id" name="partner_header">

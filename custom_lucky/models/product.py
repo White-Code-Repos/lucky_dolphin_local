@@ -56,4 +56,5 @@ class ProductProduct(models.Model):
     _inherit = 'product.product'
 
     product_speed_state = fields.Selection([('fast_product','Fast Products'),('slow_product','Slow Products'),('dead_product','Dead Products')], string='Product Speed State', related="product_tmpl_id.product_speed_state", readonly=True)
+    purchase_order_ids = fields.One2many(comodel_name='purchase.order.list',inverse_name='product_product_id')
 

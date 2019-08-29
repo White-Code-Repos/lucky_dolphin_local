@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-7 -*-
 {
     'name': 'Lucky Dolphin Sale Reports',
     'summary': 'Lucky Dolphin Sale Reports',

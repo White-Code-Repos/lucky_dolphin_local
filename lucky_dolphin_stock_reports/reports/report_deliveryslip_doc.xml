@@ -29,6 +29,12 @@
                 </t>
                 <div class="header"/>
                 <div class="page">
+                    <div class="row justify-content-end" t-if="o.sudo().sale_id.vessel_id">
+                        <div class="col-4">
+                            <strong>Vessel:</strong>
+                            <p t-field="o.sudo().sale_id.vessel_id"/>
+                        </div>
+                    </div>
                     <h2>
                         <span t-field="o.name"/>
                     </h2>

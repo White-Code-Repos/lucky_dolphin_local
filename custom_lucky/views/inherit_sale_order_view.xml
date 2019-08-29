@@ -10,8 +10,14 @@
 	        <field name="state" widget="statusbar" statusbar_visible="draft,sent,waiting_price,sale"/>
 	     </field>
              <xpath expr="//field[@name='order_line']/tree/field[@name='currency_id']" position="after">
-		<field name="price_state"/>
-	    </xpath>
+		        <field name="price_state"/>
+             </xpath>
+
+            <!--Zina changes -->
+            <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
+		        <field name="product_cost" string="Cost"/>
+                <field name="vendors" widget="many2many_tags"/>
+             </xpath>
         </field>
     </record>
 

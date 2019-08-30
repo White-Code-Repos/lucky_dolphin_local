@@ -133,12 +133,25 @@ class SaleOrderLine(models.Model):
         return 
 
 
+    @api.model
+    def create(self, vals_list):
+        lines = super().create(vals_list)
+        for line in lines:
+            if line.product_id:
+                line.product_id.product_tmpl_id._get_product_speed_state()
+        return lines
+
+    @api.depends( 'product_id')
+    def _get_vendors(self):
+        for line in self:
+            line.vendors = [(6,0,[l.name.id for l in line.product_id.seller_ids])]
+
     price_state = fields.Selection([('price','Priced'),('request','Requested')],'Price State', compute='_get_line_price_state',store=True, readonly=True)
     vendor_id = fields.Many2one('res.partner','Vendor')
     overhead_cost =  fields.Float('Overhead Cost',defaults=0.0)
     overall_cost = fields.Float(compute='_get_overall_cost' ,string='Overall Cost',store=True,  readonly=True)
     
-
-    
+    product_cost = fields.Float(related="product_id.standard_price")
+    vendors = fields.Many2many('res.partner',compute='_get_vendors' )
 
 

@@ -24,6 +24,11 @@
                     <strong>Vessel:</strong>
                     <p class="m-0" t-field="doc.vessel_id"/>
                 </div>
+                <!--Zian Edites-->
+                <div t-if="doc.delivery_port_id.id" class="col-auto mw-100 mb-2">
+                    <strong>Delivery port:</strong>
+                    <p class="m-0" t-field="doc.delivery_port_id"/>
+                </div>
                 <div name="payment_term" t-if="doc.payment_term_id" class="col-auto mw-100 mb-2">
                     <strong>Payment Terms:</strong>
                     <p class="m-0" t-field="doc.payment_term_id"/>

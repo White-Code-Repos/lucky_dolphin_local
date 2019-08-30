@@ -28,8 +28,7 @@ class PurchaseOrder(models.Model):
             if order.order_line:
                 for line in order.order_line:
                     line.product_id.last_purchase_price = line.price_unit
-            
-            '''if order.order_line:
+            """if order.order_line:
                 line_ids = []
                 for line in order.order_line:
                     print ("IIIIIIIIIIIIIIIIIIIIIIII",line)
@@ -38,21 +37,19 @@ class PurchaseOrder(models.Model):
                         for lines in order_line_search:
                             line_ids.append(lines.id) 
                 final_list = sorted(line_ids, key=int, reverse=True)
-                print ("_________final_list_______",final_list)'''
-                
-            
+                print ("_________final_list_______",final_list)"""
         return True
-
 
 class PurchaseOrderList(models.Model):
     _name = 'purchase.order.list'
     _rec_name = 'purchase_order_id'
-
     purchase_order_id = fields.Many2one('purchase.order')
     product_product_id = fields.Many2one('product.product', string="Product")
 
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
+    purchase_order_id = fields.Many2one('purchase.order')
+    product_product_id = fields.Many2one('product.product', string="Product")
 
     @api.model
     def create(self, vals):

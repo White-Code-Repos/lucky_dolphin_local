@@ -1,4 +1,4 @@
-<ml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
    <record id="view_sale_stage_order_inherit" model="ir.ui.view">
@@ -6,32 +6,22 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-
-	        <field name="state" position='replace'>
-	            <field name="state" widget="statusbar" statusbar_visible="draft,sent,waiting_price,sale"/>
-	        </field>
-            <xpath expr="//field[@name='order_line']/tree/field[@name='currency_id']" position="after">
-
 	    <field name="state" position='replace'>
 	        <field name="state" widget="statusbar" statusbar_visible="draft,sent,waiting_price,sale"/>
 	     </field>
-
-              <!--<xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="before">
-		<field name="price_state"/>
-	    </xpath>-->
              <xpath expr="//field[@name='order_line']/tree/field[@name='currency_id']" position="after">
 		        <field name="price_state"/>
-            </xpath>
+             </xpath>
+
             <!--Zina changes -->
             <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
 		        <field name="product_cost" string="Cost"/>
                 <field name="vendors" widget="many2many_tags"/>
              </xpath>
-
         </field>
     </record>
 
-    
+
 
 <record id="view_sale_order_line_lucky_inherit" model="ir.ui.view">
         <field name="name">sale.order.line</field>
@@ -44,3 +34,4 @@
         </field>
 </record>
 </odoo>
+

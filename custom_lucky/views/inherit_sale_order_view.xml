@@ -6,10 +6,21 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
+<<<<<<< HEAD
 	        <field name="state" position='replace'>
 	            <field name="state" widget="statusbar" statusbar_visible="draft,sent,waiting_price,sale"/>
 	        </field>
             <xpath expr="//field[@name='order_line']/tree/field[@name='currency_id']" position="after">
+=======
+	    <field name="state" position='replace'>
+	        <field name="state" widget="statusbar" statusbar_visible="draft,sent,waiting_price,sale"/>
+	     </field>
+
+              <!--<xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="before">
+		<field name="price_state"/>
+	    </xpath>-->
+             <xpath expr="//field[@name='order_line']/tree/field[@name='currency_id']" position="after">
+>>>>>>> a9b7eb03d56a70e7c6e6546599bf7af2e968e439
 		        <field name="price_state"/>
             </xpath>
             <!--Zina changes -->
@@ -17,6 +28,7 @@
 		        <field name="product_cost" string="Cost"/>
                 <field name="vendors" widget="many2many_tags"/>
              </xpath>
+
         </field>
     </record>
 

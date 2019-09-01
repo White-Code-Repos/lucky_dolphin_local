@@ -4,18 +4,17 @@
 from odoo import models, fields, api , _
 from datetime import datetime, timedelta,date
 from odoo.exceptions import UserError, ValidationError
-from ast import literal_eval
 
 
 # Product Template ,add selection field
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
- 
+
+    
     def _get_product_speed_state(self):
         for product in self:
             today = fields.Date.today()
             dead_days = self.env['ir.config_parameter'].sudo().get_param('dead_product_days')
-            print ("********dead_days********************************",dead_days)
             slow_days = self.env['ir.config_parameter'].sudo().get_param('slow_product_days')
             before_365_date = today - timedelta(days=float(dead_days))
             before_90_date = today - timedelta(days=float(slow_days))
@@ -24,13 +23,14 @@ class ProductTemplate(models.Model):
             today_datetime = fields.datetime.now()
             product_ids = self.env['product.product'].search([('product_tmpl_id','=',product.id )])
             if product_ids:
-                stock_365_move_ids = self.env['stock.move'].search([('product_id','=',product_ids[0].id),('date','>=',convert_before_datetime),('date','<=',today_datetime)])
-                stock_90_move_ids = self.env['stock.move'].search([('product_id','=',product_ids[0].id),('date','>=',convert_before_datetime),('date','<=',convert_90_datetime)])
-                if not stock_90_move_ids:
-                    product.product_speed_state = 'slow_product'
+                stock_365_move_ids = self.env['stock.move'].search([('product_id','=',product_ids[0].id),('date','>=',convert_before_datetime),('date','<=',today_datetime),('state','=','done')])
+                stock_90_move_ids = self.env['stock.move'].search([('product_id','=',product_ids[0].id),('date','>=',convert_90_datetime),('date','<=',today_datetime),('state','=','done')])
+                bet_365_to_90_move_ids = self.env['stock.move'].search([('product_id','=',product_ids[0].id),('date','>=',convert_before_datetime),('date','<=',convert_90_datetime),('state','=','done')])
                 if not stock_365_move_ids:
                     product.product_speed_state = 'dead_product'
-                if stock_365_move_ids or stock_90_move_ids:
+                if not stock_90_move_ids and  bet_365_to_90_move_ids :
+                    product.product_speed_state = 'slow_product'
+                if stock_365_move_ids and stock_90_move_ids:
                     product.product_speed_state = 'fast_product'
         return 
  
@@ -56,4 +56,5 @@ class ProductProduct(models.Model):
     _inherit = 'product.product'
 
     product_speed_state = fields.Selection([('fast_product','Fast Products'),('slow_product','Slow Products'),('dead_product','Dead Products')], string='Product Speed State', related="product_tmpl_id.product_speed_state", readonly=True)
+    purchase_order_ids = fields.One2many(comodel_name='purchase.order.list',inverse_name='product_product_id')
 

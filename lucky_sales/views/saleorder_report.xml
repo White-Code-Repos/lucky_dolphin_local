@@ -39,6 +39,18 @@
                 </div>
             </div>
         </xpath>
+        <!--Zina adds-->
+        <xpath expr="//td[1]" position="replace">
+             <td><span t-field="line.product_id"/></td>
+        </xpath>
+        <xpath expr="//tr[hasclass('border-black')]" position="before">
+             <tr class="border-black" style="border-bottom:1px solid #dddddd;">
+                                <td><strong>Discount</strong></td>
+                                <td class="text-right">
+                                    <span t-field="doc.total_disc"/>
+                                </td>
+             </tr>
+        </xpath>
     </template>
 
 </odoo>

@@ -114,3 +114,16 @@ class SaleOrderInherit(models.Model):
     @api.onchange('delivery_port_id')
     def _onchange_delivery_port_id(self):
         self.carrier_id = self.delivery_port_id.id
+
+    @api.multi
+    @api.depends('order_line')
+    def _get_total_disc(self):
+        for rec in self:
+            if rec.order_line :
+                total = 0.0
+                for l in rec.order_line:
+                    if l.discount:
+                        dis = (l.discount / 100) * l.price_unit
+                        total += dis
+            rec.total_disc = total
+    total_disc = fields.Float(compute=_get_total_disc)

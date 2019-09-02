@@ -68,7 +68,7 @@
 
     <template id="sale_order_batch_report">
         <t t-foreach="docs" t-as="o">
-            <t t-call="lucky_sales.sale_order_batch_report_temp" t-lang="o.partner_d.lang"/>
+            <t t-call="lucky_sales.sale_order_batch_report_temp" />
         </t>
     </template>
 

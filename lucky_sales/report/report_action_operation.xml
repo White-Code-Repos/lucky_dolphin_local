@@ -16,5 +16,14 @@
             <field name="state">code</field>
             <field name="code">action = records.invoice_action_pdf()</field>
         </record>
+
+        <!--Zina changes-->
+        <report id="sale_order_operation"
+                model="sale.order.batch" report_type="pdf"
+                string="Export Operation"
+                name="lucky_sales.sale_order_batch_report"
+                file="lucky_sales.sale_order_batch_report"
+                attachment_use="False"
+                menu="True"/>
     </data>
 </odoo>

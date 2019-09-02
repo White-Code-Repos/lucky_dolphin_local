@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <template id="sale_order_batch_report_temp">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
+
+                <div class="page">
+
+                    <strong>Operation Main Data</strong>
+
+                    <div class="row">
+                        <div class="col-2 text-left">Operation# </div>
+                        <div class="col-10 text-left" >
+                            <div t-field="o.name" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2 text-left">Vessel </div>
+                        <div class="col-10 text-left" >
+                            <div t-field="o.vessel_id" />
+                        </div>
+                    </div>
+                                        <div class="row">
+                        <div class="col-2 text-left">Vessel Agent	 </div>
+                        <div class="col-10 text-left" >
+                            <div t-field="o.vessel_agent_id" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2 text-left">Remark	 </div>
+                        <div class="col-10 text-left" >
+                            <div t-field="o.remark" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2 text-left">Delivery Port </div>
+                        <div class="col-10 text-left" >
+                            <div t-field="o.delivery_port_id" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2 text-left">Arrival Port </div>
+                        <div class="col-10 text-left" >
+                            <div t-field="o.arrival_port_id" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2 text-left">ETA </div>
+                        <div class="col-10 text-left" >
+                            <div t-field="o.eta"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2 text-left">Commitment Delivery Date</div>
+                        <div class="col-10 text-left" >
+                            <div t-field="o.commit_delivery_date" />
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </t>
+         </t>
+    </template>
+
+    <template id="sale_order_batch_report">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="lucky_sales.sale_order_batch_report_temp" t-lang="o.partner_d.lang"/>
+        </t>
+    </template>
+
+</odoo>

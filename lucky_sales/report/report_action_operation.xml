@@ -19,7 +19,7 @@
 
         <!--Zina changes-->
         <report id="sale_order_operation"
-                model="sale.order.batch" report_type="pdf"
+                model="sale.order.batch" report_type="qweb-pdf"
                 string="Export Operation"
                 name="lucky_sales.sale_order_batch_report"
                 file="lucky_sales.sale_order_batch_report"

@@ -8,7 +8,6 @@
         <field name="arch" type="xml">
             <field name="categ_id" position="after">
 		<field name="product_speed_state" readonly="1"/>
-		<field name="product_speed" invisible="1"/>
             </field>
             <field name="list_price" position="after">
 		<field name="market_price" />
@@ -50,7 +49,7 @@
         <field name="inherit_id" ref="product.product_template_search_view"/>
         <field name="arch" type="xml">
             <filter name="filter_to_sell" position="after">
-		<filter string="Product Speed State" name="groupby_state" domain="[]" context="{'group_by': 'product_speed'}"/>
+		<filter string="Product Speed State" name="groupby_state" domain="[]" context="{'group_by': 'product_speed_state'}"/>
             </filter>
         </field>
     </record>

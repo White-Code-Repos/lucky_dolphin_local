@@ -14,7 +14,8 @@
         'views/egypt_ports_view.xml',
         'views/saleorder_report.xml',
         'views/report_delivery_slip.xml',
-        'report/report_action_operation.xml'
+        'report/report_action_operation.xml',
 #        'views/invoice_report.xml',
+        'views/sale_order_batch_report.xml',
     ]
 }

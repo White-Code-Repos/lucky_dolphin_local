@@ -164,7 +164,7 @@
 
     <template id="report_deliveryslip_doc">
         <t t-foreach="docs" t-as="o">
-            <t t-call="lucky_dolphin_stock_reports.report_delivery_document_inherit_1" t-lang="o.partner_id.lang"/>
+            <t t-call="lucky_dolphin_stock_reports.report_delivery_document_inherit_1" t-lang="o.partner_d.lang"/>
         </t>
     </template>
 

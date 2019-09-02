@@ -7,8 +7,8 @@
         <field name="inherit_id" ref="product.product_template_only_form_view"/>
         <field name="arch" type="xml">
             <field name="categ_id" position="after">
-		<field name="product_speed_state" />
-		<field name="product_speed" />
+		<field name="product_speed_state" readonly="1"/>
+		<field name="product_speed" invisible="1"/>
             </field>
             <field name="list_price" position="after">
 		<field name="market_price" />

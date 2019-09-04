@@ -16,6 +16,7 @@
     'data': [
 	'security/ir.model.access.csv',
         'views/quotation_comment_view.xml',
+	'views/sale_order_report_templates.xml',
         'views/inherit_sale_view.xml',
 	'views/delivery_carrier_view.xml',
       ],

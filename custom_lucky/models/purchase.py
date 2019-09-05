@@ -10,6 +10,7 @@ from odoo.exceptions import UserError, ValidationError
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
+
     @api.multi
     def button_confirm(self):
         for order in self:
@@ -40,21 +41,5 @@ class PurchaseOrder(models.Model):
                 print ("_________final_list_______",final_list)"""
         return True
 
-class PurchaseOrderList(models.Model):
-    _name = 'purchase.order.list'
-    _rec_name = 'purchase_order_id'
-    purchase_order_id = fields.Many2one('purchase.order')
-    product_product_id = fields.Many2one('product.product', string="Product")
 
-class PurchaseOrderLine(models.Model):
-    _inherit = "purchase.order.line"
-    purchase_order_id = fields.Many2one('purchase.order')
-    product_product_id = fields.Many2one('product.product', string="Product")
 
-    @api.model
-    def create(self, vals):
-        res = super(PurchaseOrderLine, self).create(vals)
-        dropship = self.env.ref('stock_dropshipping.picking_type_dropship').id
-        if res.order_id.origin and dropship in res.product_id.route_ids.ids:
-            res.product_id.purchase_order_ids = [(0, 0, {'purchase_order_id': res.order_id.id})]
-        return res

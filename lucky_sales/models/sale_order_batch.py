@@ -115,7 +115,7 @@ class SaleOrderBatch(models.Model):
 
     @api.multi
     def invoice_action_pdf(self):
-        if False in self.order_ids.mapped('print_invoice'):
+        if True not in self.order_ids.mapped('print_invoice'):
             raise exceptions.UserError("you are not allowed to print invoices")
         else:
             return {

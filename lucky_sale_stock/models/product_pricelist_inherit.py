@@ -135,8 +135,12 @@ class ProductPricelist(models.Model):
                     price_tmp = rule.base_pricelist_id._compute_price_rule([(product, qty, partner)])[product.id][0]  # TDE: 0 = price, 1 = rule
                     price = rule.base_pricelist_id.currency_id._convert(price_tmp, self.currency_id, self.env.user.company_id, date, round=False)
                 elif rule.base == 'market_price':
-                    if rule.factor and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                    # Zina changes
+                    if rule.factor and rule.req_to_min == 'less_min':
                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                    else :
+                        if rule.factor and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                            price = product.price_compute(rule.market_type)[product.id] * rule.factor
                 else:
                     # if base option is public price take sale price else cost price of product
                     # price_compute returns the price in the context UoM, i.e. qty_uom_id

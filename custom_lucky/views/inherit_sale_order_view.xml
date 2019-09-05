@@ -21,7 +21,7 @@
         </field>
     </record>
 
-    
+
 
 <record id="view_sale_order_line_lucky_inherit" model="ir.ui.view">
         <field name="name">sale.order.line</field>
@@ -34,3 +34,4 @@
         </field>
 </record>
 </odoo>
+

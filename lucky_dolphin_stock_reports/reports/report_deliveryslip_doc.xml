@@ -12,8 +12,8 @@
                         <div t-field="o.client_order_ref" />
                         <div t-field="o.date_done" t-options='{"widget": "date"}'/>
                         <div t-field="o.delivery_port_id" />
-                        <div t-field="o.move_lines[0].partner_id"
-                        t-options='{"widget": "contact", "fields": [ "phone"], "no_marker": True}'/>
+                        <!--<div t-field="o.move_lines[0].partner_id"-->
+                        <!--t-options='{"widget": "contact", "fields": [ "phone"], "no_marker": True}'/>-->
                    </t>
                 </t>
                 <t t-if="not (o.move_lines and o.move_lines[0].partner_id) and o.partner_id" name="partner_header">
@@ -24,17 +24,17 @@
                         <div t-field="o.client_order_ref" />
                         <div t-field="o.date_done" t-options='{"widget": "date"}'/>
                         <div t-field="o.delivery_port_id" />
-                        <div t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["phone"], "no_marker": True}'/>
+                        <!--<div t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["phone"], "no_marker": True}'/>-->
                     </t>
                 </t>
                 <div class="header"/>
                 <div class="page">
-                    <div class="row justify-content-end" t-if="o.sudo().sale_id.vessel_id">
-                        <div class="col-4">
-                            <strong>Vessel:</strong>
-                            <p t-field="o.sudo().sale_id.vessel_id"/>
-                        </div>
-                    </div>
+                    <!--<div class="row justify-content-end" t-if="o.sudo().sale_id.vessel_id">-->
+                        <!--<div class="col-4">-->
+                            <!--<strong>Vessel:</strong>-->
+                            <!--<p t-field="o.sudo().sale_id.vessel_id"/>-->
+                        <!--</div>-->
+                    <!--</div>-->
                     <h2>
                         <span t-field="o.name"/>
                     </h2>
@@ -164,7 +164,7 @@
 
     <template id="report_deliveryslip_doc">
         <t t-foreach="docs" t-as="o">
-            <t t-call="lucky_dolphin_stock_reports.report_delivery_document_inherit_1" t-lang="o.partner_id.lang"/>
+            <t t-call="lucky_dolphin_stock_reports.report_delivery_document_inherit_1" t-lang="o.partner_d.lang"/>
         </t>
     </template>
 

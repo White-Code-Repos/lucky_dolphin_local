@@ -15,7 +15,7 @@
     ],
     'data': [
         'views/sale_product_view.xml',
-        'views/report_saleorder.xml',
+       #'views/report_saleorder.xml',
     ],
     'installable': True,
 }

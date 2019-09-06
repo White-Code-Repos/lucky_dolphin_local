@@ -31,9 +31,9 @@
       </field>
 
             <!--Zienab Edits -->
-            <field name="min_quantity" position="attributes">
-                <attribute name="string">Safety Stock</attribute>
-            </field>
+            <!--<field name="min_quantity" position="attributes">-->
+                <!--<attribute name="string">Safety Stock</attribute>-->
+            <!--</field>-->
             <field name="factor" position="attributes">
                 <attribute name="string">Margin</attribute>
             </field>

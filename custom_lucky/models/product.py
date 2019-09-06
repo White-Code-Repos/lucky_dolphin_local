@@ -45,7 +45,7 @@ class ProductTemplate(models.Model):
     product_speed_state = fields.Selection([('fast_product','Fast Products'),('slow_product','Slow Products'),('dead_product','Dead Products')], string='Product Speed State', compute='_get_product_speed_state', readonly=True) 
     market_price = fields.Float('Market Price',default=0.0)
     last_purchase_price = fields.Float('Last Purchase Price',readonly=True)
-    min_qty = fields.Integer('Minimum Quantity')
+    min_qty = fields.Integer('Safety Stock')
     price_diff = fields.Float(compute='_get_price_diff',string='Price Difference %', store=True, readonly=True)
     product_speed = fields.Selection([('fast_product','Fast Products'),('slow_product','Slow Products'),('dead_product','Dead Products')], string='Product Speed State', readonly=True)
 

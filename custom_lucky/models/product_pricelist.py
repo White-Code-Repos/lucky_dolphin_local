@@ -24,7 +24,7 @@ class ProductPricelistItem(models.Model):
 
     last_po_to_market = fields.Selection([('less_market','PO > Market'),('less_po','PO =< Market')], string='Last Po To Market',default="less_po")
     req_to_min = fields.Selection([('less_min','Requested > Safety Stock'),('less_req','Requested =< Safety Stock')], string='Requested to Minimum')
-    min_to_available = fields.Selection([('less_available','Minimum > Available'),('less_min','Minimum =< Available')], string='Minimum to Available') 
+    min_to_available = fields.Selection([('less_available','safety stock > Available'),('less_min','safety stock =< Available')], string='Minimum to Available')
 
     min_price_diff =  fields.Float("Min Price Diff")
     max_price_diff = fields.Float("Max Price Diff")

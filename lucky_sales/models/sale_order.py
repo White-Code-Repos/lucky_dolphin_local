@@ -22,6 +22,7 @@ class SaleOrderInherit(models.Model):
     client_order_ref = fields.Char("INQ/PO")
     remark_saleorder = fields.Text('Remark',related='batch_id.remark')
     print_invoice = fields.Boolean(string='allow print invoice if cash')
+    purchase_order_ids = fields.One2many(comodel_name='purchase.order.listing',inverse_name='sale_id',readonly=True)
 
     @api.model
     def create(self, vals_list):

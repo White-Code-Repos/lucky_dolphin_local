@@ -32,10 +32,10 @@ class SaleOrder(models.Model):
         if self.state in ('draft', 'sent'):
             #self.after_fixed_price = self.carrier_id.after_fixed_price
             if self.carrier_id:
-                before_value = self.carrier_id.before_fixed_price or '0.0' 
-                after_value = self.carrier_id.after_fixed_price or '0.0'
+                before_value = self.carrier_id.before_fixed_price or '' 
+                after_value = self.carrier_id.after_fixed_price or ''
                 fixed_value = str(self.carrier_id.fixed_price)
-                self.before_fixed_price = 'Before Fixed Price:' + ''+ before_value + ', ' + 'Fixed Price:' +' ' +fixed_value + ', ' + 'After Fixed Price:' + '' + after_value
+                self.before_fixed_price =  before_value + '  '  + fixed_value + ' ' + after_value
 
     @api.multi
     def write(self, vals):

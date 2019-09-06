@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<odoo>
+    <template id="report_saleorder_document_inherit_lucky" inherit_id="sale.report_saleorder_document">
+      	<xpath expr="//div[@name='total']" position="after">
+        	<div class="col-3" t-if="doc.before_fixed_price">
+          		<p t-field="doc.before_fixed_price"/>
+        	</div>
+      	</xpath>
+  	</template>
+</odoo>

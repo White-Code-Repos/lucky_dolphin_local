@@ -146,6 +146,11 @@ class SaleOrderLine(models.Model):
         for line in self:
             line.vendors = [(6,0,[l.name.id for l in line.product_id.seller_ids])]
 
+    @api.multi
+    def get_reprice(self):
+        self.write({'price_state':'request'})
+        self.order_id.write({'state':'waiting_price'})
+
     price_state = fields.Selection([('price','Priced'),('request','Requested')],'Price State', compute='_get_line_price_state',store=True, readonly=True)
     vendor_id = fields.Many2one('res.partner','Vendor')
     overhead_cost =  fields.Float('Overhead Cost',defaults=0.0)

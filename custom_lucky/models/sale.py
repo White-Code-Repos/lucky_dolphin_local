@@ -48,10 +48,11 @@ class SaleOrder(models.Model):
             else:
                 for line in vals.get('order_line'):
                     if line[2]:
-                        product_id = self.order_line.product_id.id
-                        product_brw = self.env['product.product'].browse(product_id)
-                        if product_brw.standard_price == 0.0:
-                            self.write({'state':'waiting_price'})
+                        sale_order_line_ids = self.order_line
+                        for product_id in sale_order_line_ids:
+                            product_brw = self.env['product.product'].browse(product_id)
+                            if product_brw.standard_price == 0.0:
+                                self.write({'state':'waiting_price'})
         return result
 
     @api.multi

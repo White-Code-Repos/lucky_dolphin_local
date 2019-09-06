@@ -37,8 +37,9 @@ class SaleOrder(models.Model):
         result = super(SaleOrder, self).write(vals)
         if vals.get('order_line'):
             if len(vals.get('order_line')) == 1:
-                if vals.get('order_line')[0][2] and vals.get('order_line')[0][2]['product_id']:
-                    product_id = vals.get('order_line')[0][2]['product_id']
+                # if vals.get('order_line')[0][2] and vals.get('order_line')[0][2]['product_id']:
+                if vals.get('order_line')[0][2] and self.order_line.product_id.id:
+                    product_id = self.order_line.product_id.id
                     product_brw = self.env['product.product'].browse(product_id)
                     if product_brw.standard_price == 0.0:
                         self.write({'state':'waiting_price'})
@@ -46,8 +47,8 @@ class SaleOrder(models.Model):
                         self.write({'state':'draft'})
             else:
                 for line in vals.get('order_line'):
-                    if line[2] and line[2]['product_id']:
-                        product_id = line[2]['product_id']
+                    if line[2]:
+                        product_id = self.order_line.product_id.id
                         product_brw = self.env['product.product'].browse(product_id)
                         if product_brw.standard_price == 0.0:
                             self.write({'state':'waiting_price'})

@@ -25,10 +25,10 @@ class SaleOrder(models.Model):
                         result.write({'state':'draft'})
             else:
                 for line in vals.get('order_line'):
-                    if line[2]['product_id']:
-                        product_id = line[2]['product_id']
-                        product_brw = self.env['product.product'].browse(product_id)
-                        if product_brw.standard_price == 0.0:
+                    if line[2]:
+                        product_id = line[2].get('product_id', False)
+                        product_brw = product_id and self.env['product.product'].browse(product_id)
+                        if product_brw and product_brw.standard_price == 0.0:
                             result.write({'state':'waiting_price'})
         return result
 

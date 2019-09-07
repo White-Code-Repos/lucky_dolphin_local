@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models, api, fields, _
 from odoo.exceptions import ValidationError
-
+from odoo import tools
 
 class ProductPricelist(models.Model):
     _inherit = 'product.pricelist'
@@ -135,16 +135,18 @@ class ProductPricelist(models.Model):
                     price_tmp = rule.base_pricelist_id._compute_price_rule([(product, qty, partner)])[product.id][0]  # TDE: 0 = price, 1 = rule
                     price = rule.base_pricelist_id.currency_id._convert(price_tmp, self.currency_id, self.env.user.company_id, date, round=False)
                 elif rule.base == 'market_price':
-                    if qty > product.min_qty:
-                        if rule.factor and rule.req_to_min == 'less_min':
+                    if rule.factor and rule.req_to_min == 'less_min':
+                        if product.min_qty and qty_in_product_uom > product.min_qty:
                             price = product.price_compute(rule.market_type)[product.id] * rule.factor
-                    elif qty <= product.min_qty:
-                        if rule.factor and rule.req_to_min == 'less_req':
+                        else:
+                            continue
+                    elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                        if product.min_qty and qty_in_product_uom <= product.min_qty:
                             price = product.price_compute(rule.market_type)[product.id] * rule.factor
-                        else: continue
-                    else :
-                        if rule.factor and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
-                            price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                        else:
+                            continue
+                    else:
+                        price = product.price_compute(rule.base)[product.id]
                 else:
                     # if base option is public price take sale price else cost price of product
                     # price_compute returns the price in the context UoM, i.e. qty_uom_id

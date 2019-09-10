@@ -107,19 +107,19 @@ class SaleOrderBatch(models.Model):
 
     @api.multi
     def delivery_action_pdf(self):
-        # return {
-        #      'type' : 'ir.actions.act_url',
-        #      'url': '/opening/delivery/%s' % (self.id),
-        #      'target' :'new'
-        #      }
-        data = self.read()[0]
-        active_ids = self.order_ids
-        datas = {
-            'ids': active_ids,
-            'model': 'stock.picking',
-            'form': data
-        }
-        return self.env['report'].get_action(self, 'lucky_dolphin_stock_reports.report_deliveryslip_doc',data=datas)
+        return {
+             'type' : 'ir.actions.act_url',
+             'url': '/opening/delivery/%s' % (self.id),
+             'target' :'new'
+             }
+        # data = self.read()[0]
+        # active_ids = self.order_ids
+        # datas = {
+        #     'ids': active_ids,
+        #     'model': 'stock.picking',
+        #     'form': data
+        # }
+        # return self.env['report'].get_action(self, 'lucky_dolphin_stock_reports.report_deliveryslip_doc',data=datas)
 
     @api.multi
     def invoice_action_pdf(self):

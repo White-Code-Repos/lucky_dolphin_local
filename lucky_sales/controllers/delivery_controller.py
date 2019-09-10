@@ -15,7 +15,7 @@ class file_download(http.Controller):
         if opening.order_ids:
             try:
                 ids = opening.order_ids.mapped('picking_ids').mapped('id')
-                pdf = request.env.ref('stock.action_report_delivery').sudo().render_qweb_pdf(ids)[0]
+                pdf = request.env.ref('lucky_dolphin_stock_reports.report_deliveryslip_doc').sudo().render_qweb_pdf(ids)[0]
                 pdfhttpheaders = [
                     ('Content-Type', 'application/pdf'),
                     ('Content-Length', len(pdf)),('Content-Disposition', 'attachment; filename=' + filename + ';')

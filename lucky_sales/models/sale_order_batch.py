@@ -113,7 +113,7 @@ class SaleOrderBatch(models.Model):
         #      'target' :'new'
         #      }
         ids = self.order_ids.mapped('picking_ids')
-        return self.env.ref('stock.action_report_delivery').report_action(ids)
+        return self.env.ref('stock.action_report_delivery').report_action(ids[1])
         # data = self.read()[0]
         # active_ids = self.order_ids
         # datas = {

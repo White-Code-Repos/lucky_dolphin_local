@@ -72,15 +72,14 @@ class SaleOrder(models.Model):
         if self.env['ir.config_parameter'].sudo().get_param('sale.auto_done_setting'):
             self.action_done()
         for line in self.order_line:
-            print ("><<<<<<<<<<<<<<<<<<<",line)
             if line.product_id:
                 line.product_id.product_tmpl_id._get_product_speed_state()
         return True
 
     state = fields.Selection([
         ('draft', 'Quotation'),
+	('waiting_price','Waiting Price'),
         ('sent', 'Quotation Sent'),
-        ('waiting_price','Waiting Price'),
         ('sale', 'Sales Order'),
         ('done', 'Locked'),
         ('cancel', 'Cancelled'),

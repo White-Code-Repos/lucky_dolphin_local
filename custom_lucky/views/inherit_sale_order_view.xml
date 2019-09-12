@@ -15,7 +15,7 @@
 
             <!--Zina changes -->
             <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
-		        <field name="product_cost" string="Cost"/>
+		     <!--   <field name="product_cost" string="Cost"/>-->
                 <field name="vendors" widget="many2many_tags"/>
              </xpath>
 	<!--divya changes-->

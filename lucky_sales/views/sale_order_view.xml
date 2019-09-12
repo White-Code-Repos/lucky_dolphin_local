@@ -68,9 +68,9 @@
                     </page>
                 </xpath>
                 <page name="other_information" position="inside">
-                    <group name="purchase_order_list" string="Purchase Order">
-                        <field name="purchase_order_ids" nolabel="1"/>
-                    </group>
+                    <!-- <group name="purchase_order_list" string="Purchase Order"> -->
+                        <field name="purchase_order_ids" nolabel="1" invisible="1"/>
+                    <!-- </group> -->
                 </page>
 
             </field>

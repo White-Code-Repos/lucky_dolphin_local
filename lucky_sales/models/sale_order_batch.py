@@ -72,8 +72,11 @@ class SaleOrderBatch(models.Model):
     partner_id = fields.Many2one('res.partner', readonly=True)
     vessel_id = fields.Many2one("res.partner", readonly=True)
     vessel_agent_id = fields.Many2one("res.partner")
-    arrival_port_id = fields.Many2one("lucky.port")
-    delivery_port_id = fields.Many2one("lucky.port")
+    # arrival_port_id = fields.Many2one("lucky.port")
+    # delivery_port_id = fields.Many2one("lucky.port")
+
+    arrival_port_id = fields.Many2one("delivery.carrier")
+    delivery_port_id = fields.Many2one("delivery.carrier")
     eta = fields.Datetime("ETA")
     commit_delivery_date = fields.Datetime("Commitment Delivery Date")
     order_ids = fields.One2many("sale.order", 'batch_id')

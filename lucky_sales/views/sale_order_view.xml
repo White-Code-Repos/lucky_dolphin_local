@@ -68,11 +68,33 @@
                     </page>
                 </xpath>
                 <page name="other_information" position="inside">
-                    <group name="purchase_order_list" string="Purchase Order">
-                        <field name="purchase_order_ids" nolabel="1"/>
-                    </group>
+                    <!-- <group name="purchase_order_list" string="Purchase Order"> -->
+                        <field name="purchase_order_ids" nolabel="1" invisible="1"/>
+                    <!-- </group> -->
                 </page>
 
+            </field>
+        </record>
+
+	<record id="lucky_view_order_tree" model="ir.ui.view">
+            <field name="name">Lucky Sale tree view</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+	        <field name="partner_id" position="after">
+			 <field name="vessel_id"/>
+                 </field>	
+            </field>
+        </record>
+
+	 <record id="lucky_view_order_quotation_tree" model="ir.ui.view">
+            <field name="name">Lucky Sale tree view</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_quotation_tree"/>
+            <field name="arch" type="xml">
+	        <field name="partner_id" position="after">
+			 <field name="vessel_id"/>
+                 </field>	
             </field>
         </record>
         <!-- <report

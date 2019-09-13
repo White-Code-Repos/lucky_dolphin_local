@@ -37,6 +37,11 @@
             <field name="arch" type="xml">
                 <form create="0" edit="0">
                     <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button icon="fa-truck" class="oe_inline oe_stat_button" type="object" name="purchase_order_action" attrs="  {'invisible': [('purchase_order_count', '=', 0)]}">
+                                <field string="Dropships" name="purchase_order_count" widget="statinfo"/>
+                            </button>
+                        </div>
                         <group string="Main Data">
                             <group>
                                 <field name="name"/>

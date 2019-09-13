@@ -3,9 +3,13 @@
 
     <template id="report_invoice_document_inherit_1" inherit_id="account.report_invoice_document">
         <xpath expr="//div[@id='informations']/div[@name='reference']" position="after">
-            <div name="vessel" class="col-auto mw-100 mb-2">
+            <div t-if="o.sale_order_id.vessel_id" name="vessel" class="col-auto mw-100 mb-3">
                 <strong>Vessel:</strong>
                 <p class="m-0" t-field="o.sale_order_id.vessel_id.name"/>
+            </div>
+	    <div t-if="o.sale_order_id.client_order_ref" name="vessel" class="col-auto mw-100 mb-3">
+               <strong>Inq/PO:</strong>
+                <p class="m-0" t-field="o.sale_order_id.client_order_ref"/>
             </div>
         </xpath>
     </template>

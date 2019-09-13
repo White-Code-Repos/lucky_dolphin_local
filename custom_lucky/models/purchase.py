@@ -41,5 +41,18 @@ class PurchaseOrder(models.Model):
                 print ("_________final_list_______",final_list)"""
         return True
 
+# Purchase order Line
+class PurchaseOrderLine(models.Model):
+    _inherit = 'purchase.order.line'
 
+
+    @api.multi
+    @api.onchange('product_id')
+    def onchange_product_id(self):
+        vals = {}
+        res = super(PurchaseOrderLine, self).onchange_product_id()
+        name = self.product_id.description_purchase 
+        vals.update(name=name)
+        self.update(vals)
+        return res
 

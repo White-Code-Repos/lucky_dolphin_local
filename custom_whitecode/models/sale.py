@@ -66,7 +66,11 @@ class SaleOrderLine(models.Model):
     @api.multi
     @api.onchange('product_id')
     def product_id_change(self):
-        res = super(SaleOrderLine, self).product_id_change()
+        res = super(SaleOrderLine, self).product_id_change() 
+        vals = {}
+        name = self.product_id.description_sale
+        vals.update(name=name)
+        self.update(vals)
         for line in self:
             if line.order_id.profit_margin:
                 if line.order_id.profit_margin == '10':

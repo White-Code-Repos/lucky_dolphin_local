@@ -66,11 +66,6 @@ class SaleOrderBatch(models.Model):
                             warehouses.append(warehouse)
             self.drop_ship_summary = self._get_summary_table(drop_shippings)
             self.wh_summary = self._get_summary_table(warehouses)
-    @api.one
-    @api.depends('order_ids')
-    def _purchase_order_count(self):
-        for order_id in self.order_ids:
-                self.purchase_order_count += len(order_id.purchase_order_ids)
 
     name = fields.Char(default=lambda s: s.env['ir.sequence'].next_by_code('sale.order.batch'),
                        readonly=True, string="Operation#")
@@ -95,16 +90,7 @@ class SaleOrderBatch(models.Model):
     drop_ship_summary = fields.Html("Drop Shipping Summary", compute=_get_warehouse_summary)
     remark = fields.Text(string='Remark')
     parcel_awb = fields.Char('Parcel AWB',compute='_parcel_awb')
-    purchase_order_count = fields.Integer(compute='_purchase_order_count')
 
-    @api.multi
-    def purchase_order_action(self):
-
-        action = self.env.ref('purchase.purchase_rfq').read()[0]
-        purchase_orders = self.mapped('order_ids').mapped('purchase_order_ids').mapped('purchase_order_id')
-        if len(purchase_orders) > 0:
-            action['domain'] = [('id', 'in', purchase_orders.ids)]
-        return action
 
     def _parcel_awb(self):
         self.parcel_awb = ""
@@ -130,7 +116,7 @@ class SaleOrderBatch(models.Model):
         #      'target' :'new'
         #      }
         ids = self.order_ids.mapped('picking_ids')
-        return self.env.ref('stock.action_report_delivery').report_action(ids[1])
+        return self.env.ref('stock.action_report_delivery').report_action(ids)
         # data = self.read()[0]
         # active_ids = self.order_ids
         # datas = {

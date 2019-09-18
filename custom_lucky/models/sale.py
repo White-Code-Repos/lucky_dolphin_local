@@ -87,24 +87,24 @@ class SaleOrder(models.Model):
     pricelist_id = fields.Many2one('product.pricelist', string='Pricelist', required=True, readonly=True, states={'draft': [('readonly', False)], 'waiting_price': [('readonly', False)],'sent': [('readonly', False)]}, help="Pricelist for current sales order.")
 
 
-    @api.multi
-    @api.onchange('pricelist_id', 'order_line')
-    def onchange_pricelist_id(self):
-        if self.pricelist_id:
-            if self.order_line:
-                for line in self.order_line:
-                    if line.order_id.pricelist_id and line.order_id.partner_id:
-                        product = line.product_id.with_context(
-                            lang=line.order_id.partner_id.lang,
-                            partner=line.order_id.partner_id.id,
-                            quantity=line.product_uom_qty,
-                            date=line.order_id.date_order,
-                            pricelist=line.order_id.pricelist_id.id,
-                            uom=line.product_uom.id,
-                            fiscal_position=self.env.context.get('fiscal_position')
-                        )
-                        line.price_unit = self.env['account.tax']._fix_tax_included_price(line._get_display_price(product), product.taxes_id, line.tax_id)
-    
+    # @api.multi
+    # @api.onchange('pricelist_id', 'order_line')
+    # def onchange_pricelist_id(self):
+    #     if self.pricelist_id:
+    #         if self.order_line:
+    #             for line in self.order_line:
+    #                 if line.order_id.pricelist_id and line.order_id.partner_id:
+    #                     product = line.product_id.with_context(
+    #                         lang=line.order_id.partner_id.lang,
+    #                         partner=line.order_id.partner_id.id,
+    #                         quantity=line.product_uom_qty,
+    #                         date=line.order_id.date_order,
+    #                         pricelist=line.order_id.pricelist_id.id,
+    #                         uom=line.product_uom.id,
+    #                         fiscal_position=self.env.context.get('fiscal_position')
+    #                     )
+    #                     line.price_unit = self.env['account.tax']._fix_tax_included_price(line._get_display_price(product), product.taxes_id, line.tax_id)
+    #
 
     
 

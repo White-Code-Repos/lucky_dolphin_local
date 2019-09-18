@@ -23,10 +23,12 @@ class ProductPricelistItem(models.Model):
 
 
     last_po_to_market = fields.Selection([('less_market','PO > Market'),('less_po','PO =< Market')], string='Last Po To Market',default="less_po")
-    req_to_min = fields.Selection([('less_min','Requested > Safety Stock'),('less_req','Requested =< Safety Stock')], string='Requested to Safety stock')
-    min_to_available = fields.Selection([('less_available','safety stock > Available'),('less_min','safety stock =< Available')], string='Safety stock to Available')
+    req_to_min = fields.Selection([('less_min','Requested > Safety Stock'),('less_req','Requested =< Safety Stock'),('stock_zero','Safety Stock = 0')], string='Requested to Safety stock')
+    min_to_available = fields.Selection([('less_available','safety stock > Available'),('less_min','safety stock =< Available'),('stock_zero','Safety Stock = 0')], string='Safety stock to Available')
 
     min_price_diff =  fields.Float("Min Price Diff")
     max_price_diff = fields.Float("Max Price Diff")
     market_type = fields.Selection([('last_purchase_price','Last Purchase Price'),('market_price','Market Price')], string='Type')
     factor = fields.Float(string='Factor')
+    dropship = fields.Boolean('Dropship')
+    last_po_0 = fields.Boolean('Last PO is 0')

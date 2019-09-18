@@ -28,6 +28,8 @@
         <field name="min_price_diff" attrs="{'invisible': ['|',('base','!=','market_price'),('req_to_min','=','less_min')]}"/>
         <field name="max_price_diff" attrs="{'invisible': ['|',('base','!=','market_price'),('req_to_min','=','less_min')]}"/>
         <field name="market_type" attrs="{'invisible': [('base','!=','market_price')]}"/>
+        <field name="dropship" attrs="{'invisible': [('base','!=','market_price')]}"/>
+        <field name="last_po_0" attrs="{'invisible': [('base','!=','market_price')]}"/>
       </field>
 
             <!--Zienab Edits -->

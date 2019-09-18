@@ -1,40 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
 
+	
     <template id="report_delivery_document_inherit_1">
 <!--        <t t-call="web.html_container">-->
-            <t t-call="web.external_layout">
-                <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
-                <t t-if="o.move_lines and o.move_lines[0].partner_id" name="partner_header">
-                    <t t-set="address">
-                        <!--Edits -->
-                        <strong>Vessel:</strong><div t-field="o.vessel_id" t-options='{"widget": "contact","no_marker": True}'/>
-                        <strong>INQ/PO:</strong><div t-field="o.client_order_ref" />
-                        <div t-field="o.date_done" t-options='{"widget": "date"}'/>
-                        <strong>Delivery Port :</strong><div t-field="o.delivery_port_id" />
-                        <!--<div t-field="o.move_lines[0].partner_id"-->
-                        <!--t-options='{"widget": "contact", "fields": [ "phone"], "no_marker": True}'/>-->
-                   </t>
-                </t>
-                <t t-if="not (o.move_lines and o.move_lines[0].partner_id) and o.partner_id" name="partner_header">
-
-                    <t t-set="address">
-                        <!--Edits -->
-                        <div t-field="o.vessel_id" t-options='{"widget": "contact","no_marker": True}'/>
-                        <div t-field="o.client_order_ref" />
-                        <div t-field="o.date_done" t-options='{"widget": "date"}'/>
-                        <div t-field="o.delivery_port_id" />
-                        <!--<div t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["phone"], "no_marker": True}'/>-->
-                    </t>
-                </t>
-                <div class="header"/>
+                <t t-call="web.external_layout">
+              
+		
+		<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
+                
                 <div class="page">
-                    <!--<div class="row justify-content-end" t-if="o.sudo().sale_id.vessel_id">-->
-                        <!--<div class="col-4">-->
-                            <!--<strong>Vessel:</strong>-->
-                            <!--<p t-field="o.sudo().sale_id.vessel_id"/>-->
-                        <!--</div>-->
-                    <!--</div>-->
+		 <div class="header">
+		    <div class="row">
+		        <div class="col-3 mb4">
+		            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 45px;" alt="Logo"/>
+		        </div>
+		        <div class="col-9 text-right" style="margin-top:22px;" t-field="o.company_id.report_header" name="moto"/>
+		    </div>
+		    <div t-if="o.company_id.logo or o.company_id.report_header" class="row zero_min_height">
+		        <div class="col-12">
+		            <div style="border-bottom: 1px solid black;"/>
+		        </div>
+		    </div>
+		    <div class="row">
+		        <div class="col-6" name="company_address">
+		            <div t-field="o.company_id.partner_id"
+		                t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'
+		            />
+		        </div>
+		    </div>
+		</div>
+		<div class="oe_structure"/>
+		
+		    <t t-if="o.move_lines and o.move_lines[0].partner_id" name="partner_header">
+                    <t t-set="address">
+                        <t t-if="o.vessel_id"> <strong>Vessel:</strong><div t-field="o.vessel_id" t-options='{"widget": "contact","no_marker": True}'/></t>
+                       <t t-if="o.client_order_ref">  <strong>INQ/PO:</strong><div t-field="o.client_order_ref" /></t>
+                       <t t-if="o.date_done">  <div t-field="o.date_done" t-options='{"widget": "date"}'/></t>
+                       <t t-if="o.delivery_port_id">  <strong>Delivery Port :</strong><div t-field="o.delivery_port_id" /></t>
+                   </t>
+               		 </t>
                     <h2>
                         <span t-field="o.name"/>
                     </h2>
@@ -136,29 +141,32 @@
                         <t t-if="o.backorder_ids and o.backorder_ids.filtered(lambda x: x.state not in ('done', 'cancel'))">
                             All items couldn't be shipped, the remaining ones will be shipped as soon as they become available.
                         </t>
+
                     </p>
+		   <div style="margin-top: 200px">
+		            <div class="row">
+		                <div class="col-1"/>
+		                <div class="col-3 text-center" >
+		                    <span>Master Signature</span>
+		                </div>
+		                <div class="col-4"/>
+		                <div class="col-3">stamp</div>
+		                <div class="col-1"/>
+		            </div>
+		            <div class="row">
+		                <div class="col-1"/>
+		                <div class="col-3 text-center">
+		                    <span>---------------------------</span>
+		                </div>
+		                <div class="col-4"/>
+		                <div class="col-3"></div>
+		                <div class="col-1"/>
+		            </div>
+		  </div>
+		 <div class="oe_structure"/>
                 </div>
-                <div class="footer">
-                    <div class="row">
-                        <div class="col-1"/>
-                        <div class="col-3 text-center" >
-                            <span>Master Signature</span>
-                        </div>
-                        <div class="col-4"/>
-                        <div class="col-3">stamp</div>
-                        <div class="col-1"/>
-                    </div>
-                    <div class="row">
-                        <div class="col-1"/>
-                        <div class="col-3 text-center">
-                            <span>---------------------------</span>
-                        </div>
-                        <div class="col-4"/>
-                        <div class="col-3"></div>
-                        <div class="col-1"/>
-                    </div>
-                </div>
-            </t>
+		</t>
+		
 <!--         </t>-->
     </template>
 

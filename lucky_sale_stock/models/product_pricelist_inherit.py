@@ -156,7 +156,7 @@ class ProductPricelist(models.Model):
                                     elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff <= rule.min_price_diff):
                                         continue
                                     else:
-                                        continue
+                                        price = product.price_compute(rule.market_type)[product.id]
                                 else:
                                     # if base option is public price take sale price else cost price of product
                                     # price_compute returns the price in the context UoM, i.e. qty_uom_id
@@ -233,7 +233,7 @@ class ProductPricelist(models.Model):
                                 elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff <= rule.min_price_diff):
                                     continue
                                 else:
-                                    continue
+                                    price = product.price_compute(rule.market_type)[product.id]
                             else:
                                 # if base option is public price take sale price else cost price of product
                                 # price_compute returns the price in the context UoM, i.e. qty_uom_id
@@ -312,7 +312,7 @@ class ProductPricelist(models.Model):
                                 elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff <= rule.min_price_diff):
                                     continue
                                 else:
-                                    continue
+                                    price = product.price_compute(rule.market_type)[product.id]
                             else:
                                 # if base option is public price take sale price else cost price of product
                                 # price_compute returns the price in the context UoM, i.e. qty_uom_id
@@ -389,7 +389,7 @@ class ProductPricelist(models.Model):
                             elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff <= rule.min_price_diff):
                                 continue
                             else:
-                                continue
+                                price = product.price_compute(rule.market_type)[product.id]
                         else:
                             # if base option is public price take sale price else cost price of product
                             # price_compute returns the price in the context UoM, i.e. qty_uom_id

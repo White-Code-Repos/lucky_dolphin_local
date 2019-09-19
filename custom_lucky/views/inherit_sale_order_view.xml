@@ -22,6 +22,9 @@
 	   <xpath expr="//field[@name='order_line']/tree/field[@name='price_tax']" position="after">
 		<button name="get_reprice" string="Re-price"  type="object"/>
 	    </xpath>
+		<field name="pricelist_id" position="after">
+			<button name="update_pricelist" string="Update Price"  type="object"/>
+		</field>
         </field>
     </record>
 

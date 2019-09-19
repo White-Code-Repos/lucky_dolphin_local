@@ -86,6 +86,7 @@ class SaleOrder(models.Model):
         ], string='Status', readonly=True, copy=False, index=True, track_visibility='onchange', track_sequence=3,default='draft')
     pricelist_id = fields.Many2one('product.pricelist', string='Pricelist', required=True, readonly=True, states={'draft': [('readonly', False)], 'waiting_price': [('readonly', False)],'sent': [('readonly', False)]}, help="Pricelist for current sales order.")
 
+    
 
     # @api.multi
     # @api.onchange('pricelist_id', 'order_line')
@@ -106,7 +107,14 @@ class SaleOrder(models.Model):
     #                     line.price_unit = self.env['account.tax']._fix_tax_included_price(line._get_display_price(product), product.taxes_id, line.tax_id)
     #
 
-    
+    @api.multi
+    def update_pricelist(self):
+        if self.pricelist_id:
+            if self.order_line:
+                lines = self.order_line
+                for line in lines:
+                    line.price_unit = self.env['account.tax']._fix_tax_included_price_company(line._get_display_price(line.product_id), line.product_id.taxes_id, line.tax_id, line.company_id)
+
 
 #sale order line
 #add requested and priced value stage

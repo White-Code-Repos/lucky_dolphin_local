@@ -113,7 +113,15 @@ class SaleOrder(models.Model):
             if self.order_line:
                 lines = self.order_line
                 for line in lines:
-                    line.price_unit = self.env['account.tax']._fix_tax_included_price_company(line._get_display_price(line.product_id), line.product_id.taxes_id, line.tax_id, line.company_id)
+                    product = line.product_id.with_context(
+			    lang=line.order_id.partner_id.lang,
+			    partner=line.order_id.partner_id,
+			    quantity= line.product_uom_qty,
+			    date=line.order_id.date_order,
+			    pricelist=line.order_id.pricelist_id.id,
+			    uom=line.product_uom.id
+			)
+                    line.price_unit = self.env['account.tax']._fix_tax_included_price_company(line._get_display_price(product), product.taxes_id, line.tax_id, line.company_id)
 
 
 #sale order line

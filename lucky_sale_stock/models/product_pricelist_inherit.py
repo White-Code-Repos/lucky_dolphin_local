@@ -225,6 +225,8 @@ class ProductPricelist(models.Model):
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
                                     else:
                                         continue
+                                elif rule.factor and rule.req_to_min == 'stock_zero' and rule.min_to_available == 'stock_zero' and product.min_qty == 0:
+                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
                                 elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
                                     if product.min_qty and qty_in_product_uom <= product.min_qty:
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
@@ -304,6 +306,8 @@ class ProductPricelist(models.Model):
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
                                     else:
                                         continue
+                                elif rule.factor and rule.req_to_min == 'stock_zero' and rule.min_to_available == 'stock_zero' and product.min_qty == 0:
+                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
                                 elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
                                     if product.min_qty and qty_in_product_uom <= product.min_qty:
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
@@ -381,6 +385,8 @@ class ProductPricelist(models.Model):
                                     price = product.price_compute(rule.market_type)[product.id] * rule.factor
                                 else:
                                     continue
+                            elif rule.factor and rule.req_to_min == 'stock_zero' and rule.min_to_available == 'stock_zero' and product.min_qty == 0:
+                                    price = product.price_compute(rule.market_type)[product.id] * rule.factor
                             elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
                                 if product.min_qty and qty_in_product_uom <= product.min_qty:
                                     price = product.price_compute(rule.market_type)[product.id] * rule.factor

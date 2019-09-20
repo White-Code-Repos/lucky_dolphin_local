@@ -53,7 +53,22 @@ class ProductTemplate(models.Model):
     last_purchase_price = fields.Float('Last Purchase Price',readonly=True)
     min_qty = fields.Integer('Safety Stock')
     price_diff = fields.Float(compute='_get_price_diff',string='Price Difference %', store=True, readonly=True)
+    available = fields.Float('available',compute='_compute_quantities')
     #add extra product speed field for group by 
+
+    @api.depends(
+        'product_variant_ids',
+        'product_variant_ids.stock_move_ids.product_qty',
+        'product_variant_ids.stock_move_ids.state',
+    )
+    def _compute_quantities(self):
+        res = self._compute_quantities_dict()
+        for template in self:
+            template.qty_available = res[template.id]['qty_available']
+            template.virtual_available = res[template.id]['virtual_available']
+            template.incoming_qty = res[template.id]['incoming_qty']
+            template.outgoing_qty = res[template.id]['outgoing_qty']
+            template.available = res[template.id]['virtual_available']
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'

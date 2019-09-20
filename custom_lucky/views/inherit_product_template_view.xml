@@ -14,6 +14,7 @@
                 <field name="last_purchase_price" />
 		<field name="min_qty" />
 		<field name="price_diff" />
+        <field name="available"/>
             </field>
 	   
         </field>

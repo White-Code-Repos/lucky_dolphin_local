@@ -115,6 +115,372 @@ class ProductPricelist(models.Model):
                     if rule.dropship:
                         if product.last_purchase_price==0.00:
                             if rule.last_po_0 == True:
+                                if product.available ==0.00:
+                                    if rule.available_is_0 == True:
+                                        if rule.min_quantity and qty_in_product_uom < rule.min_quantity:
+                                            continue
+                                        if is_product_template:
+                                            if rule.product_tmpl_id and product.id != rule.product_tmpl_id.id:
+                                                continue
+                                            if rule.product_id and not (product.product_variant_count == 1 and product.product_variant_id.id == rule.product_id.id):
+                                                # product rule acceptable on template if has only one variant
+                                                continue
+                                        else:
+                                            if rule.product_tmpl_id and product.product_tmpl_id.id != rule.product_tmpl_id.id:
+                                                continue
+                                            if rule.product_id and product.id != rule.product_id.id:
+                                                continue
+
+                                        if rule.categ_id:
+                                            cat = product.categ_id
+                                            while cat:
+                                                if cat.id == rule.categ_id.id:
+                                                    break
+                                                cat = cat.parent_id
+                                            if not cat:
+                                                continue
+                                        if rule.base == 'pricelist' and rule.base_pricelist_id:
+                                            price_tmp = rule.base_pricelist_id._compute_price_rule([(product, qty, partner)])[product.id][0]  # TDE: 0 = price, 1 = rule
+                                            price = rule.base_pricelist_id.currency_id._convert(price_tmp, self.currency_id, self.env.user.company_id, date, round=False)
+                                        elif rule.base == 'market_price':
+                                            if rule.factor and rule.req_to_min == 'less_min':
+                                                if qty_in_product_uom > product.min_qty:
+                                                    price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                                else:
+                                                    continue
+                                            elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                                                if product.min_qty and qty_in_product_uom <= product.min_qty:
+                                                    price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                                else:
+                                                    continue
+                                            elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff <= rule.min_price_diff):
+                                                continue
+                                            elif rule.factor and rule.req_to_available == 'more_avail' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                                                if product.available and qty_in_product_uom <= product.available:
+                                                    price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                                else:
+                                                    continue
+                                            elif rule.factor and rule.req_to_available == 'less_avail':
+                                                if qty_in_product_uom > product.available:
+                                                    price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                                else:
+                                                    continue
+                                            else:
+                                                # price = product.price_compute(rule.market_type)[product.id]
+                                                continue
+                                        else:
+                                            # if base option is public price take sale price else cost price of product
+                                            # price_compute returns the price in the context UoM, i.e. qty_uom_id
+                                            price = product.price_compute(rule.base)[product.id]
+
+                                        convert_to_price_uom = (lambda price: product.uom_id._compute_price(price, price_uom))
+
+                                        if price is not False:
+                                            if rule.compute_price == 'fixed':
+                                                price = convert_to_price_uom(rule.fixed_price)
+                                            elif rule.compute_price == 'percentage':
+                                                price = (price - (price * (rule.percent_price / 100))) or 0.0
+                                            else:
+                                                # complete formula
+                                                price_limit = price
+                                                price = (price - (price * (rule.price_discount / 100))) or 0.0
+                                                if rule.price_round:
+                                                    price = tools.float_round(price, precision_rounding=rule.price_round)
+
+                                                if rule.price_surcharge:
+                                                    price_surcharge = convert_to_price_uom(rule.price_surcharge)
+                                                    price += price_surcharge
+
+                                                if rule.price_min_margin:
+                                                    price_min_margin = convert_to_price_uom(rule.price_min_margin)
+                                                    price = max(price, price_limit + price_min_margin)
+
+                                                if rule.price_max_margin:
+                                                    price_max_margin = convert_to_price_uom(rule.price_max_margin)
+                                                    price = min(price, price_limit + price_max_margin)
+                                            suitable_rule = rule
+                                        break
+                                    else:
+                                        continue
+                                elif rule.available_is_0 == True:
+                                    continue
+                                else:
+                                    if rule.min_quantity and qty_in_product_uom < rule.min_quantity:
+                                        continue
+                                    if is_product_template:
+                                        if rule.product_tmpl_id and product.id != rule.product_tmpl_id.id:
+                                            continue
+                                        if rule.product_id and not (product.product_variant_count == 1 and product.product_variant_id.id == rule.product_id.id):
+                                            # product rule acceptable on template if has only one variant
+                                            continue
+                                    else:
+                                        if rule.product_tmpl_id and product.product_tmpl_id.id != rule.product_tmpl_id.id:
+                                            continue
+                                        if rule.product_id and product.id != rule.product_id.id:
+                                            continue
+
+                                    if rule.categ_id:
+                                        cat = product.categ_id
+                                        while cat:
+                                            if cat.id == rule.categ_id.id:
+                                                break
+                                            cat = cat.parent_id
+                                        if not cat:
+                                            continue
+                                    if rule.base == 'pricelist' and rule.base_pricelist_id:
+                                        price_tmp = rule.base_pricelist_id._compute_price_rule([(product, qty, partner)])[product.id][0]  # TDE: 0 = price, 1 = rule
+                                        price = rule.base_pricelist_id.currency_id._convert(price_tmp, self.currency_id, self.env.user.company_id, date, round=False)
+                                    elif rule.base == 'market_price':
+                                        if rule.factor and rule.req_to_min == 'less_min':
+                                            if qty_in_product_uom > product.min_qty:
+                                                price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                            else:
+                                                continue
+                                        elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                                            if product.min_qty and qty_in_product_uom <= product.min_qty:
+                                                price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                            else:
+                                                continue
+                                        elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff <= rule.min_price_diff):
+                                            continue
+                                        elif rule.factor and rule.req_to_available == 'more_avail' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                                            if product.available and qty_in_product_uom <= product.available:
+                                                price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                            else:
+                                                continue
+                                        elif rule.factor and rule.req_to_available == 'less_avail':
+                                            if qty_in_product_uom > product.available:
+                                                price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                            else:
+                                                continue
+                                        else:
+                                            # price = product.price_compute(rule.market_type)[product.id]
+                                            continue
+                                    else:
+                                        # if base option is public price take sale price else cost price of product
+                                        # price_compute returns the price in the context UoM, i.e. qty_uom_id
+                                        price = product.price_compute(rule.base)[product.id]
+
+                                    convert_to_price_uom = (lambda price: product.uom_id._compute_price(price, price_uom))
+
+                                    if price is not False:
+                                        if rule.compute_price == 'fixed':
+                                            price = convert_to_price_uom(rule.fixed_price)
+                                        elif rule.compute_price == 'percentage':
+                                            price = (price - (price * (rule.percent_price / 100))) or 0.0
+                                        else:
+                                            # complete formula
+                                            price_limit = price
+                                            price = (price - (price * (rule.price_discount / 100))) or 0.0
+                                            if rule.price_round:
+                                                price = tools.float_round(price, precision_rounding=rule.price_round)
+
+                                            if rule.price_surcharge:
+                                                price_surcharge = convert_to_price_uom(rule.price_surcharge)
+                                                price += price_surcharge
+
+                                            if rule.price_min_margin:
+                                                price_min_margin = convert_to_price_uom(rule.price_min_margin)
+                                                price = max(price, price_limit + price_min_margin)
+
+                                            if rule.price_max_margin:
+                                                price_max_margin = convert_to_price_uom(rule.price_max_margin)
+                                                price = min(price, price_limit + price_max_margin)
+                                        suitable_rule = rule
+                                    break
+                            else:
+                                continue
+                        elif rule.last_po_0:
+                            continue
+                        else:
+                            if product.available == 0.00:
+                                if rule.available_is_0 == True:
+                                    if rule.min_quantity and qty_in_product_uom < rule.min_quantity:
+                                            continue
+                                    if is_product_template:
+                                        if rule.product_tmpl_id and product.id != rule.product_tmpl_id.id:
+                                            continue
+                                        if rule.product_id and not (product.product_variant_count == 1 and product.product_variant_id.id == rule.product_id.id):
+                                            # product rule acceptable on template if has only one variant
+                                            continue
+                                    else:
+                                        if rule.product_tmpl_id and product.product_tmpl_id.id != rule.product_tmpl_id.id:
+                                            continue
+                                        if rule.product_id and product.id != rule.product_id.id:
+                                            continue
+
+                                    if rule.categ_id:
+                                        cat = product.categ_id
+                                        while cat:
+                                            if cat.id == rule.categ_id.id:
+                                                break
+                                            cat = cat.parent_id
+                                        if not cat:
+                                            continue
+                                    if rule.base == 'pricelist' and rule.base_pricelist_id:
+                                        price_tmp = rule.base_pricelist_id._compute_price_rule([(product, qty, partner)])[product.id][0]  # TDE: 0 = price, 1 = rule
+                                        price = rule.base_pricelist_id.currency_id._convert(price_tmp, self.currency_id, self.env.user.company_id, date, round=False)
+                                    elif rule.base == 'market_price':
+                                        if rule.factor and rule.req_to_min == 'less_min':
+                                            if qty_in_product_uom > product.min_qty:
+                                                price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                            else:
+                                                continue
+                                        elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                                            if product.min_qty and qty_in_product_uom <= product.min_qty:
+                                                price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                            else:
+                                                continue
+                                        elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff <= rule.min_price_diff):
+                                            continue
+                                        elif rule.factor and rule.req_to_available == 'more_avail' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                                            if product.available and qty_in_product_uom <= product.available:
+                                                price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                            else:
+                                                continue
+                                        elif rule.factor and rule.req_to_available == 'less_avail':
+                                            if qty_in_product_uom > product.available:
+                                                price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                            else:
+                                                continue
+                                        else:
+                                            # price = product.price_compute(rule.market_type)[product.id]
+                                            continue
+                                    else:
+                                        # if base option is public price take sale price else cost price of product
+                                        # price_compute returns the price in the context UoM, i.e. qty_uom_id
+                                        price = product.price_compute(rule.base)[product.id]
+
+                                    convert_to_price_uom = (lambda price: product.uom_id._compute_price(price, price_uom))
+
+                                    if price is not False:
+                                        if rule.compute_price == 'fixed':
+                                            price = convert_to_price_uom(rule.fixed_price)
+                                        elif rule.compute_price == 'percentage':
+                                            price = (price - (price * (rule.percent_price / 100))) or 0.0
+                                        else:
+                                            # complete formula
+                                            price_limit = price
+                                            price = (price - (price * (rule.price_discount / 100))) or 0.0
+                                            if rule.price_round:
+                                                price = tools.float_round(price, precision_rounding=rule.price_round)
+
+                                            if rule.price_surcharge:
+                                                price_surcharge = convert_to_price_uom(rule.price_surcharge)
+                                                price += price_surcharge
+
+                                            if rule.price_min_margin:
+                                                price_min_margin = convert_to_price_uom(rule.price_min_margin)
+                                                price = max(price, price_limit + price_min_margin)
+
+                                            if rule.price_max_margin:
+                                                price_max_margin = convert_to_price_uom(rule.price_max_margin)
+                                                price = min(price, price_limit + price_max_margin)
+                                        suitable_rule = rule
+                                    break
+                                else:
+                                    continue
+                            elif rule.available_is_0 == True:
+                                continue
+                            else:
+                                continue
+                    else:
+                        continue
+                elif rule.dropship:
+                    continue
+                else:
+                    if product.last_purchase_price==0.00:
+                        if rule.last_po_0 == True:
+                            if product.available ==0.00:
+                                if rule.available_is_0 == True:
+                                    if rule.min_quantity and qty_in_product_uom < rule.min_quantity:
+                                        continue
+                                    if is_product_template:
+                                        if rule.product_tmpl_id and product.id != rule.product_tmpl_id.id:
+                                            continue
+                                        if rule.product_id and not (product.product_variant_count == 1 and product.product_variant_id.id == rule.product_id.id):
+                                            # product rule acceptable on template if has only one variant
+                                            continue
+                                    else:
+                                        if rule.product_tmpl_id and product.product_tmpl_id.id != rule.product_tmpl_id.id:
+                                            continue
+                                        if rule.product_id and product.id != rule.product_id.id:
+                                            continue
+
+                                    if rule.categ_id:
+                                        cat = product.categ_id
+                                        while cat:
+                                            if cat.id == rule.categ_id.id:
+                                                break
+                                            cat = cat.parent_id
+                                        if not cat:
+                                            continue
+                                    if rule.base == 'pricelist' and rule.base_pricelist_id:
+                                        price_tmp = rule.base_pricelist_id._compute_price_rule([(product, qty, partner)])[product.id][0]  # TDE: 0 = price, 1 = rule
+                                        price = rule.base_pricelist_id.currency_id._convert(price_tmp, self.currency_id, self.env.user.company_id, date, round=False)
+                                    elif rule.base == 'market_price':
+                                        if rule.factor and rule.req_to_min == 'less_min':
+                                            if qty_in_product_uom > product.min_qty:
+                                                price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                            else:
+                                                continue
+                                        elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                                            if product.min_qty and qty_in_product_uom <= product.min_qty:
+                                                price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                            else:
+                                                continue
+                                        elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff <= rule.min_price_diff):
+                                            continue
+                                        elif rule.factor and rule.req_to_available == 'more_avail' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                                            if product.available and qty_in_product_uom <= product.available:
+                                                price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                            else:
+                                                continue
+                                        elif rule.factor and rule.req_to_available == 'less_avail':
+                                            if qty_in_product_uom > product.available:
+                                                price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                            else:
+                                                continue
+                                        else:
+                                            # price = product.price_compute(rule.market_type)[product.id]
+                                            continue
+                                    else:
+                                        # if base option is public price take sale price else cost price of product
+                                        # price_compute returns the price in the context UoM, i.e. qty_uom_id
+                                        price = product.price_compute(rule.base)[product.id]
+
+                                    convert_to_price_uom = (lambda price: product.uom_id._compute_price(price, price_uom))
+
+                                    if price is not False:
+                                        if rule.compute_price == 'fixed':
+                                            price = convert_to_price_uom(rule.fixed_price)
+                                        elif rule.compute_price == 'percentage':
+                                            price = (price - (price * (rule.percent_price / 100))) or 0.0
+                                        else:
+                                            # complete formula
+                                            price_limit = price
+                                            price = (price - (price * (rule.price_discount / 100))) or 0.0
+                                            if rule.price_round:
+                                                price = tools.float_round(price, precision_rounding=rule.price_round)
+
+                                            if rule.price_surcharge:
+                                                price_surcharge = convert_to_price_uom(rule.price_surcharge)
+                                                price += price_surcharge
+
+                                            if rule.price_min_margin:
+                                                price_min_margin = convert_to_price_uom(rule.price_min_margin)
+                                                price = max(price, price_limit + price_min_margin)
+
+                                            if rule.price_max_margin:
+                                                price_max_margin = convert_to_price_uom(rule.price_max_margin)
+                                                price = min(price, price_limit + price_max_margin)
+                                        suitable_rule = rule
+                                    break
+                                else:
+                                    continue
+                            elif rule.available_is_0 == True:
+                                continue
+                            else:
                                 if rule.min_quantity and qty_in_product_uom < rule.min_quantity:
                                     continue
                                 if is_product_template:
@@ -146,8 +512,6 @@ class ProductPricelist(models.Model):
                                             price = product.price_compute(rule.market_type)[product.id] * rule.factor
                                         else:
                                             continue
-                                    elif rule.factor and rule.req_to_min == 'stock_zero' and rule.min_to_available == 'stock_zero' and product.min_qty == 0:
-                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
                                     elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
                                         if product.min_qty and qty_in_product_uom <= product.min_qty:
                                             price = product.price_compute(rule.market_type)[product.id] * rule.factor
@@ -155,8 +519,110 @@ class ProductPricelist(models.Model):
                                             continue
                                     elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff <= rule.min_price_diff):
                                         continue
+                                    elif rule.factor and rule.req_to_available == 'more_avail' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                                        if product.available and qty_in_product_uom <= product.available:
+                                            price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        else:
+                                            continue
+                                    elif rule.factor and rule.req_to_available == 'less_avail':
+                                        if qty_in_product_uom > product.available:
+                                            price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        else:
+                                            continue
                                     else:
                                         # price = product.price_compute(rule.market_type)[product.id]
+                                        #when no rule is satisfied
+                                        continue
+                                else:
+                                    # if base option is public price take sale price else cost price of product
+                                    # price_compute returns the price in the context UoM, i.e. qty_uom_id
+                                    price = product.price_compute(rule.base)[product.id]
+
+                                convert_to_price_uom = (lambda price: product.uom_id._compute_price(price, price_uom))
+
+                                if price is not False:
+                                    if rule.compute_price == 'fixed':
+                                        price = convert_to_price_uom(rule.fixed_price)
+                                    elif rule.compute_price == 'percentage':
+                                        price = (price - (price * (rule.percent_price / 100))) or 0.0
+                                    else:
+                                        # complete formula
+                                        price_limit = price
+                                        price = (price - (price * (rule.price_discount / 100))) or 0.0
+                                        if rule.price_round:
+                                            price = tools.float_round(price, precision_rounding=rule.price_round)
+
+                                        if rule.price_surcharge:
+                                            price_surcharge = convert_to_price_uom(rule.price_surcharge)
+                                            price += price_surcharge
+
+                                        if rule.price_min_margin:
+                                            price_min_margin = convert_to_price_uom(rule.price_min_margin)
+                                            price = max(price, price_limit + price_min_margin)
+
+                                        if rule.price_max_margin:
+                                            price_max_margin = convert_to_price_uom(rule.price_max_margin)
+                                            price = min(price, price_limit + price_max_margin)
+                                    suitable_rule = rule
+                                break
+                        else:
+                            continue
+                    elif rule.last_po_0:
+                        continue
+                    else:
+                        if product.available == 0.00:
+                            if rule.available_is_0 == True:
+                                if rule.min_quantity and qty_in_product_uom < rule.min_quantity:
+                                    continue
+                                if is_product_template:
+                                    if rule.product_tmpl_id and product.id != rule.product_tmpl_id.id:
+                                        continue
+                                    if rule.product_id and not (product.product_variant_count == 1 and product.product_variant_id.id == rule.product_id.id):
+                                        # product rule acceptable on template if has only one variant
+                                        continue
+                                else:
+                                    if rule.product_tmpl_id and product.product_tmpl_id.id != rule.product_tmpl_id.id:
+                                        continue
+                                    if rule.product_id and product.id != rule.product_id.id:
+                                        continue
+
+                                if rule.categ_id:
+                                    cat = product.categ_id
+                                    while cat:
+                                        if cat.id == rule.categ_id.id:
+                                            break
+                                        cat = cat.parent_id
+                                    if not cat:
+                                        continue
+                                if rule.base == 'pricelist' and rule.base_pricelist_id:
+                                    price_tmp = rule.base_pricelist_id._compute_price_rule([(product, qty, partner)])[product.id][0]  # TDE: 0 = price, 1 = rule
+                                    price = rule.base_pricelist_id.currency_id._convert(price_tmp, self.currency_id, self.env.user.company_id, date, round=False)
+                                elif rule.base == 'market_price':
+                                    if rule.factor and rule.req_to_min == 'less_min':
+                                        if qty_in_product_uom > product.min_qty:
+                                            price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        else:
+                                            continue
+                                    elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                                        if product.min_qty and qty_in_product_uom <= product.min_qty:
+                                            price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        else:
+                                            continue
+                                    elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff <= rule.min_price_diff):
+                                        continue
+                                    elif rule.factor and rule.req_to_available == 'more_avail' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                                        if product.available and qty_in_product_uom <= product.available:
+                                            price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        else:
+                                            continue
+                                    elif rule.factor and rule.req_to_available == 'less_avail':
+                                        if qty_in_product_uom > product.available:
+                                            price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        else:
+                                            continue
+                                    else:
+                                        # price = product.price_compute(rule.market_type)[product.id]
+                                        #when no rule is satisfied
                                         continue
                                 else:
                                     # if base option is public price take sale price else cost price of product
@@ -192,247 +658,10 @@ class ProductPricelist(models.Model):
                                 break
                             else:
                                 continue
-                        elif rule.last_po_0:
+                        elif rule.available_is_0 == True:
                             continue
                         else:
-                            if rule.min_quantity and qty_in_product_uom < rule.min_quantity:
-                                    continue
-                            if is_product_template:
-                                if rule.product_tmpl_id and product.id != rule.product_tmpl_id.id:
-                                    continue
-                                if rule.product_id and not (product.product_variant_count == 1 and product.product_variant_id.id == rule.product_id.id):
-                                    # product rule acceptable on template if has only one variant
-                                    continue
-                            else:
-                                if rule.product_tmpl_id and product.product_tmpl_id.id != rule.product_tmpl_id.id:
-                                    continue
-                                if rule.product_id and product.id != rule.product_id.id:
-                                    continue
-
-                            if rule.categ_id:
-                                cat = product.categ_id
-                                while cat:
-                                    if cat.id == rule.categ_id.id:
-                                        break
-                                    cat = cat.parent_id
-                                if not cat:
-                                    continue
-                            if rule.base == 'pricelist' and rule.base_pricelist_id:
-                                price_tmp = rule.base_pricelist_id._compute_price_rule([(product, qty, partner)])[product.id][0]  # TDE: 0 = price, 1 = rule
-                                price = rule.base_pricelist_id.currency_id._convert(price_tmp, self.currency_id, self.env.user.company_id, date, round=False)
-                            elif rule.base == 'market_price':
-                                if rule.factor and rule.req_to_min == 'less_min':
-                                    if qty_in_product_uom > product.min_qty:
-                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
-                                    else:
-                                        continue
-                                elif rule.factor and rule.req_to_min == 'stock_zero' and rule.min_to_available == 'stock_zero' and product.min_qty == 0:
-                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
-                                elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
-                                    if product.min_qty and qty_in_product_uom <= product.min_qty:
-                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
-                                    else:
-                                        continue
-                                elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff <= rule.min_price_diff):
-                                    continue
-                                else:
-                                    # price = product.price_compute(rule.market_type)[product.id]
-                                    continue
-                            else:
-                                # if base option is public price take sale price else cost price of product
-                                # price_compute returns the price in the context UoM, i.e. qty_uom_id
-                                price = product.price_compute(rule.base)[product.id]
-
-                            convert_to_price_uom = (lambda price: product.uom_id._compute_price(price, price_uom))
-
-                            if price is not False:
-                                if rule.compute_price == 'fixed':
-                                    price = convert_to_price_uom(rule.fixed_price)
-                                elif rule.compute_price == 'percentage':
-                                    price = (price - (price * (rule.percent_price / 100))) or 0.0
-                                else:
-                                    # complete formula
-                                    price_limit = price
-                                    price = (price - (price * (rule.price_discount / 100))) or 0.0
-                                    if rule.price_round:
-                                        price = tools.float_round(price, precision_rounding=rule.price_round)
-
-                                    if rule.price_surcharge:
-                                        price_surcharge = convert_to_price_uom(rule.price_surcharge)
-                                        price += price_surcharge
-
-                                    if rule.price_min_margin:
-                                        price_min_margin = convert_to_price_uom(rule.price_min_margin)
-                                        price = max(price, price_limit + price_min_margin)
-
-                                    if rule.price_max_margin:
-                                        price_max_margin = convert_to_price_uom(rule.price_max_margin)
-                                        price = min(price, price_limit + price_max_margin)
-                                suitable_rule = rule
-                            break
-                    else:
-                        continue
-                elif rule.dropship:
-                    continue
-                else:
-                    if product.last_purchase_price==0.00:
-                        if rule.last_po_0 == True:
-                            if rule.min_quantity and qty_in_product_uom < rule.min_quantity:
-                                continue
-                            if is_product_template:
-                                if rule.product_tmpl_id and product.id != rule.product_tmpl_id.id:
-                                    continue
-                                if rule.product_id and not (product.product_variant_count == 1 and product.product_variant_id.id == rule.product_id.id):
-                                    # product rule acceptable on template if has only one variant
-                                    continue
-                            else:
-                                if rule.product_tmpl_id and product.product_tmpl_id.id != rule.product_tmpl_id.id:
-                                    continue
-                                if rule.product_id and product.id != rule.product_id.id:
-                                    continue
-
-                            if rule.categ_id:
-                                cat = product.categ_id
-                                while cat:
-                                    if cat.id == rule.categ_id.id:
-                                        break
-                                    cat = cat.parent_id
-                                if not cat:
-                                    continue
-                            if rule.base == 'pricelist' and rule.base_pricelist_id:
-                                price_tmp = rule.base_pricelist_id._compute_price_rule([(product, qty, partner)])[product.id][0]  # TDE: 0 = price, 1 = rule
-                                price = rule.base_pricelist_id.currency_id._convert(price_tmp, self.currency_id, self.env.user.company_id, date, round=False)
-                            elif rule.base == 'market_price':
-                                if rule.factor and rule.req_to_min == 'less_min':
-                                    if qty_in_product_uom > product.min_qty:
-                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
-                                    else:
-                                        continue
-                                elif rule.factor and rule.req_to_min == 'stock_zero' and rule.min_to_available == 'stock_zero' and product.min_qty == 0:
-                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
-                                elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
-                                    if product.min_qty and qty_in_product_uom <= product.min_qty:
-                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
-                                    else:
-                                        continue
-                                elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff <= rule.min_price_diff):
-                                    continue
-                                else:
-                                    # price = product.price_compute(rule.market_type)[product.id]
-                                    continue
-                            else:
-                                # if base option is public price take sale price else cost price of product
-                                # price_compute returns the price in the context UoM, i.e. qty_uom_id
-                                price = product.price_compute(rule.base)[product.id]
-
-                            convert_to_price_uom = (lambda price: product.uom_id._compute_price(price, price_uom))
-
-                            if price is not False:
-                                if rule.compute_price == 'fixed':
-                                    price = convert_to_price_uom(rule.fixed_price)
-                                elif rule.compute_price == 'percentage':
-                                    price = (price - (price * (rule.percent_price / 100))) or 0.0
-                                else:
-                                    # complete formula
-                                    price_limit = price
-                                    price = (price - (price * (rule.price_discount / 100))) or 0.0
-                                    if rule.price_round:
-                                        price = tools.float_round(price, precision_rounding=rule.price_round)
-
-                                    if rule.price_surcharge:
-                                        price_surcharge = convert_to_price_uom(rule.price_surcharge)
-                                        price += price_surcharge
-
-                                    if rule.price_min_margin:
-                                        price_min_margin = convert_to_price_uom(rule.price_min_margin)
-                                        price = max(price, price_limit + price_min_margin)
-
-                                    if rule.price_max_margin:
-                                        price_max_margin = convert_to_price_uom(rule.price_max_margin)
-                                        price = min(price, price_limit + price_max_margin)
-                                suitable_rule = rule
-                            break
-                        else:
                             continue
-                    elif rule.last_po_0:
-                        continue
-                    else:
-                        if rule.min_quantity and qty_in_product_uom < rule.min_quantity:
-                            continue
-                        if is_product_template:
-                            if rule.product_tmpl_id and product.id != rule.product_tmpl_id.id:
-                                continue
-                            if rule.product_id and not (product.product_variant_count == 1 and product.product_variant_id.id == rule.product_id.id):
-                                # product rule acceptable on template if has only one variant
-                                continue
-                        else:
-                            if rule.product_tmpl_id and product.product_tmpl_id.id != rule.product_tmpl_id.id:
-                                continue
-                            if rule.product_id and product.id != rule.product_id.id:
-                                continue
-
-                        if rule.categ_id:
-                            cat = product.categ_id
-                            while cat:
-                                if cat.id == rule.categ_id.id:
-                                    break
-                                cat = cat.parent_id
-                            if not cat:
-                                continue
-                        if rule.base == 'pricelist' and rule.base_pricelist_id:
-                            price_tmp = rule.base_pricelist_id._compute_price_rule([(product, qty, partner)])[product.id][0]  # TDE: 0 = price, 1 = rule
-                            price = rule.base_pricelist_id.currency_id._convert(price_tmp, self.currency_id, self.env.user.company_id, date, round=False)
-                        elif rule.base == 'market_price':
-                            if rule.factor and rule.req_to_min == 'less_min':
-                                if qty_in_product_uom > product.min_qty:
-                                    price = product.price_compute(rule.market_type)[product.id] * rule.factor
-                                else:
-                                    continue
-                            elif rule.factor and rule.req_to_min == 'stock_zero' and rule.min_to_available == 'stock_zero' and product.min_qty == 0:
-                                    price = product.price_compute(rule.market_type)[product.id] * rule.factor
-                            elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
-                                if product.min_qty and qty_in_product_uom <= product.min_qty:
-                                    price = product.price_compute(rule.market_type)[product.id] * rule.factor
-                                else:
-                                    continue
-                            elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff <= rule.min_price_diff):
-                                continue
-                            else:
-                                # price = product.price_compute(rule.market_type)[product.id]
-                                #when no rule is satisfied
-                                continue
-                        else:
-                            # if base option is public price take sale price else cost price of product
-                            # price_compute returns the price in the context UoM, i.e. qty_uom_id
-                            price = product.price_compute(rule.base)[product.id]
-
-                        convert_to_price_uom = (lambda price: product.uom_id._compute_price(price, price_uom))
-
-                        if price is not False:
-                            if rule.compute_price == 'fixed':
-                                price = convert_to_price_uom(rule.fixed_price)
-                            elif rule.compute_price == 'percentage':
-                                price = (price - (price * (rule.percent_price / 100))) or 0.0
-                            else:
-                                # complete formula
-                                price_limit = price
-                                price = (price - (price * (rule.price_discount / 100))) or 0.0
-                                if rule.price_round:
-                                    price = tools.float_round(price, precision_rounding=rule.price_round)
-
-                                if rule.price_surcharge:
-                                    price_surcharge = convert_to_price_uom(rule.price_surcharge)
-                                    price += price_surcharge
-
-                                if rule.price_min_margin:
-                                    price_min_margin = convert_to_price_uom(rule.price_min_margin)
-                                    price = max(price, price_limit + price_min_margin)
-
-                                if rule.price_max_margin:
-                                    price_max_margin = convert_to_price_uom(rule.price_max_margin)
-                                    price = min(price, price_limit + price_max_margin)
-                            suitable_rule = rule
-                        break
 
             # Final price conversion into pricelist currency
             if suitable_rule and suitable_rule.compute_price != 'fixed' and suitable_rule.base != 'pricelist':

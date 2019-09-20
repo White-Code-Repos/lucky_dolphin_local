@@ -10,6 +10,8 @@
 	        <field name="last_po_to_market"  attrs="{'invisible':[('base', 'in', ['list_price','standard_price','pricelist'])]}"/>
 		<field name="req_to_min" attrs="{'invisible':[('base', 'in', ['list_price','standard_price','pricelist'])]}"/>
 		<field name="min_to_available" attrs="{'invisible':[('base', 'in', ['list_price','standard_price','pricelist'])]}"/>
+    <field name="req_to_available" attrs="{'invisible':[('base', 'in', ['list_price','standard_price','pricelist'])]}"/>
+
 	     </field>
               <!--<xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="before">
 		<field name="price_state"/>
@@ -25,11 +27,12 @@
             <!-- Zina Changes -->
       <field name="price_max_margin" position="after">
         <field name="factor" attrs="{'invisible': [('base','!=','market_price')]}"/>
-        <field name="min_price_diff" attrs="{'invisible': ['|','|',('base','!=','market_price'),('req_to_min','=','less_min'),('req_to_min','=','stock_zero')]}"/>
-        <field name="max_price_diff" attrs="{'invisible': ['|','|',('base','!=','market_price'),('req_to_min','=','less_min'),('req_to_min','=','stock_zero')]}"/>
+        <field name="min_price_diff" attrs="{'invisible': ['|','|',('base','!=','market_price'),('req_to_min','=','less_min'),('req_to_available','=','less_avail')]}"/>
+        <field name="max_price_diff" attrs="{'invisible': ['|','|',('base','!=','market_price'),('req_to_min','=','less_min'),('req_to_available','=','less_avail')]}"/>
         <field name="market_type" attrs="{'invisible': [('base','!=','market_price')]}"/>
         <field name="dropship" attrs="{'invisible': [('base','!=','market_price')]}"/>
         <field name="last_po_0" attrs="{'invisible': [('base','!=','market_price')]}"/>
+        <field name="available_is_0" attrs="{'invisible': [('base','!=','market_price')]}"/>
       </field>
 
             <!--Zienab Edits -->

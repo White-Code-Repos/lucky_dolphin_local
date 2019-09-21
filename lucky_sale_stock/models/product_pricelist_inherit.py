@@ -141,8 +141,13 @@ class ProductPricelist(models.Model):
                         price = rule.base_pricelist_id.currency_id._convert(price_tmp, self.currency_id, self.env.user.company_id, date, round=False)
                     elif rule.base == 'market_price':
                         if rule.market_type:
-                            if rule.factor and rule.req_to_min == 'less_min':
-                                if qty_in_product_uom > product.min_qty:
+                            if rule.factor and rule.req_to_min == 'less_min' and rule.min_to_available=='less_available':
+                                if qty_in_product_uom > product.min_qty and product.min_qty > product.available:
+                                    price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                else:
+                                    continue
+                            elif rule.factor and rule.req_to_min == 'less_min' and rule.min_to_available=='less_min' and rule.req_to_available=='less_avail':
+                                if qty_in_product_uom > product.min_qty and product.min_qty < product.available and qty_in_product_uom > product.available:
                                     price = product.price_compute(rule.market_type)[product.id] * rule.factor
                                 else:
                                     continue
@@ -219,6 +224,6 @@ class ProductPricelist(models.Model):
                 available_rules = items.filtered(lambda rule: rule.available_is_0)
                 compute_price_ct(available_rules)
             else:
-                compute_price_ct(items)
+                compute_price_ct(items.filtered(lambda rule: rule.available_is_0==False and rule.dropship==False and rule.last_po_0==False))
 
         return results

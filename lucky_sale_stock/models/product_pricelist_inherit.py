@@ -141,31 +141,218 @@ class ProductPricelist(models.Model):
                         price = rule.base_pricelist_id.currency_id._convert(price_tmp, self.currency_id, self.env.user.company_id, date, round=False)
                     elif rule.base == 'market_price':
                         if rule.market_type:
-                            if rule.factor and rule.req_to_min == 'less_min' and rule.min_to_available=='less_available':
-                                if qty_in_product_uom > product.min_qty and product.min_qty > product.available:
+                            if rule.factor and rule.req_to_min == 'less_min' and rule.min_to_available=='less_available' and rule.req_to_available == 'less_avail':
+                                if qty_in_product_uom > product.min_qty and product.min_qty > product.available and qty_in_product_uom > product.available:
                                     price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                    break
+                                else:
+                                    continue
+                            elif rule.factor and rule.req_to_min == 'less_min' and rule.min_to_available=='less_available' and rule.req_to_available == 'more_avail':
+                                if qty_in_product_uom > product.min_qty and product.min_qty > product.available and qty_in_product_uom <= product.available:
+                                    price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                    break
                                 else:
                                     continue
                             elif rule.factor and rule.req_to_min == 'less_min' and rule.min_to_available=='less_min' and rule.req_to_available=='less_avail':
-                                if qty_in_product_uom > product.min_qty and product.min_qty < product.available and qty_in_product_uom > product.available:
+                                if qty_in_product_uom > product.min_qty and product.min_qty <= product.available and qty_in_product_uom > product.available:
                                     price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                    break
                                 else:
                                     continue
-                            elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
-                                if product.min_qty and qty_in_product_uom <= product.min_qty:
+                            elif rule.factor and rule.req_to_min == 'less_min' and rule.min_to_available=='less_min' and rule.req_to_available=='more_avail':
+                                if qty_in_product_uom > product.min_qty and product.min_qty <= product.available and qty_in_product_uom <= product.available:
                                     price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                    break
+                                else:
+                                    continue
+                            elif rule.factor and rule.req_to_min == 'less_req' and rule.min_to_available=='less_min' and rule.req_to_available=='less_avail':
+                                if qty_in_product_uom <= product.min_qty and product.min_qty <= product.available and qty_in_product_uom > product.available:
+                                    price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                    break
+                                else:
+                                    continue
+                            elif rule.factor and rule.req_to_min == 'less_req' and rule.min_to_available=='less_min' and rule.req_to_available=='more_avail' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                                if qty_in_product_uom <= product.min_qty and product.min_qty <= product.available and qty_in_product_uom <= product.available:
+                                    price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                    break
+                                else:
+                                    continue
+                            elif rule.factor and rule.req_to_min == 'less_req' and rule.min_to_available=='less_available' and rule.req_to_available=='less_avail':
+                                if qty_in_product_uom <= product.min_qty and product.min_qty > product.available and qty_in_product_uom > product.available:
+                                    price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                    break
+                                else:
+                                    continue
+                            elif rule.factor and rule.req_to_min == 'less_req' and rule.min_to_available=='less_available' and rule.req_to_available=='more_avail' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                                if qty_in_product_uom <= product.min_qty and product.min_qty > product.available and qty_in_product_uom <= product.available:
+                                    price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                    break
+                                else:
+                                    continue
+                            elif rule.factor and rule.req_to_min == 'less_min' and rule.min_to_available=='less_min':
+                                if not rule.req_to_available:
+                                    if qty_in_product_uom > product.min_qty and product.min_qty <= product.available:
+                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        break
+                                    else:
+                                        continue
+                                else:
+                                    continue
+                            elif rule.factor and rule.req_to_min == 'less_min' and rule.min_to_available=='less_available':
+                                if not rule.req_to_available:
+                                    if qty_in_product_uom > product.min_qty and product.min_qty > product.available:
+                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        break
+                                    else:
+                                        continue
+                                else:
+                                    continue
+                            elif rule.factor and rule.req_to_min == 'less_req' and rule.min_to_available=='less_min' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                                if not rule.req_to_available:
+                                    if product.min_qty and qty_in_product_uom <= product.min_qty and product.min_qty <= product.available:
+                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        break
+                                    else:
+                                        continue
+                                else:
+                                    continue
+                            elif rule.factor and rule.req_to_min == 'less_req' and rule.min_to_available=='less_available' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                                if not rule.req_to_available:
+                                    if product.min_qty and qty_in_product_uom <= product.min_qty and product.min_qty > product.available:
+                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        break
+                                    else:
+                                        continue
+                                else:
+                                    continue
+                            elif rule.factor and rule.req_to_min == 'less_req' and rule.req_to_available=='less_avail':
+                                if not rule.min_to_available:
+                                    if qty_in_product_uom <= product.min_qty and qty_in_product_uom > product.available:
+                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        break
+                                    else:
+                                        continue
+                                else:
+                                    continue
+                            elif rule.factor and rule.req_to_min == 'less_req' and rule.req_to_available=='more_avail' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                                if not rule.min_to_available:
+                                    if qty_in_product_uom <= product.min_qty and qty_in_product_uom <= product.available:
+                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        break
+                                    else:
+                                        continue
+                                else:
+                                    continue
+                            elif rule.factor and rule.req_to_min == 'less_min' and rule.req_to_available=='more_avail':
+                                if not rule.min_to_available:
+                                    if qty_in_product_uom > product.min_qty and qty_in_product_uom <= product.available:
+                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        break
+                                    else:
+                                        continue
+                                else:
+                                    continue
+                            elif rule.factor and rule.req_to_min == 'less_min' and rule.req_to_available=='less_avail':
+                                if not rule.min_to_available:
+                                    if qty_in_product_uom > product.min_qty and qty_in_product_uom > product.available:
+                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        break
+                                    else:
+                                        continue
                                 else:
                                     continue
                             elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff <= rule.min_price_diff):
                                 continue
+                            elif rule.factor and rule.req_to_available == 'more_avail' and (product.price_diff <= rule.min_price_diff):
+                                continue
+                            elif rule.factor and rule.min_to_available=='less_available' and rule.req_to_available == 'more_avail' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                                if not rule.req_to_min:
+                                    if product.min_qty > product.available and qty_in_product_uom <= product.available:
+                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        break
+                                    else:
+                                        continue
+                                else:
+                                    continue
+                            elif rule.factor and rule.min_to_available=='less_min' and rule.req_to_available == 'more_avail' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                                if not rule.req_to_min:
+                                    if product.min_qty <= product.available and qty_in_product_uom <= product.available:
+                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        break
+                                    else:
+                                        continue
+                                else:
+                                    continue
+                            elif rule.factor and rule.min_to_available=='less_min' and rule.req_to_available == 'less_avail':
+                                if not rule.req_to_min:
+                                    if product.min_qty <= product.available and qty_in_product_uom > product.available:
+                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        break
+                                    else:
+                                        continue
+                                else:
+                                    continue
+                            elif rule.factor and rule.min_to_available=='less_available' and rule.req_to_available == 'less_avail':
+                                if not rule.req_to_min:
+                                    if product.min_qty > product.available and qty_in_product_uom > product.available:
+                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        break
+                                    else:
+                                        continue
+                                else:
+                                    continue
+                            elif rule.factor and rule.req_to_min == 'less_min':
+                                if not rule.min_to_available and rule.req_to_available:
+                                    if qty_in_product_uom > product.min_qty:
+                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        break
+                                    else:
+                                        continue
+                                else:
+                                    continue
+                            elif rule.factor and rule.req_to_min == 'less_req' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
+                                if not rule.min_to_available and rule.req_to_available:
+                                    if qty_in_product_uom <= product.min_qty:
+                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        break
+                                    else:
+                                        continue
+                                else:
+                                    continue
+                            elif rule.factor and rule.min_to_available == 'less_available':
+                                if not rule.req_to_min and rule.req_to_available:
+                                    if product.min_qty > product.available:
+                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        break
+                                    else:
+                                        continue
+                                else:
+                                    continue
+                            elif rule.factor and rule.min_to_available == 'less_min':
+                                if not rule.req_to_min and rule.req_to_available:
+                                    if product.min_qty <= product.available:
+                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        break
+                                    else:
+                                        continue
+                                else:
+                                    continue
                             elif rule.factor and rule.req_to_available == 'more_avail' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
-                                if product.available and qty_in_product_uom <= product.available:
-                                    price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                if not rule.req_to_min and rule.min_to_available:
+                                    if qty_in_product_uom <= product.available:
+                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        break
+                                    else:
+                                        continue
                                 else:
                                     continue
                             elif rule.factor and rule.req_to_available == 'less_avail':
-                                if qty_in_product_uom > product.available:
-                                    price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                if not rule.req_to_min and rule.min_to_available:
+                                    if qty_in_product_uom > product.available:
+                                        price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        break
+                                    else:
+                                        continue
                                 else:
                                     continue
                             else:

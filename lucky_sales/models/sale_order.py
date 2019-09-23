@@ -21,7 +21,7 @@ class SaleOrderInherit(models.Model):
     commit_delivery_date = fields.Datetime("Commitment Delivery Date")
     client_order_ref = fields.Char("INQ/PO")
     remark_saleorder = fields.Text('Remark',related='batch_id.remark')
-    print_invoice = fields.Boolean(string='allow print invoice', default=True)
+    print_invoice = fields.Boolean(string='allow print invoice', default=False)
     purchase_order_ids = fields.One2many(comodel_name='purchase.order.listing',inverse_name='sale_id',readonly=True)
 
     @api.model

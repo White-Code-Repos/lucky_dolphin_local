@@ -136,19 +136,24 @@ class SaleOrderLine(models.Model):
             if self.vendor_id:
                 vals ={'name' : self.vendor_id.id,
 			'price':self.overall_cost,
-			'delay':1,
-			'min_qty': 1,
+			#'delay':1 ,
+			'min_qty': self.min_qty,
+			'date_start': self.date_start,	
+			'date_end': self.date_end,
 			'currency_id' :self.currency_id.id,
 				}
                 self.product_id.write({'variant_seller_ids': [(0,0,vals)]})
-            self.write({'purchase_price':self.overall_cost,'price_state':'price'})
-            if self.order_id:
-                request = False
-                for line in self.order_id.order_line:
-                    if line.price_state == 'request':
-                        request = True
-                if request == False:
-                    self.order_id.write({'state': 'draft'})
+            if self.not_available:
+                self.write({'purchase_price':self.overall_cost,'price_state':'not_available'})
+            else:
+                self.write({'purchase_price':self.overall_cost,'price_state':'price'})
+                if self.order_id:
+                    request = False
+                    for line in self.order_id.order_line:
+                        if line.price_state == 'request':
+                            request = True
+                    if request == False:
+                       self.order_id.write({'state': 'draft'})
                       
     @api.depends('order_id')
     def _get_line_price_state(self):
@@ -195,5 +200,9 @@ class SaleOrderLine(models.Model):
     
     product_cost = fields.Float(related="product_id.standard_price")
     vendors = fields.Many2many('res.partner',compute='_get_vendors' )
+    min_qty =fields.Float("Minimal Quantity",default= 1.0 )
+    date_start = fields.Date("Validity")
+    date_end = fields.Date("End Date")
+    not_available = fields.Boolean('Not Available')
 
 

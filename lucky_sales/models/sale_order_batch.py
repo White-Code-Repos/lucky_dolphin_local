@@ -46,10 +46,12 @@ class SaleOrderBatch(models.Model):
         for record in self:
             drop_shippings = []
             warehouses = []
+            pack_move_count = 0
             for order in record.order_ids:
                 if order.order_internal_type == "normal":
                     for picking in order.picking_ids:
                         packages = picking.move_line_ids.mapped('result_package_id')
+                        pack_move_count += len(packages)
                         packages_str = "{} package ({})".format(len(packages),
                                                                 ",".join([p.name for p in packages]))
                         if picking.picking_type_id.name == 'Dropship':
@@ -59,11 +61,13 @@ class SaleOrderBatch(models.Model):
                             }
                             drop_shippings.append(drop_shipping)
                         else:
+                            packages.write({'operation_id': record.id})
                             warehouse = {
                                 'name': picking.location_id.name,
                                 'packages': packages_str
                             }
                             warehouses.append(warehouse)
+            record.pack_move_count = pack_move_count
             self.drop_ship_summary = self._get_summary_table(drop_shippings)
             self.wh_summary = self._get_summary_table(warehouses)
 
@@ -98,6 +102,8 @@ class SaleOrderBatch(models.Model):
     remark = fields.Text(string='Remark')
     parcel_awb = fields.Char('Parcel AWB',compute='_parcel_awb')
     purchase_order_count = fields.Integer(compute='_purchase_order_count')
+    pack_move_ids = fields.One2many(comodel_name='stock.quant.package',inverse_name='operation_id')
+    pack_move_count = fields.Integer(compute='_get_warehouse_summary')
 
     @api.multi
     def purchase_order_action(self):
@@ -152,3 +158,15 @@ class SaleOrderBatch(models.Model):
                 'url': '/opening/invoice/%s' % (self.id),
                 'target' :'new'
                 }
+
+    @api.multi
+    def pack_move_action(self):
+        action = self.env.ref('stock.action_package_view').read()[0]
+        if self.pack_move_count > 0:
+            action['domain'] = [('id', 'in', self.pack_move_ids.ids)]
+            return action
+
+class StockQuantPackage(models.Model):
+    _inherit = "stock.quant.package"
+
+    operation_id = fields.Many2one('sale.order.batch',string='Operation')

@@ -41,6 +41,9 @@
                             <button icon="fa-truck" class="oe_inline oe_stat_button" type="object" name="purchase_order_action" attrs="  {'invisible': [('purchase_order_count', '=', 0)]}">
                                 <field string="Dropships" name="purchase_order_count" widget="statinfo"/>
                             </button>
+                            <button icon="fa-square" class="oe_inline oe_stat_button" type="object" name="pack_move_action" attrs="{'invisible': [('pack_move_count', '=', 0)]}">
+                                <field string="Packings" name="pack_move_count" widget="statinfo"/>
+                            </button>
                         </div>
                         <group string="Main Data">
                             <group>

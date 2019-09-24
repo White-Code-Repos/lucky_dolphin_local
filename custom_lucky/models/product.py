@@ -52,7 +52,11 @@ class ProductTemplate(models.Model):
     market_price = fields.Float('Market Price',default=0.0)
     last_purchase_price = fields.Float('Last Purchase Price',readonly=True)
     min_qty = fields.Integer('Safety Stock')
-    price_diff = fields.Float(compute='_get_price_diff',string='Price Difference %', store=True, readonly=True)
+    price_diff = fields.Float(compute='_get_price_diff',string='Price Difference %', store=True, readonly=True,
+        help="Price Difference % = ((Market Price - Last Purchase Price) / Last Purchase Price) * 100\n\
+            For Example: If Market Price = 100, Last Purchase Price = 75\n\
+            then Price Difference % = 50\
+        ")
     available = fields.Float('available',compute='_compute_quantities')
     #add extra product speed field for group by 
 

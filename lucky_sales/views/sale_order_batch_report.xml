@@ -7,59 +7,70 @@
                 <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
 
                 <div class="page">
-
-                    <strong>Operation Main Data</strong>
-
-                    <div class="row">
-                        <div class="col-2 text-left">Operation# </div>
-                        <div class="col-10 text-left" >
-                            <div t-field="o.name" />
-                        </div>
+                    <div style="float:left;"> 
+                        <strong>Operation Main Data</strong>
+                        <br></br>
+                        <span> Operation#:</span>
+                        <span t-field="o.name" />
+                        <br></br>
+                        <span> Vessel:</span>
+                        <span t-field="o.vessel_id" />
+                        <br></br>
+                        <span>Vessel Agent:</span>
+                        <span t-field="o.vessel_agent_id" />
+                        <br></br>
+                        <span>Remark:</span>
+                        <span t-field="o.remark" />
+                        <br></br>
+                        <br></br>
+                        <strong>Parcels</strong>
+                        <br></br>
+                        <span>Incoming Parcels PCS.:</span>
+                        <span t-field="o.parcels_in" />
+                        <br></br>
+                        <span>Outgoing Parcels PCS.:</span>
+                        <span t-field="o.parcels_out" />
+                        <br></br>
+                        <span>Parcel AWB:</span>
+                        <span t-field="o.parcel_awb" />
+                        <br></br>
+                        <br></br>
+                        <strong>Repair</strong>
+                        <br></br>
+                        <span t-field="o.is_repair"/>
+                        <strong>Warehouse Products</strong>
+                        <br></br>
+                        <span>Warehouses Summary:</span>
+                        <span t-field="o.wh_summary"/>
+                        <br></br>
+                        <strong>Drop shipping Products</strong>
+                        <br></br>
+                        <span>Drop Shipping Summary: </span>
+                        <span t-field="o.drop_ship_summary"/>
+                        <br></br>
                     </div>
-                    <div class="row">
-                        <div class="col-2 text-left">Vessel </div>
-                        <div class="col-10 text-left" >
-                            <div t-field="o.vessel_id" />
-                        </div>
+                    <div style="float:right;"> 
+                        <span>Delivery Port:</span>
+                        <span t-field="o.delivery_port_id" />
+                        <br></br>
+                        <span>Arrival Port:</span>
+                        <span t-field="o.arrival_port_id" />
+                        <br></br>
+                        <span>ETA:</span>
+                        <span t-field="o.eta" />
+                        <br></br>
+                        <span>Commitment Delivery Date:</span>
+                        <span t-field="o.commit_delivery_date" />
+                        <br></br>
+                        <br></br>
+                        <strong>Crew</strong>
+                        <br></br>
+                        <span>Crew Embarkation:</span>
+                        <span t-field="o.crew_in"/>
+                        <br></br>
+                        <span>Crew disembarkation:</span>
+                        <span t-field="o.crew_out"/>
                     </div>
-                                        <div class="row">
-                        <div class="col-2 text-left">Vessel Agent	 </div>
-                        <div class="col-10 text-left" >
-                            <div t-field="o.vessel_agent_id" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2 text-left">Remark	 </div>
-                        <div class="col-10 text-left" >
-                            <div t-field="o.remark" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2 text-left">Delivery Port </div>
-                        <div class="col-10 text-left" >
-                            <div t-field="o.delivery_port_id" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2 text-left">Arrival Port </div>
-                        <div class="col-10 text-left" >
-                            <div t-field="o.arrival_port_id" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2 text-left">ETA </div>
-                        <div class="col-10 text-left" >
-                            <div t-field="o.eta"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2 text-left">Commitment Delivery Date</div>
-                        <div class="col-10 text-left" >
-                            <div t-field="o.commit_delivery_date" />
-                        </div>
-                    </div>
-
-
 
                 </div>
             </t>

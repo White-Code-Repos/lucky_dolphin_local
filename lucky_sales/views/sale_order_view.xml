@@ -97,7 +97,7 @@
                  </field>	
             </field>
         </record>
-        <!-- <report
+        <report
             string="Delivery Slip"
             id="action_report_delivery_batch"
             model="sale.order.batch"
@@ -106,7 +106,7 @@
             file="stock.report_deliveryslip"
             print_report_name="'Delivery Slip - %s - %s' % (object.partner_id.name or '', object.name)"
         />
-        <report
+       <!-- <report
             string="Invoices"
             id="account_invoice_operation"
             model="sale.order.batch"

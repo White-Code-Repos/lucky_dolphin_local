@@ -55,6 +55,17 @@ class SaleOrder(models.Model):
                                 self.write({'state':'waiting_price'})
         return result
 
+
+    @api.multi
+    def _action_confirm(self):
+        res = super(SaleOrder, self)._action_confirm()
+        if  self.order_line:
+            for line in  self.order_line:
+                if line.price_state == 'request':
+                    raise UserError(_(
+                'You can not proceed confirm order becuase one of the line has requested price')) 
+        return res
+
     @api.multi
     def action_confirm(self):
         if self._get_forbidden_state_confirm() & set(self.mapped('state')):
@@ -165,11 +176,11 @@ class SaleOrderLine(models.Model):
                     line.price_state = 'request'
         return 
     
-    @api.depends('overhead_cost','purchase_price')
+    @api.depends('overhead_cost','price_purchase')
     def _get_overall_cost(self):
         for line in self:
-            if line.overhead_cost or line.purchase_price :
-                line.overall_cost = line.overhead_cost + line.purchase_price
+            if line.overhead_cost or line.price_purchase :
+                line.overall_cost = line.overhead_cost + line.price_purchase
             else: 
                 line.overall_cost = 0.0
         return 
@@ -193,9 +204,10 @@ class SaleOrderLine(models.Model):
         self.write({'price_state':'request'})
         self.order_id.write({'state':'waiting_price'})
 
-    price_state = fields.Selection([('price','Priced'),('request','Requested')],'Price State', compute='_get_line_price_state',store=True, readonly=True)
+    price_state = fields.Selection([('price','Priced'),('request','Requested'),('not_available','Not Available')],'Price State', compute='_get_line_price_state',store=True, readonly=True)
     vendor_id = fields.Many2one('res.partner','Vendor')
     overhead_cost =  fields.Float('Overhead Cost',defaults=0.0)
+    price_purchase =  fields.Float('Purchase Price',default=0.0)
     overall_cost = fields.Float(compute='_get_overall_cost' ,string='Overall Cost',store=True,  readonly=True)
     
     product_cost = fields.Float(related="product_id.standard_price")

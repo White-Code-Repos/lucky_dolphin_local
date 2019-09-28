@@ -138,7 +138,10 @@ class SaleOrderBatch(models.Model):
         #      'target' :'new'
         #      }
         ids = self.order_ids.mapped('picking_ids')
-        return self.env.ref('stock.action_report_delivery').report_action(ids)
+        if ids:
+            return self.env.ref('stock.action_report_delivery').report_action(ids)
+        else:
+            raise exceptions.UserError("There is no picking for this order")
         # data = self.read()[0]
         # active_ids = self.order_ids
         # datas = {

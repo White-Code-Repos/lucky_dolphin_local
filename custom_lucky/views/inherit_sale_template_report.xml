@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<odoo>
+    <template id="report_sale_template_report_inherit_lucky" inherit_id="sale.report_saleorder_document">
+      	<xpath expr="//table[@class='table table-sm o_main_table']//thead//tr" position="inside">
+        	 <th class="text-right">State</th>
+      	</xpath>
+	<xpath expr="//table[@class='table table-sm o_main_table']//tbody//tr" position="inside">
+        	 <td class="text-right">
+                                    <span t-field="line.price_state"/>
+                                </td>
+      	</xpath>
+  	</template>
+</odoo>

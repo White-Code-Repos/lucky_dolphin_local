@@ -58,6 +58,8 @@ class ProductTemplate(models.Model):
             then Price Difference % = 50\
         ")
     available = fields.Float('available',compute='_compute_quantities')
+    last_po_currency = fields.Many2one('res.currency')
+    market_price_currency = fields.Many2one('res.currency')
     #add extra product speed field for group by 
 
     @api.depends(

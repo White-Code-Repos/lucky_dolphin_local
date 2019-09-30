@@ -29,6 +29,7 @@ class PurchaseOrder(models.Model):
             if order.order_line:
                 for line in order.order_line:
                     line.product_id.last_purchase_price = line.price_unit
+                    line.product_id.last_po_currency = line.currency_id.id
             """if order.order_line:
                 line_ids = []
                 for line in order.order_line:

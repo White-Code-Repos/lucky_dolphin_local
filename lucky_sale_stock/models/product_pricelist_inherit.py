@@ -144,48 +144,57 @@ class ProductPricelist(models.Model):
                             if rule.factor and rule.req_to_min == 'less_min' and rule.min_to_available=='less_available' and rule.req_to_available == 'less_avail':
                                 if qty_in_product_uom > product.min_qty and product.min_qty > product.available and qty_in_product_uom > product.available:
                                     price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                    suitable_rule = rule
                                     break
                                 else:
                                     continue
                             elif rule.factor and rule.req_to_min == 'less_min' and rule.min_to_available=='less_available' and rule.req_to_available == 'more_avail':
                                 if qty_in_product_uom > product.min_qty and product.min_qty > product.available and qty_in_product_uom <= product.available:
                                     price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                    suitable_rule = rulesuitable_rule = rule
+
                                     break
                                 else:
                                     continue
                             elif rule.factor and rule.req_to_min == 'less_min' and rule.min_to_available=='less_min' and rule.req_to_available=='less_avail':
                                 if qty_in_product_uom > product.min_qty and product.min_qty <= product.available and qty_in_product_uom > product.available:
                                     price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                    suitable_rule = rule
                                     break
                                 else:
                                     continue
                             elif rule.factor and rule.req_to_min == 'less_min' and rule.min_to_available=='less_min' and rule.req_to_available=='more_avail':
                                 if qty_in_product_uom > product.min_qty and product.min_qty <= product.available and qty_in_product_uom <= product.available:
                                     price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                    suitable_rule = rule
                                     break
                                 else:
                                     continue
                             elif rule.factor and rule.req_to_min == 'less_req' and rule.min_to_available=='less_min' and rule.req_to_available=='less_avail':
                                 if qty_in_product_uom <= product.min_qty and product.min_qty <= product.available and qty_in_product_uom > product.available:
                                     price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                    suitable_rule = rule
                                     break
                                 else:
                                     continue
                             elif rule.factor and rule.req_to_min == 'less_req' and rule.min_to_available=='less_min' and rule.req_to_available=='more_avail' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
                                 if qty_in_product_uom <= product.min_qty and product.min_qty <= product.available and qty_in_product_uom <= product.available:
                                     price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                    suitable_rule = rule
                                     break
                                 else:
                                     continue
                             elif rule.factor and rule.req_to_min == 'less_req' and rule.min_to_available=='less_available' and rule.req_to_available=='less_avail':
                                 if qty_in_product_uom <= product.min_qty and product.min_qty > product.available and qty_in_product_uom > product.available:
                                     price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                    suitable_rule = rule
                                     break
                                 else:
                                     continue
                             elif rule.factor and rule.req_to_min == 'less_req' and rule.min_to_available=='less_available' and rule.req_to_available=='more_avail' and (product.price_diff >= rule.min_price_diff) and (product.price_diff <= rule.max_price_diff):
                                 if qty_in_product_uom <= product.min_qty and product.min_qty > product.available and qty_in_product_uom <= product.available:
                                     price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                    suitable_rule = rule
                                     break
                                 else:
                                     continue
@@ -193,6 +202,7 @@ class ProductPricelist(models.Model):
                                 if not rule.req_to_available:
                                     if qty_in_product_uom > product.min_qty and product.min_qty <= product.available:
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        suitable_rule = rule
                                         break
                                     else:
                                         continue
@@ -202,6 +212,7 @@ class ProductPricelist(models.Model):
                                 if not rule.req_to_available:
                                     if qty_in_product_uom > product.min_qty and product.min_qty > product.available:
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        suitable_rule = rule
                                         break
                                     else:
                                         continue
@@ -211,6 +222,7 @@ class ProductPricelist(models.Model):
                                 if not rule.req_to_available:
                                     if product.min_qty and qty_in_product_uom <= product.min_qty and product.min_qty <= product.available:
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        suitable_rule = rule
                                         break
                                     else:
                                         continue
@@ -220,6 +232,7 @@ class ProductPricelist(models.Model):
                                 if not rule.req_to_available:
                                     if product.min_qty and qty_in_product_uom <= product.min_qty and product.min_qty > product.available:
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        suitable_rule = rule
                                         break
                                     else:
                                         continue
@@ -229,6 +242,7 @@ class ProductPricelist(models.Model):
                                 if not rule.min_to_available:
                                     if qty_in_product_uom <= product.min_qty and qty_in_product_uom > product.available:
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        suitable_rule = rule
                                         break
                                     else:
                                         continue
@@ -238,6 +252,7 @@ class ProductPricelist(models.Model):
                                 if not rule.min_to_available:
                                     if qty_in_product_uom <= product.min_qty and qty_in_product_uom <= product.available:
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        suitable_rule = rule
                                         break
                                     else:
                                         continue
@@ -247,6 +262,7 @@ class ProductPricelist(models.Model):
                                 if not rule.min_to_available:
                                     if qty_in_product_uom > product.min_qty and qty_in_product_uom <= product.available:
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        suitable_rule = rule
                                         break
                                     else:
                                         continue
@@ -256,6 +272,7 @@ class ProductPricelist(models.Model):
                                 if not rule.min_to_available:
                                     if qty_in_product_uom > product.min_qty and qty_in_product_uom > product.available:
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        suitable_rule = rule
                                         break
                                     else:
                                         continue
@@ -269,6 +286,7 @@ class ProductPricelist(models.Model):
                                 if not rule.req_to_min:
                                     if product.min_qty > product.available and qty_in_product_uom <= product.available:
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        suitable_rule = rule
                                         break
                                     else:
                                         continue
@@ -278,6 +296,7 @@ class ProductPricelist(models.Model):
                                 if not rule.req_to_min:
                                     if product.min_qty <= product.available and qty_in_product_uom <= product.available:
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        suitable_rule = rule
                                         break
                                     else:
                                         continue
@@ -287,6 +306,7 @@ class ProductPricelist(models.Model):
                                 if not rule.req_to_min:
                                     if product.min_qty <= product.available and qty_in_product_uom > product.available:
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        suitable_rule = rule
                                         break
                                     else:
                                         continue
@@ -296,6 +316,7 @@ class ProductPricelist(models.Model):
                                 if not rule.req_to_min:
                                     if product.min_qty > product.available and qty_in_product_uom > product.available:
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        suitable_rule = rule
                                         break
                                     else:
                                         continue
@@ -305,6 +326,7 @@ class ProductPricelist(models.Model):
                                 if not rule.min_to_available and rule.req_to_available:
                                     if qty_in_product_uom > product.min_qty:
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        suitable_rule = rule
                                         break
                                     else:
                                         continue
@@ -314,6 +336,7 @@ class ProductPricelist(models.Model):
                                 if not rule.min_to_available and rule.req_to_available:
                                     if qty_in_product_uom <= product.min_qty:
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        suitable_rule = rule
                                         break
                                     else:
                                         continue
@@ -323,6 +346,7 @@ class ProductPricelist(models.Model):
                                 if not rule.req_to_min and rule.req_to_available:
                                     if product.min_qty > product.available:
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        suitable_rule = rule
                                         break
                                     else:
                                         continue
@@ -332,6 +356,7 @@ class ProductPricelist(models.Model):
                                 if not rule.req_to_min and rule.req_to_available:
                                     if product.min_qty <= product.available:
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        suitable_rule = rule
                                         break
                                     else:
                                         continue
@@ -341,6 +366,7 @@ class ProductPricelist(models.Model):
                                 if not rule.req_to_min and rule.min_to_available:
                                     if qty_in_product_uom <= product.available:
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        suitable_rule = rule
                                         break
                                     else:
                                         continue
@@ -350,6 +376,7 @@ class ProductPricelist(models.Model):
                                 if not rule.req_to_min and rule.min_to_available:
                                     if qty_in_product_uom > product.available:
                                         price = product.price_compute(rule.market_type)[product.id] * rule.factor
+                                        suitable_rule = rule
                                         break
                                     else:
                                         continue
@@ -366,7 +393,6 @@ class ProductPricelist(models.Model):
                         price = product.price_compute(rule.base)[product.id]
 
                     convert_to_price_uom = (lambda price: product.uom_id._compute_price(price, price_uom))
-
                     if price is not False:
                         if rule.compute_price == 'fixed':
                             price = convert_to_price_uom(rule.fixed_price)
@@ -395,9 +421,22 @@ class ProductPricelist(models.Model):
                 if suitable_rule and suitable_rule.compute_price != 'fixed' and suitable_rule.base != 'pricelist':
                     if suitable_rule.base == 'standard_price':
                         cur = product.cost_currency_id
-                    else:
-                        cur = product.currency_id
-                    price = cur._convert(price, self.currency_id, self.env.user.company_id, date, round=False)
+                    elif suitable_rule.base == 'market_price':
+                        if suitable_rule.market_type == 'last_purchase_price':
+                            if self.currency_id == product.last_po_currency:
+                                pass
+                            else:
+                                cur = product.currency_id
+                                price = cur._convert(price, self.currency_id, self.env.user.company_id, date, round=False)
+                        elif suitable_rule.market_type == 'market_price':
+                            if self.currency_id == product.market_price_currency:
+                                pass
+                            else:
+                                cur = product.currency_id
+                                price = cur._convert(price, self.currency_id, self.env.user.company_id, date, round=False)
+
+                # if product.market_price_currency.id != self.currency_id.id:
+                #     price = product.market_price_currency._convert(price, self.currency_id, self.env.user.company_id, date, round=False)
 
                 results[product.id] = (price, suitable_rule and suitable_rule.id or False)
 

@@ -10,8 +10,18 @@
 		<field name="product_speed_state" readonly="1"/>
             </field>
             <field name="list_price" position="after">
-		<field name="market_price" />
-                <field name="last_purchase_price" />
+		<!-- <field name="market_price"/> -->
+        <label for="market_price"/>
+        <div class="o_row">
+            <field name="market_price"/>
+            <field name="market_price_currency"/>
+        </div>
+        <!-- <field name="last_purchase_price"/> -->
+        <label for="last_purchase_price"/>
+        <div class="o_row">
+            <field name="last_purchase_price"/>
+            <field name="last_po_currency" readonly="1"/>
+        </div>
 		<field name="min_qty" />
 		<field name="price_diff" />
         <field name="available"/>

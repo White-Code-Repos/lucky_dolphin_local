@@ -60,6 +60,7 @@ class ProductTemplate(models.Model):
     available = fields.Float('available',compute='_compute_quantities')
     last_po_currency = fields.Many2one('res.currency')
     market_price_currency = fields.Many2one('res.currency')
+    req_diff = fields.Boolean("Requeste the difference")
     #add extra product speed field for group by 
 
     @api.depends(

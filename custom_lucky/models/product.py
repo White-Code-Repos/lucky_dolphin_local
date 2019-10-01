@@ -62,6 +62,7 @@ class ProductTemplate(models.Model):
     market_price_currency = fields.Many2one('res.currency')
     req_diff = fields.Boolean("Requeste the difference")
     #add extra product speed field for group by 
+    arabic_name = fields.Char('Arabic Name')
 
     @api.depends(
         'product_variant_ids',

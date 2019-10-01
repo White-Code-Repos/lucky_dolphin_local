@@ -13,7 +13,6 @@
 		<field name="product_speed_state" readonly="1"/>
             </field>
             <field name="list_price" position="after">
-		<field name="req_diff" />
 		<!-- <field name="market_price"/> -->
         <label for="market_price"/>
         <div class="o_row">

@@ -423,16 +423,12 @@ class ProductPricelist(models.Model):
                         cur = product.cost_currency_id
                     elif suitable_rule.base == 'market_price':
                         if suitable_rule.market_type == 'last_purchase_price':
-                            if self.currency_id == product.last_po_currency:
-                                pass
-                            else:
-                                cur = product.currency_id
+                            if not self.currency_id == product.last_po_currency:
+                                cur = product.last_po_currency
                                 price = cur._convert(price, self.currency_id, self.env.user.company_id, date, round=False)
                         elif suitable_rule.market_type == 'market_price':
-                            if self.currency_id == product.market_price_currency:
-                                pass
-                            else:
-                                cur = product.currency_id
+                            if not self.currency_id == product.market_price_currency:
+                                cur = product.market_price_currency
                                 price = cur._convert(price, self.currency_id, self.env.user.company_id, date, round=False)
 
                 # if product.market_price_currency.id != self.currency_id.id:

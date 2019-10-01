@@ -6,11 +6,13 @@
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_only_form_view"/>
         <field name="arch" type="xml">
+            <field name="barcode" position="after">
+                <field name="arabic_name"/>
+            </field>
             <field name="categ_id" position="after">
 		<field name="product_speed_state" readonly="1"/>
             </field>
             <field name="list_price" position="after">
-		<field name="req_diff" />
 		<!-- <field name="market_price"/> -->
         <label for="market_price"/>
         <div class="o_row">

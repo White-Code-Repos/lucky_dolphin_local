@@ -64,3 +64,21 @@ class PurchaseOrderInherit(models.Model):
                     'order_id': order.id,
                     'date_planned': order.date_planned,
                 })
+
+class PurchaseOrderListing(models.Model):
+    _name = 'purchase.order.listing'
+    _rec_name = 'purchase_order_id'
+
+    purchase_order_id = fields.Many2one('purchase.order')
+    sale_id = fields.Many2one('sale.order', string="Sale Order")
+
+class PurchaseOrderLine(models.Model):
+    _inherit = "purchase.order.line"
+
+    @api.model
+    def create(self, vals):
+        res = super(PurchaseOrderLine, self).create(vals)
+        dropship = self.env.ref('stock_dropshipping.picking_type_dropship').id
+        if res.order_id.origin and dropship in res.product_id.route_ids.ids:
+            res.sale_order_id.purchase_order_ids = [(0, 0, {'purchase_order_id': res.order_id.id})]
+        return res

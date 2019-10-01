@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_delivery_slip_2" model="ir.actions.server">
+            <field name="name">Delivery Slip</field>
+            <field name="model_id" ref="lucky_sales.model_sale_order_batch"/>
+            <field name="binding_model_id" ref="lucky_sales.model_sale_order_batch"/>
+            <field name="state">code</field>
+            <field name="code">action = records.delivery_action_pdf()</field>
+        </record>
+
+        <record id="action_print_invoice" model="ir.actions.server">
+            <field name="name">Invoices</field>
+            <field name="model_id" ref="lucky_sales.model_sale_order_batch"/>
+            <field name="binding_model_id" ref="lucky_sales.model_sale_order_batch"/>
+            <field name="state">code</field>
+            <field name="code">action = records.invoice_action_pdf()</field>
+        </record>
+
+        <!--Zina changes-->
+        <report id="sale_order_operation"
+                model="sale.order.batch" report_type="qweb-pdf"
+                string="Export Operation"
+                name="lucky_sales.sale_order_batch_report"
+                file="lucky_sales.sale_order_batch_report"
+                attachment_use="False"
+                menu="True"/>
+    </data>
+</odoo>

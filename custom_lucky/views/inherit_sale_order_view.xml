@@ -9,13 +9,26 @@
 	    <field name="state" position='replace'>
 	        <field name="state" widget="statusbar" statusbar_visible="draft,sent,waiting_price,sale"/>
 	     </field>
-              <!--<xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="before">
-		<field name="price_state"/>
-	    </xpath>-->
+             <xpath expr="//field[@name='order_line']/tree/field[@name='currency_id']" position="after">
+		        <field name="price_state"/>
+             </xpath>
+
+            <!--Zina changes -->
+            <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
+		     <!--   <field name="product_cost" string="Cost"/>-->
+                <field name="vendors" widget="many2many_tags"/>
+             </xpath>
+	<!--divya changes-->
+	   <xpath expr="//field[@name='order_line']/tree/field[@name='price_tax']" position="after">
+		<button name="get_reprice" string="Re-price"  type="object"/>
+	    </xpath>
+		<field name="pricelist_id" position="after">
+			<button name="update_pricelist" string="Update Price"  type="object"/>
+		</field>
         </field>
     </record>
 
-    
+
 
 <record id="view_sale_order_line_lucky_inherit" model="ir.ui.view">
         <field name="name">sale.order.line</field>
@@ -28,3 +41,4 @@
         </field>
 </record>
 </odoo>
+

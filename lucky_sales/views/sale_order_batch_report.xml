@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <template id="sale_order_batch_report_temp">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
+
+                <div class="page">
+                    <div style="float:left;"> 
+                        <strong>Operation Main Data</strong>
+                        <br></br>
+                        <span> Operation#:</span>
+                        <span t-field="o.name" />
+                        <br></br>
+                        <span> Vessel:</span>
+                        <span t-field="o.vessel_id" />
+                        <br></br>
+                        <span>Vessel Agent:</span>
+                        <span t-field="o.vessel_agent_id" />
+                        <br></br>
+                        <span>Remark:</span>
+                        <span t-field="o.remark" />
+                        <br></br>
+                        <br></br>
+                        <strong>Parcels</strong>
+                        <br></br>
+                        <span>Incoming Parcels PCS.:</span>
+                        <span t-field="o.parcels_in" />
+                        <br></br>
+                        <span>Outgoing Parcels PCS.:</span>
+                        <span t-field="o.parcels_out" />
+                        <br></br>
+                        <span>Parcel AWB:</span>
+                        <span t-field="o.parcel_awb" />
+                        <br></br>
+                        <br></br>
+                        <strong>Repair</strong>
+                        <br></br>
+                        <span t-field="o.is_repair"/>
+                        <strong>Warehouse Products</strong>
+                        <br></br>
+                        <span>Warehouses Summary:</span>
+                        <span t-field="o.wh_summary"/>
+                        <br></br>
+                        <strong>Drop shipping Products</strong>
+                        <br></br>
+                        <span>Drop Shipping Summary: </span>
+                        <span t-field="o.drop_ship_summary"/>
+                        <br></br>
+                    </div>
+                    <div style="float:right;"> 
+                        <span>Delivery Port:</span>
+                        <span t-field="o.delivery_port_id" />
+                        <br></br>
+                        <span>Arrival Port:</span>
+                        <span t-field="o.arrival_port_id" />
+                        <br></br>
+                        <span>ETA:</span>
+                        <span t-field="o.eta" />
+                        <br></br>
+                        <span>Commitment Delivery Date:</span>
+                        <span t-field="o.commit_delivery_date" />
+                        <br></br>
+                        <br></br>
+                        <strong>Crew</strong>
+                        <br></br>
+                        <span>Crew Embarkation:</span>
+                        <span t-field="o.crew_in"/>
+                        <br></br>
+                        <span>Crew disembarkation:</span>
+                        <span t-field="o.crew_out"/>
+                    </div>
+
+                </div>
+            </t>
+         </t>
+    </template>
+
+    <template id="sale_order_batch_report">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="lucky_sales.sale_order_batch_report_temp" />
+        </t>
+    </template>
+
+</odoo>

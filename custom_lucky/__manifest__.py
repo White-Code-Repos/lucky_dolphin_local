@@ -19,7 +19,9 @@
 	'views/inherit_product_template_view.xml',
 	'views/inherit_sale_order_view.xml',	
 	'views/inherit_product_pricelist_view.xml',
+	'views/inherit_sale_template_report.xml',
 	'views/inherit_purchase_order.xml',
+	'views/res_config_settings_views.xml',
       ],
     'installable': True,
 }

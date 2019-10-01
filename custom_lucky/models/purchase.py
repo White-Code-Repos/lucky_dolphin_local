@@ -29,8 +29,8 @@ class PurchaseOrder(models.Model):
             if order.order_line:
                 for line in order.order_line:
                     line.product_id.last_purchase_price = line.price_unit
-            
-            '''if order.order_line:
+                    line.product_id.last_po_currency = line.currency_id.id
+            """if order.order_line:
                 line_ids = []
                 for line in order.order_line:
                     print ("IIIIIIIIIIIIIIIIIIIIIIII",line)
@@ -39,14 +39,21 @@ class PurchaseOrder(models.Model):
                         for lines in order_line_search:
                             line_ids.append(lines.id) 
                 final_list = sorted(line_ids, key=int, reverse=True)
-                print ("_________final_list_______",final_list)'''
-                
-            
+                print ("_________final_list_______",final_list)"""
         return True
 
+# Purchase order Line
+class PurchaseOrderLine(models.Model):
+    _inherit = 'purchase.order.line'
 
-    
 
-    
-
+    @api.multi
+    @api.onchange('product_id')
+    def onchange_product_id(self):
+        vals = {}
+        res = super(PurchaseOrderLine, self).onchange_product_id()
+        name = self.product_id.description_purchase 
+        vals.update(name=name)
+        self.update(vals)
+        return res
 

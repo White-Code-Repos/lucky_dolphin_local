@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+	
+    <template id="report_delivery_document_inherit_1">
+<!--        <t t-call="web.html_container">-->
+                <t t-call="web.external_layout">
+              
+		
+		<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
+                
+                <div class="page">
+		 <div class="header">
+		    <div class="row">
+		        <div class="col-3 mb4">
+		            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 45px;" alt="Logo"/>
+		        </div>
+		        <div class="col-9 text-right" style="margin-top:22px;" t-field="o.company_id.report_header" name="moto"/>
+		    </div>
+		    <div t-if="o.company_id.logo or o.company_id.report_header" class="row zero_min_height">
+		        <div class="col-12">
+		            <div style="border-bottom: 1px solid black;"/>
+		        </div>
+		    </div>
+		    <div class="row">
+		        <div class="col-6" name="company_address">
+		            <div t-field="o.company_id.partner_id"
+		                t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'
+		            />
+		        </div>
+		    </div>
+		</div>
+		<div class="oe_structure"/>
+		
+		    <t t-if="o.move_lines and o.move_lines[0].partner_id" name="partner_header">
+                    <t t-set="address">
+                        <t t-if="o.vessel_id"> <strong>Vessel:</strong><div t-field="o.vessel_id" t-options='{"widget": "contact","no_marker": True}'/></t>
+                       <t t-if="o.client_order_ref">  <strong>INQ/PO:</strong><div t-field="o.client_order_ref" /></t>
+                       <t t-if="o.date_done">  <div t-field="o.date_done" t-options='{"widget": "date"}'/></t>
+                       <t t-if="o.delivery_port_id">  <strong>Delivery Port :</strong><div t-field="o.delivery_port_id" /></t>
+                   </t>
+               		 </t>
+                    <h2>
+                        <span t-field="o.name"/>
+                    </h2>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th t-if="o.origin"><strong>Order</strong></th>
+                                <th name="td_sched_date_h">
+                                    <strong>Date</strong>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td t-if="o.origin">
+                                    <span t-field="o.origin"/>
+                                </td>
+                                <td name="td_sched_date">
+                                   <t t-if="o.state == 'done'">
+                                        <span t-field="o.date_done"/>
+                                   </t>
+                                   <t t-if="o.state != 'done'">
+                                        <span t-field="o.scheduled_date"/>
+                                   </t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-sm mt48" t-if="o.state!='done'">
+                        <thead>
+                            <tr>
+                                <th><strong>Product</strong></th>
+                                <th><strong>Quantity</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="lines" t-value="o.move_lines.filtered(lambda x: x.product_uom_qty)"/>
+                            <tr t-foreach="lines" t-as="move">
+                                <td>
+                                    <span t-field="move.product_id"/>
+                                    <p t-if="o.picking_type_code == 'outgoing'">
+                                        <span t-field="move.product_id.sudo().description_pickingout"/>
+                                    </p>
+                                    <p t-if="o.picking_type_code == 'incoming'">
+                                        <span t-field="move.product_id.sudo().description_pickingin"/>
+                                    </p>
+                                </td>
+                                <td>
+                                    <span t-field="move.product_uom_qty"/>
+                                    <span t-field="move.product_uom"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-sm mt48" t-if="o.move_line_ids and o.state=='done'">
+                        <t t-set="has_serial_number" t-value="o.move_line_ids.mapped('lot_id')" />
+                        <t t-set="has_package" t-value="o.move_line_ids.mapped('result_package_id')" />
+                        <thead>
+                            <tr>
+                                <th><strong>Product</strong></th>
+                                <th name="lot_serial" t-if="has_serial_number" groups="stock.group_lot_on_delivery_slip">
+                                    Lot/Serial Number
+                                </th>
+                                <th></th>
+                                <th name="package" t-if="has_package" >
+                                    Package
+                                </th>
+                                <th class="text-center"><strong>Quantity</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="o.move_line_ids" t-as="move_line">
+                                <td>
+                                    <span t-field="move_line.product_id"/>
+                                    <p t-if="o.picking_type_code == 'outgoing'">
+                                        <span t-field="move_line.product_id.sudo().description_pickingout"/>
+                                    </p>
+                                    <p t-if="o.picking_type_code == 'incoming'">
+                                        <span t-field="move_line.product_id.sudo().description_pickingin"/>
+                                    </p>
+                                </td>
+                                <td t-if="has_serial_number and move_line.lot_name" groups="stock.group_lot_on_delivery_slip">
+                                    <span t-field="move_line.lot_name"/>
+                                </td>
+                                <td t-else="" groups="stock.group_lot_on_delivery_slip">
+                                    <span t-field="move_line.lot_id.name"/>
+                                </td>
+                                <td t-if="move_line.result_package_id">
+                                    <span t-field="move_line.result_package_id"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-field="move_line.qty_done"/>
+                                    <span t-field="move_line.product_uom_id"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>
+                        <t t-if="o.backorder_ids and o.backorder_ids.filtered(lambda x: x.state not in ('done', 'cancel'))">
+                            All items couldn't be shipped, the remaining ones will be shipped as soon as they become available.
+                        </t>
+
+                    </p>
+		   <div style="margin-top: 200px">
+		            <div class="row">
+		                <div class="col-1"/>
+		                <div class="col-3 text-center" >
+		                    <span>Master Signature</span>
+		                </div>
+		                <div class="col-4"/>
+		                <div class="col-3">stamp</div>
+		                <div class="col-1"/>
+		            </div>
+		            <div class="row">
+		                <div class="col-1"/>
+		                <div class="col-3 text-center">
+		                    <span>---------------------------</span>
+		                </div>
+		                <div class="col-4"/>
+		                <div class="col-3"></div>
+		                <div class="col-1"/>
+		            </div>
+		  </div>
+		 <div class="oe_structure"/>
+                </div>
+		</t>
+		
+<!--         </t>-->
+    </template>
+
+    <template id="report_deliveryslip_doc">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="lucky_dolphin_stock_reports.report_delivery_document_inherit_1" t-lang="o.partner_id.lang"/>
+                </t>
+            </t>
+    </template>
+
+</odoo>

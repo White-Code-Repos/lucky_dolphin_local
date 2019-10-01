@@ -10,3 +10,5 @@ access_lucky_service_config,lucky.service.config,model_lucky_service_config,base
 access_lucky_port,lucky.port,model_lucky_port,base.group_user,1,1,1,1
 access_sale_order_batch,sale.order.batch,model_sale_order_batch,base.group_user,1,1,1,0
 access_egypt_ports,egypt.ports,model_egypt_ports,base.group_user,1,1,1,1
+
+access_purchase_order_listing,purchase.order.listing,model_purchase_order_listing,,1,1,1,1

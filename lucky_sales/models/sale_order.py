@@ -20,8 +20,9 @@ class SaleOrderInherit(models.Model):
     service_ids = fields.One2many("lucky.service", 'order_id')
     commit_delivery_date = fields.Datetime("Commitment Delivery Date")
     client_order_ref = fields.Char("INQ/PO")
-    remark_checkbox_saleorder = fields.Boolean(related='batch_id.remark_checkbox')
     remark_saleorder = fields.Text('Remark',related='batch_id.remark')
+    print_invoice = fields.Boolean(string='allow print invoice', default=False)
+    purchase_order_ids = fields.One2many(comodel_name='purchase.order.listing',inverse_name='sale_id',readonly=True)
 
     @api.model
     def create(self, vals_list):
@@ -114,3 +115,16 @@ class SaleOrderInherit(models.Model):
     @api.onchange('delivery_port_id')
     def _onchange_delivery_port_id(self):
         self.carrier_id = self.delivery_port_id.id
+
+    @api.multi
+    @api.depends('order_line')
+    def _get_total_disc(self):
+        for rec in self:
+            if rec.order_line :
+                total = 0.0
+                for l in rec.order_line:
+                    if l.discount:
+                        dis = (l.discount / 100) * l.price_unit
+                        total += dis
+            rec.total_disc = total
+    total_disc = fields.Float(compute=_get_total_disc)

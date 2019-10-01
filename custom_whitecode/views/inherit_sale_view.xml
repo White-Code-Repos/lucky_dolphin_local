@@ -8,11 +8,10 @@
         <field name="arch" type="xml">
             <field name="note" position="after">
 		<field name="before_fixed_price" />
-		<!--<field name="after_fixed_price" placeholder="After Fixed PriceComment..."/>-->
                 <field name="comment" placeholder="Comment..."/>
 		<div class="oe_clear"/>
             </field>
-             <xpath expr="//field[@name='order_line']/tree" position="replace">
+             <!--<xpath expr="//field[@name='order_line']/tree" position="replace">
  		      <tree string="Sales Order Lines" editable="bottom" decoration-info="(not display_type and invoice_status == 'to invoice')" colors="red:product_speed_state == 'dead_product'; yellow:product_speed_state == 'slow_product'">
                                     <control>
                                         <create string="Add a product"/>
@@ -54,7 +53,7 @@
 				   <button name="get_reprice" string="Re-price"  type="object"/>
                                 </tree>
 
-                 </xpath>
+                 </xpath>-->
         </field>
     </record>
 

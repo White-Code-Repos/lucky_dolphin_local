@@ -169,6 +169,9 @@ class PurchaseRequest(models.Model):
     picking_type_id = fields.Many2one('stock.picking.type',
                                       'Picking Type', required=True,
                                       default=_default_picking_type)
+    #divya change
+    department_id = fields.Many2one('hr.department','Department')
+    request_type = fields.Selection([('warehouse','Warehouse Stock Request'),('sale','Sales People for requesting item not available'),('internal','Internal Request for employees')],'Type')
 
 
 class PurchaseRequestLine(models.Model):

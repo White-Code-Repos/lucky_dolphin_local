@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
-# For copyright and license notices, see __manifest__.py file in module root
+# For copyright and license notices, see __openerp__.py file in module root
 # directory
 ##############################################################################
 from odoo import fields, models, api, _
@@ -19,31 +20,28 @@ class AccountCheckbook(models.Model):
     sequence_id = fields.Many2one(
         'ir.sequence',
         'Sequence',
+        readonly=True,
         copy=False,
         domain=[('code', '=', 'issue_check')],
         help="Checks numbering sequence.",
         context={'default_code': 'issue_check'},
+        states={'draft': [('readonly', False)]},
     )
     next_number = fields.Integer(
         'Next Number',
-        # usamos compute y no related para poder usar sudo cuando se setea
-        # secuencia sin necesidad de dar permiso en ir.sequence
-        compute='_compute_next_number',
-        inverse='_inverse_next_number',
+        related='sequence_id.number_next_actual',
     )
     issue_check_subtype = fields.Selection(
         [('deferred', 'Deferred'), ('currents', 'Currents')],
         string='Issue Check Subtype',
+        readonly=True,
         required=True,
         default='deferred',
-        help='* Con cheques corrientes el asiento generado por el pago '
-        'descontará directamente de la cuenta de banco y además la fecha de '
-        'pago no es obligatoria.\n'
-        '* Con cheques diferidos el asiento generado por el pago se hará '
-        'contra la cuenta definida para tal fin en la compañía, luego será '
-        'necesario el asiento de débito que se puede generar desde el extracto'
-        ' o desde el cheque.',
+        help='The only difference bewteen Deferred and Currents is that when '
+        'delivering a Deferred check a Payment Date is Require',
+        states={'draft': [('readonly', False)]}
     )
+
     journal_id = fields.Many2one(
         'account.journal', 'Journal',
         help='Journal where it is going to be used',
@@ -52,13 +50,12 @@ class AccountCheckbook(models.Model):
         domain=[('type', '=', 'bank')],
         ondelete='cascade',
         context={'default_type': 'bank'},
-        states={'draft': [('readonly', False)]},
-        auto_join=True,
+        states={'draft': [('readonly', False)]}
     )
     range_to = fields.Integer(
         'To Number',
-        # readonly=True,
-        # states={'draft': [('readonly', False)]},
+        readonly=True,
+        states={'draft': [('readonly', False)]},
         help='If you set a number here, this checkbook will be automatically'
         ' set as used when this number is raised.'
     )
@@ -73,65 +70,34 @@ class AccountCheckbook(models.Model):
         string='State',
         # readonly=True,
         default='draft',
-        copy=False,
+        copy=False
     )
-    # TODO depreciar esta funcionalidad que no estamos usando
     block_manual_number = fields.Boolean(
+        readonly=True,
         default=True,
         string='Block manual number?',
-        # readonly=True,
-        # states={'draft': [('readonly', False)]},
+        states={'draft': [('readonly', False)]},
         help='Block user to enter manually another number than the suggested'
     )
-    numerate_on_printing = fields.Boolean(
-        default=False,
-        string='Numerate on printing?',
-        # readonly=True,
-        # states={'draft': [('readonly', False)]},
-        help='No number will be assigne while creating payment, number will be'
-        'assigned after printing check.'
-    )
-    report_template = fields.Many2one(
-        'ir.actions.report',
-        'Report',
-        domain="[('model', '=', 'account.payment')]",
-        context="{'default_model': 'account.payment'}",
-        help='Report to use when printing checks. If not report selected, '
-        'report with name "check_report" will be used',
-    )
-
-    @api.multi
-    @api.depends('sequence_id.number_next_actual')
-    def _compute_next_number(self):
-        for rec in self:
-            rec.next_number = rec.sequence_id.number_next_actual
-
-    @api.multi
-    def _inverse_next_number(self):
-        for rec in self.filtered('sequence_id'):
-            rec.sequence_id.sudo().number_next_actual = rec.next_number
 
     @api.model
     def create(self, vals):
         rec = super(AccountCheckbook, self).create(vals)
         if not rec.sequence_id:
-            rec._create_sequence(vals.get('next_number', 0))
+            rec._create_sequence()
         return rec
 
-    @api.multi
-    def _create_sequence(self, next_number):
+    @api.one
+    def _create_sequence(self):
         """ Create a check sequence for the checkbook """
-        for rec in self:
-            rec.sequence_id = rec.env['ir.sequence'].sudo().create({
-                'name': '%s - %s' % (rec.journal_id.name, rec.name),
-                'implementation': 'no_gap',
-                'padding': 8,
-                'number_increment': 1,
-                'code': 'issue_check',
-                # si no lo pasamos, en la creacion se setea 1
-                'number_next_actual': next_number,
-                'company_id': rec.journal_id.company_id.id,
-            })
+        self.sequence_id = self.env['ir.sequence'].sudo().create({
+            'name': '%s - %s' % (self.journal_id.name, self.name),
+            'implementation': 'no_gap',
+            'padding': 8,
+            'number_increment': 1,
+            'code': 'issue_check',
+            'company_id': self.journal_id.company_id.id,
+        })
 
     @api.multi
     def _compute_name(self):
@@ -144,9 +110,9 @@ class AccountCheckbook(models.Model):
                 name += _(' up to %s') % rec.range_to
             rec.name = name
 
-    @api.multi
+    @api.one
     def unlink(self):
-        if self.mapped('issue_check_ids'):
+        if self.issue_check_ids:
             raise ValidationError(
                 _('You can drop a checkbook if it has been used on checks!'))
         return super(AccountCheckbook, self).unlink()

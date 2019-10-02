@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
-# For copyright and license notices, see __manifest__.py file in module root
+# For copyright and license notices, see __openerp__.py file in module root
 # directory
 ##############################################################################
 from odoo import fields, models, api, _
@@ -13,19 +14,22 @@ class ResCompany(models.Model):
 
     rejected_check_account_id = fields.Many2one(
         'account.account',
-        'Rejected Checks Account',
+        'Rejected Check Account',
         help='Rejection Checks account, for eg. "Rejected Checks"',
+        # domain=[('type', 'in', ['other'])],
     )
     deferred_check_account_id = fields.Many2one(
         'account.account',
-        'Deferred Checks Account',
+        'Deferred Check Account',
         help='Deferred Checks account, for eg. "Deferred Checks"',
+        # domain=[('type', 'in', ['other'])],
     )
     holding_check_account_id = fields.Many2one(
         'account.account',
-        'Holding Checks Account',
+        'Holding Check Account',
         help='Holding Checks account for third checks, '
         'for eg. "Holding Checks"',
+        # domain=[('type', 'in', ['other'])],
     )
 
     @api.multi

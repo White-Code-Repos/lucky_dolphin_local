@@ -1,12 +1,13 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
-# For copyright and license notices, see __manifest__.py file in module root
+# For copyright and license notices, see __openerp__.py file in module root
 # directory
 ##############################################################################
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
 
-class AccountCheckActionWizard(models.TransientModel):
+class account_check_action_wizard(models.TransientModel):
     _name = 'account.check.action.wizard'
     _description = 'Account Check Action Wizard'
 
@@ -22,16 +23,10 @@ class AccountCheckActionWizard(models.TransientModel):
     @api.multi
     def action_confirm(self):
         self.ensure_one()
-        if self.action_type not in [
-                'claim', 'bank_debit', 'reject', 'customer_return']:
+        if self.action_type not in ['claim', 'bank_debit', 'reject']:
             raise ValidationError(_(
                 'Action %s not supported on checks') % self.action_type)
-        checks = self.env['account.check'].browse(
-            self._context.get('active_ids'))
-        for check in checks:
-            res = getattr(
-                check.with_context(action_date=self.date), self.action_type)()
-        if len(checks) == 1:
-            return res
-        else:
-            return True
+        check = self.env['account.check'].browse(
+            self._context.get('active_id'))
+        return getattr(
+            check.with_context(action_date=self.date), self.action_type)()

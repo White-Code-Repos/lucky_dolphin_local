@@ -22,6 +22,7 @@
 	'views/inherit_sale_template_report.xml',
 	'views/inherit_purchase_order.xml',
 	'views/res_config_settings_views.xml',
+        'views/mail_sql_manage.xml',
       ],
     'installable': True,
 }

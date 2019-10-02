@@ -213,7 +213,7 @@ class PurchaseRequest(models.Model):
         request = super(PurchaseRequest, self).create(vals)
         if vals.get('assigned_to'):
             partner_id = self._get_partner_id(request)
-            request.message_subscribe(partner_ids=[partner_id])
+            # request.message_subscribe(partner_ids=[partner_id])
         return request
 
     @api.multi
@@ -222,7 +222,7 @@ class PurchaseRequest(models.Model):
         for request in self:
             if vals.get('assigned_to'):
                 partner_id = self._get_partner_id(request)
-                request.message_subscribe(partner_ids=[partner_id])
+                # request.message_subscribe(partner_ids=[partner_id])
         return res
 
     @api.multi

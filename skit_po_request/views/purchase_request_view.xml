@@ -46,7 +46,7 @@
 							<!--divya change-->
 							<field name="request_type" attrs="{'readonly': [('is_editable','=', False)]}" />
 							<field name="department_id" attrs="{'readonly': [('is_editable','=', False)]}" />
-							<!--  -->
+						<!-- -->
 							<field name="picking_type_id" attrs="{'readonly': [('is_editable','=', False)]}" />
 							<field name="company_id" groups="base.group_multi_company"
 								widget="selection" attrs="{'readonly': [('is_editable','=', False)]}" />

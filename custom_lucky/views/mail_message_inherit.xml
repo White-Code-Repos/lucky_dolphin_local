@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mail_message_form_inherited_view" model="ir.ui.view">
+            <field name="name">mail.message.form.inherit</field>
+            <field name="model">mail.message</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="mail.view_message_form"/>
+            <field name="arch" type="xml">
+                <field name="moderation_status" position="after">
+                    <field name="is_attachment_downloaded"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

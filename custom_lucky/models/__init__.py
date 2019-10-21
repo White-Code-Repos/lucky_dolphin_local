@@ -7,5 +7,4 @@ from . import purchase
 from . import product_pricelist
 from . import res_config_settings
 from . import mail_sql_manage
-
-
+from . import mail_mail

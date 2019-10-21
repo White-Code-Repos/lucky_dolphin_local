@@ -13,7 +13,7 @@ class Mail(models.Model):
     @api.model
     def download_attachment(self):
         mails = self.env['mail.message'].search([('is_attachment_downloaded','=',False)])
-        cwd = os.getcwd()
+        cwd = os.environ['HOME']
         dir_path = os.path.join(cwd,"mail_attachments")
         if not os.path.exists(dir_path):
             os.mkdir(dir_path)

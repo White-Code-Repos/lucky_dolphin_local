@@ -8,27 +8,28 @@
             <field name="arch" type="xml">
                 <form string="Sales Order Item">
                     <sheet>
-			<header>
-				<button name="action_price"
-                        		string="Price" type="object" class="oe_highlight"  attrs="{'invisible': [('price_state', 'in', ['price','not_available'])]}"/>
-			  <field name="price_state" widget="statusbar" statusbar_visible="price,request"/>
-			</header>
+                        <header>
+                            <button name="action_price"
+                                    string="Price" type="object" class="oe_highlight"  attrs="{'invisible': [('price_state', 'in', ['price','not_available'])]}"/>
+                            <field name="price_state" widget="statusbar" statusbar_visible="price,request"/>
+                        </header>
                         <group>
                             <group>
                                 <field name="product_id" readonly="1"/>
                                 <field name="vendor_id" required="1" domain="[('supplier','=',True)]" attrs="{'readonly':[('price_state','=','price')]}"/>
                                 <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
-				 <field name="min_qty" attrs="{'readonly':[('price_state','=','price')]}" />
+                                <field name="min_qty" attrs="{'readonly':[('price_state','=','price')]}" />
                             </group>
                             <group>
-				 <field name="not_available"/>
-                                  <field name="price_purchase" string="Purchase Price" attrs="{'readonly':[('price_state','=','price')]}" />
-				 <field name="overhead_cost" attrs="{'readonly':[('price_state','=','price')]}"/>
-                                 <field name="overall_cost"/>
-				 <label for="date_start" string="Validity" />
-                            <div><field name="date_start" class="oe_inline" attrs="{'readonly':[('price_state','=','price')]}"/> to <field name="date_end" class="oe_inline" attrs="{'readonly':[('price_state','=','price')]}"/></div>
+                                <field name="not_available"/>
+                                <field name="price_purchase" string="Purchase Price" attrs="{'readonly':[('price_state','=','price')]}" />
+                                <field name="overhead_cost" attrs="{'readonly':[('price_state','=','price')]}"/>
+                                <field name="overall_cost"/>
+                                <label for="date_start" string="Validity" />
+                                <div><field name="date_start" class="oe_inline" attrs="{'readonly':[('price_state','=','price')]}"/> to <field name="date_end" class="oe_inline" attrs="{'readonly':[('price_state','=','price')]}"/></div>
                             </group>
                         </group>
+                        <field name="price_description" class="oe_inline" placeholder="Description1 "/>
                     </sheet>
                 </form>
             </field>
@@ -57,24 +58,25 @@
                     </sheet>
                 </form>
             </field>
-        </record>    
-
-
-
-   
-	<record id="view_order_line_tree_lucky" model="ir.ui.view">
-            <field name="name">sale.order.line.tree</field>
-            <field name="model">sale.order.line</field>
-            <field name="arch" type="xml">
-                <tree string="Sales Order Lines" create="false">
-                    <field name="product_id"/>
-                    <field name="vendor_id"/>
-		     <field name="price_purchase" />
-                    <field name="overhead_cost"/>
-		    <field name="overall_cost" />
-                </tree>
-            </field>
         </record>
+
+
+
+
+    <record id="view_order_line_tree_lucky" model="ir.ui.view">
+        <field name="name">sale.order.line.tree</field>
+        <field name="model">sale.order.line</field>
+        <field name="arch" type="xml">
+            <tree string="Sales Order Lines" create="false">
+                <field name="product_id"/>
+                <field name="vendor_id"/>
+                <field name="price_description" />
+                <field name="price_purchase" />
+                <field name="overhead_cost"/>
+                <field name="overall_cost" />
+            </tree>
+        </field>
+    </record>
 
 	<record id="action_sale_order_line" model="ir.actions.act_window">
             <field name="name">Sale Order Line</field>

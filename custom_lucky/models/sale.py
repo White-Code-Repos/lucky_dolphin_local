@@ -180,12 +180,13 @@ class SaleOrderLine(models.Model):
 			'date_start': self.date_start,	
 			'date_end': self.date_end,
 			'currency_id' :self.currency_id.id,
+
 				}
                 self.product_id.write({'variant_seller_ids': [(0,0,vals)]})
             if self.not_available:
                 self.write({'purchase_price':self.overall_cost,'price_state':'not_available'})
             else:
-                self.write({'purchase_price':self.overall_cost,'price_state':'price'})
+                self.write({'purchase_price':self.overall_cost,'price_state':'price','price_description' : self.price_description})
                 if self.order_id:
                     request = False
                     for line in self.order_id.order_line:
@@ -244,5 +245,6 @@ class SaleOrderLine(models.Model):
     date_start = fields.Date("Validity")
     date_end = fields.Date("End Date")
     not_available = fields.Boolean('Not Available')
+    price_description = fields.Text("Description")
 
 

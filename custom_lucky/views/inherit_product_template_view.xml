@@ -10,26 +10,50 @@
                 <field name="arabic_name"/>
             </field>
             <field name="categ_id" position="after">
-		<field name="product_speed_state" readonly="1"/>
+                <field name="product_speed_state" readonly="1"/>
+                <field name="cus_price_visible" invisible="1"/>
             </field>
-            <field name="list_price" position="after">
-		<!-- <field name="market_price"/> -->
-        <label for="market_price"/>
-        <div class="o_row">
-            <field name="market_price"/>
-            <field name="market_price_currency"/>
-        </div>
-        <!-- <field name="last_purchase_price"/> -->
-        <label for="last_purchase_price"/>
-        <div class="o_row">
-            <field name="last_purchase_price"/>
-            <field name="last_po_currency" readonly="1"/>
-        </div>
-		<field name="min_qty" />
-		<field name="price_diff" />
-        <field name="available"/>
+
+            <field name="list_price" position="after" >
+                <!-- <field name="market_price"/> -->
+                <label for="market_price" attrs="{'invisible': [('cus_price_visible','=',True)]}"/>
+                <div class="o_row" attrs="{'invisible': [('cus_price_visible','=',True)]}">
+                    <field name="market_price"/>
+                    <field name="market_price_currency"/>
+                </div>
+                <!-- <field name="last_purchase_price"/> -->
+                <label for="last_purchase_price" attrs="{'invisible': [('cus_price_visible','=',True)]}"/>
+                <div class="o_row" attrs="{'invisible': [('cus_price_visible','=',True)]}"  >
+                    <field name="last_purchase_price"/>
+                    <field name="last_po_currency" readonly="1"/>
+                </div>
+                <field name="min_qty" />
+                <field name="price_diff" />
+                <field name="available"/>
+                <field name="price_visible" invisible="1"/>
             </field>
-	   
+
+
+            <field name="list_price" position="attributes">
+                <attribute name="attrs">{'invisible': [('price_visible','=',True)]}</attribute>
+            </field>
+
+        </field>
+    </record>
+
+    <record id="view_tree_product_template_inherit" model="ir.ui.view">
+        <field name="name">product.template</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+
+            <field name="default_code" position="after" >
+                <field name="price_visible" invisible="1"/>
+            </field>
+             <field name="list_price" position="attributes">
+                <attribute name="attrs">{'invisible': [('price_visible','=',True)]}</attribute>
+            </field>
+
         </field>
     </record>
 

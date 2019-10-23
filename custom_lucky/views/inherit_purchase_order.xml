@@ -72,9 +72,23 @@
 		     <field name="price_purchase" />
                     <field name="overhead_cost"/>
 		    <field name="overall_cost" />
+            <field name="prod_cate_id" invisible="True"/>
                 </tree>
             </field>
         </record>
+
+
+
+    <record id="inherit_view_order_line_search_lucky" model="ir.ui.view">
+        <field name="name">inherit.view.order.line.search.lucky</field>
+        <field name="model">sale.order.line</field>
+        <field name="inherit_id" ref="sale.view_sales_order_line_filter"/>
+        <field name="arch" type="xml">
+            <filter name="salesperson" position="after">
+                <filter string="Product Category" name="groupby_prod_cate" domain="[]" context="{'group_by': 'prod_cate_id'}"/>
+            </filter>
+        </field>
+    </record>
 
 	<record id="action_sale_order_line" model="ir.actions.act_window">
             <field name="name">Sale Order Line</field>

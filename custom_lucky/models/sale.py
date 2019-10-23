@@ -244,5 +244,7 @@ class SaleOrderLine(models.Model):
     date_start = fields.Date("Validity")
     date_end = fields.Date("End Date")
     not_available = fields.Boolean('Not Available')
+    prod_cate_id = fields.Many2one(related="product_id.categ_id", store=True)
+
 
 

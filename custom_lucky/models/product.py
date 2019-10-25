@@ -63,6 +63,27 @@ class ProductTemplate(models.Model):
     req_diff = fields.Boolean("Requeste the difference")
     #add extra product speed field for group by 
     arabic_name = fields.Char('Arabic Name')
+    price_visible = fields.Boolean(string="Price Visible", compute='get_user')
+    cus_price_visible = fields.Boolean(string="Custom Price Visible", compute='get_user')
+
+    @api.multi
+    @api.depends('price_visible','cus_price_visible')
+    def get_user(self, ):
+        user_crnt = self._uid
+        res_user = self.env['res.users'].search([('id', '=', self._uid)])
+        if res_user.has_group('purchase.group_purchase_user') and res_user.has_group('purchase.group_purchase_manager'):
+            for prod in self:
+                prod.price_visible = False
+        else:
+            for prod in self:
+                prod.price_visible = True
+
+        if res_user.has_group('stock.group_stock_user') and res_user.has_group('stock.group_stock_manager'):
+            for prod in self:
+                prod.cus_price_visible = False
+        else:
+            for prod in self:
+                prod.cus_price_visible = True
 
     @api.depends(
         'product_variant_ids',
@@ -82,4 +103,6 @@ class ProductProduct(models.Model):
     _inherit = 'product.product'
 
     product_speed_state = fields.Selection([('fast_product','Fast Products'),('slow_product','Slow Products'),('dead_product','Dead Products')], string='Product Speed State', related="product_tmpl_id.product_speed_state", readonly=True)
+
+
 

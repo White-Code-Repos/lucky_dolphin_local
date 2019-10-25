@@ -171,6 +171,9 @@ class SaleOrderLine(models.Model):
 
     @api.multi
     def action_price(self):
+        if self.not_available:
+            self.write({'purchase_price': self.overall_cost, 'price_state': 'not_available'})
+
         if self.overall_cost:
             if self.vendor_id:
                 vals ={'name' : self.vendor_id.id,
@@ -183,18 +186,31 @@ class SaleOrderLine(models.Model):
 
 				}
                 self.product_id.write({'variant_seller_ids': [(0,0,vals)]})
-            if self.not_available:
-                self.write({'purchase_price':self.overall_cost,'price_state':'not_available'})
-            else:
-                self.write({'purchase_price':self.overall_cost,'price_state':'price','price_description' : self.price_description})
-                if self.order_id:
-                    request = False
-                    for line in self.order_id.order_line:
-                        if line.price_state == 'request':
-                            request = True
-                    if request == False:
-                       self.order_id.write({'state': 'draft'})
-                      
+#OLD_CODE_START
+#           if self.not_available:
+#                self.write({'purchase_price':self.overall_cost,'price_state':'not_available'})
+#            else:
+#                self.write({'purchase_price':self.overall_cost,'price_state':'price','price_description' : self.price_description})
+#                if self.order_id:
+#                    request = False
+#                    for line in self.order_id.order_line:
+#                        if line.price_state == 'request':
+#                            request = True
+#                    if request == False:
+#                       self.order_id.write({'state': 'draft'})
+#Start_New_Code
+            # if self.not_available:
+            #     self.write({'purchase_price':self.overall_cost,'price_state':'not_available'})
+            # else:
+            self.write({'purchase_price':self.overall_cost,'price_state':'price'})
+            if self.order_id:
+                request = False
+                for line in self.order_id.order_line:
+                    if line.price_state == 'request':
+                        request = True
+                if request == False:
+                   self.order_id.write({'state': 'draft'})
+#END_NEW_CODE
     @api.depends('order_id')
     def _get_line_price_state(self):
         for line in self:

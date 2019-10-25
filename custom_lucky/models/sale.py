@@ -262,5 +262,5 @@ class SaleOrderLine(models.Model):
     date_end = fields.Date("End Date")
     not_available = fields.Boolean('Not Available')
     price_description = fields.Text("Description")
-
+    prod_cate_id = fields.Many2one(related="product_id.categ_id", store=True)
 

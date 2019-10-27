@@ -9,12 +9,12 @@ class AccountInvoice(models.Model):
 
     sale_purchase_id = fields.Many2one('purchase.order',string='Purchase Order', compute='_compute_purchase_order')
 
-    eta = fields.Datetime("ETA",related='sale_purchase_id.eta')
-    batch_id = fields.Many2one("sale.order.batch", string="Operation#",related='sale_purchase_id.batch_id')
+    batch_id = fields.Many2one("sale.order.batch", string="Operation#",compute='compute_batch_id')
+    eta = fields.Datetime("ETA",related='batch_id.eta')
     vessel_id = fields.Many2one("res.partner", string="Vessel", domain="[('is_vessel', '=', True)]"
-                                ,related='sale_purchase_id.vessel_id')
-    arrival_port_id = fields.Many2one("delivery.carrier",related='sale_purchase_id.arrival_port_id')
-    delivery_port_id = fields.Many2one("delivery.carrier",related='sale_purchase_id.delivery_port_id')
+                                ,related='batch_id.vessel_id')
+    arrival_port_id = fields.Many2one("delivery.carrier",related='batch_id.arrival_port_id')
+    delivery_port_id = fields.Many2one("delivery.carrier",related='batch_id.delivery_port_id')
 
     @api.depends('origin')
     def _compute_sale_order(self):
@@ -24,8 +24,14 @@ class AccountInvoice(models.Model):
                 invoice.sale_order_id = saleorder.id
 
     @api.depends('origin')
-    def _compute_purchase_order(self):
+    def compute_batch_id(self):
         for invoice in self:
+            saleorder = self.env['sale.order'].search([('name', '=', invoice.origin)], limit=1)
             purchaseorder = self.env['purchase.order'].search([('name', '=', invoice.origin)], limit=1)
+            if saleorder:
+                invoice.sale_order_id = saleorder.id
+                invoice.batch_id = invoice.sale_order_id.batch_id.id
+
             if purchaseorder:
-                invoice.sale_purchase_id = purchaseorder.id
+                invoice.batch_id = purchaseorder.batch_id.id
+

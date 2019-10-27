@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="account_invoice_form_inherit" model="ir.ui.view">
+            <field name="name">Account Invoice From Inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='team_id']" position="after">
+                    <field name="batch_id"/>
+                    <field name="vessel_id"/>
+                    <field name="eta"/>
+                    <field name="arrival_port_id"/>
+                    <field name="delivery_port_id"/>
+                </xpath>
+
+            </field>
+        </record>
+
+         <record id="account_invoice_supplier_form_inherit" model="ir.ui.view">
+            <field name="name">Account Bill From Inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='vendor_bill_purchase_id']" position="after">
+                    <field name="batch_id"/>
+                    <field name="vessel_id"/>
+                    <field name="eta"/>
+                    <field name="arrival_port_id"/>
+                    <field name="delivery_port_id"/>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

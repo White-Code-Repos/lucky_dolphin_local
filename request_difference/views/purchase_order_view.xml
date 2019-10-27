@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="lucky_view_purchase_order_form_new" model="ir.ui.view">
+            <field name="name">Lucky Purchase form view</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="batch_id"/>
+                    <field name="commit_delivery_date"/>
+                    <field name="vessel_id"/>
+                    <field name="eta"/>
+                    <field name="arrival_port_id"/>
+                    <field name="delivery_port_id"/>
+                </xpath>
+
+
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -17,5 +17,6 @@
         'report/report_action_operation.xml',
        'views/invoice_report.xml',
         'views/sale_order_batch_report.xml',
+        'views/invoice_bill_view.xml',
     ]
 }

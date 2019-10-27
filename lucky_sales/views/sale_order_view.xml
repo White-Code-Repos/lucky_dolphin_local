@@ -76,25 +76,29 @@
             </field>
         </record>
 
-	<record id="lucky_view_order_tree" model="ir.ui.view">
+	<record id="lucky_view_order_tree_inherit" model="ir.ui.view">
             <field name="name">Lucky Sale tree view</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_tree"/>
             <field name="arch" type="xml">
-	        <field name="partner_id" position="after">
-			 <field name="vessel_id"/>
-                 </field>	
+	            <field name="partner_id" position="after">
+                    <field name="eta"/>
+			        <field name="vessel_id"/>
+                    <field name="batch_id"/>
+                </field>
             </field>
-        </record>
+    </record>
 
 	 <record id="lucky_view_order_quotation_tree" model="ir.ui.view">
             <field name="name">Lucky Sale tree view</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_quotation_tree"/>
             <field name="arch" type="xml">
-	        <field name="partner_id" position="after">
-			 <field name="vessel_id"/>
-                 </field>	
+	            <field name="partner_id" position="after">
+                    <field name="eta"/>
+			        <field name="vessel_id"/>
+                    <field name="batch_id"/>
+                </field>
             </field>
         </record>
         <!--<report

@@ -3,5 +3,6 @@
 
 from . import sale
 from . import product
+from . import purchase_order
 
 

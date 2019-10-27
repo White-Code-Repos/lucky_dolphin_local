@@ -18,5 +18,6 @@
        'views/invoice_report.xml',
         'views/sale_order_batch_report.xml',
         'views/invoice_bill_view.xml',
+        'views/invoice_print_inherit.xml',
     ]
 }

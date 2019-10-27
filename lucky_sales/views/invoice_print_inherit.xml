@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+	<template id="report_invoice_report_inherit11" inherit_id="account.report_invoice_document">
+		<xpath expr="//div[@name='reference']" position="after">
+
+			<div name="operation" class="col-auto" t-if="o.batch_id">
+				<strong>Operation:</strong>
+				<p t-field="o.batch_id"/>
+			</div>
+			<div name="eta" class="col-auto" t-if="o.eta">
+				<strong>ETA:</strong>
+				<p t-field="o.eta"/>
+			</div>
+			<div name="vessel" class="col-auto" t-if="o.vessel_id">
+				<strong>Vessel:</strong>
+				<p t-field="o.vessel_id.name"/>
+			</div>
+			<div name="arrival_port" class="col-auto" t-if="o.arrival_port_id">
+				<strong>Arrival Port:</strong>
+				<p t-field="o.arrival_port_id.name"/>
+			</div>
+			<div name="delivery_port" class="col-auto" t-if="o.delivery_port_id">
+				<strong>Delivery Port:</strong>
+				<p t-field="o.delivery_port_id.name"/>
+			</div>
+		</xpath>
+	</template>
+	</data>
+</odoo>

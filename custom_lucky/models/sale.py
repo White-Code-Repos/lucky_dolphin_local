@@ -263,4 +263,6 @@ class SaleOrderLine(models.Model):
     not_available = fields.Boolean('Not Available')
     price_description = fields.Text("Description")
     prod_cate_id = fields.Many2one(related="product_id.categ_id", store=True)
+    currency = fields.Selection([('usd','USD'),('eur','EUR'),('egp','EGP')],string='Currency')
+
 

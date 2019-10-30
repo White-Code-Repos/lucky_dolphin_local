@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+      <template id="issue_check_doc">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
+                    <div class="page">
+                       <div class="row text-right"  >
+                           <div class="col-9">
+                               Date
+                           </div>
+                           <div class="col-2">
+                               <span t-field="o.issue_date"/>
+                           </div>
+                           <div class="col-1">
+                               التاريخ
+                           </div>
+                       </div>
+
+                        <div class="row text-center">
+                            <div class="col-12"><span t-field="o.number"/> شيـك</div>
+                        </div>
+
+                        <div class="row text-right">
+                            <div class="col-7 text-center">فرع بورسعيد</div>
+                            <div class="col-3">لاكي دولفين مارين سيرفيس</div>
+                            <div class="col-2"> 0042604718003</div>
+                        </div>
+
+                        <br></br>
+
+                        <div class="row">
+                            <div class="col-4">Against This Cheque Pay to </div>
+                            <div class="col-5"></div>
+                            <div class="col-3 text-right">ادفعو بموجب هذا الشيك </div>
+                        </div>
+                        <hr></hr>
+                        <div class="row">
+                            <div class="col-3">Or to the order of</div>
+                            <div class="col-6"></div>
+                            <div class="col-3 text-right">أو لامره</div>
+                        </div>
+
+                        <br></br>
+
+                        <div class="row" style="padding-top: 1px;">
+                            <div class="col-4">The Sum Of</div>
+                            <div class="col-5"></div>
+                            <div class="col-3 text-right">مبلغا و قدره </div>
+                        </div>
+                        <hr></hr>
+
+                        <br></br>
+
+                        <div class="row" style="padding-top: 1px;">
+                            <div class="col-8"><hr></hr></div>
+                            <div class="col-3" style="height: 50px;width: 50px;background-color: #888;"></div>
+                            <div class="col-1 text-right">المبلـغ SUM</div>
+                        </div>
+
+                        <br></br>
+                        <div class="row" >
+                            <div class="col-2">Signature</div>
+                            <div class="col-3"><hr></hr></div>
+                            <div class="col-1">التوقيع</div>
+                            <div class="col-1"><i class="fa fa-lock" style="font-size:48px;"></i></div>
+                            <div class="col-1">Name</div>
+                            <div class="col-3"><hr></hr></div>
+                            <div class="col-1">الاسم</div>
+                        </div>
+
+
+                    </div>
+                </t>
+            </t>
+    </template>
+    <template id="issue_check">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="lucky_accounting.issue_check_doc" t-lang="o.partner_id.lang"/>
+                </t>
+            </t>
+    </template>
+</odoo>

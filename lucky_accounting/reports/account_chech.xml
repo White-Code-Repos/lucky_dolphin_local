@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+
+    <data>
+        <report id="account_check_report"
+                model="account.check"
+                report_type="qweb-pdf"
+                string="Issue Check"
+                name="lucky_accounting.issue_check"
+                file="lucky_accounting.issue_check"
+                menu="True"/>
+    </data>
+</odoo>

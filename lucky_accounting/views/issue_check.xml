@@ -23,9 +23,9 @@
                         </div>
 
                         <div class="row text-right">
-                            <div class="col-7 text-center">فرع بورسعيد</div>
-                            <div class="col-3">لاكي دولفين مارين سيرفيس</div>
-                            <div class="col-2"> 0042604718003</div>
+                            <div class="col-4 text-center">فرع بورسعيد</div>
+                            <div class="col-5">لاكي دولفين مارين سيرفيس</div>
+                            <div class="col-3"> 0042604718003</div>
                         </div>
 
                         <br></br>
@@ -62,11 +62,11 @@
                         <br></br>
                         <div class="row" >
                             <div class="col-2">Signature</div>
-                            <div class="col-3"><hr></hr></div>
-                            <div class="col-1">التوقيع</div>
+                            <div class="col-2"><hr></hr></div>
+                            <div class="col-2">التوقيع</div>
                             <div class="col-1"><i class="fa fa-lock" style="font-size:48px;"></i></div>
-                            <div class="col-1">Name</div>
-                            <div class="col-3"><hr></hr></div>
+                            <div class="col-2">Name</div>
+                            <div class="col-2"><hr></hr></div>
                             <div class="col-1">الاسم</div>
                         </div>
 

@@ -15,7 +15,7 @@ class AccountInvoice(models.Model):
                                 ,related='batch_id.vessel_id')
     arrival_port_id = fields.Many2one("delivery.carrier",related='batch_id.arrival_port_id')
     delivery_port_id = fields.Many2one("delivery.carrier",related='batch_id.delivery_port_id')
-
+    commit_delivery_date = fields.Datetime("Commitment Delivery Date",related='batch_id.commit_delivery_date',store=True)
     sale_purchase_number = fields.Many2one('purchase.order','Po Number', compute='_compute_sale_purchase_number')
 
     @api.depends('sale_order_id')

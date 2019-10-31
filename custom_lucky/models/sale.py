@@ -173,7 +173,7 @@ class SaleOrderLine(models.Model):
         if (to_currency == from_currency):
             amount = to_currency.round(from_amount) if round else from_amount
         else:
-            rate = self._get_conversion_rate(from_currency, to_currency)
+            rate = self.env['res.currency']._get_conversion_rate(from_currency, to_currency)
             amount = to_currency.round(from_amount * rate) if round else from_amount * rate
         return amount
 

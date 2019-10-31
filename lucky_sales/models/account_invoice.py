@@ -6,7 +6,7 @@ class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
 
 
-    batch_id = fields.Many2one("sale.order.batch", string="Operation#",compute='compute_batch_id')
+    # batch_id = fields.Many2one("sale.order.batch", string="Operation#",compute='compute_batch_id')
 
     sale_order_id = fields.Many2one('sale.order',string='Sale Order', compute='_compute_sale_order')
 

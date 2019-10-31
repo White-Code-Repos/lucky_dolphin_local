@@ -176,7 +176,7 @@ class SaleOrderLine(models.Model):
             date = self._context.get('date') or fields.Date.today()
             company = self.env['res.company'].browse(self._context.get('company_id')) or self.env[
                 'res.users']._get_company()
-            rate = self.env['res.currency']._get_conversion_rate(from_currency, to_currency,c)
+            rate = self.env['res.currency']._get_conversion_rate(from_currency, to_currency)
             amount = to_currency.round(from_amount * rate) if round else from_amount * rate
         return amount
 
@@ -186,6 +186,7 @@ class SaleOrderLine(models.Model):
             if self.currency.id == self.currency_id.id:
                 self.write({'purchase_price': self.overall_cost, 'price_state': 'not_available'})
             else:
+                currency_pool = self.env['res.currency']
                 cost = self.compute_purchase_price(self.currency,self.currency_id,self.overall_cost)
                 self.write({'purchase_price': cost, 'price_state': 'not_available'})
 

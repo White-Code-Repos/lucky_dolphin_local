@@ -173,13 +173,13 @@ class SaleOrderLine(models.Model):
     def action_price(self):
         if self.not_available:
             if self.currency.id == self.currency_id.id:
-                print("%%%%%%%%%%%%%5%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+                raise Warning("%%%%%%%%%%%%%5%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
                 print(self.overall_cost)
                 self.write({'purchase_price': self.overall_cost, 'price_state': 'not_available'})
             else:
                 currency_pool = self.env['res.currency']
                 cost = currency_pool._compute(self.currency,self.currency_id,self.overall_cost)
-                print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+                raise Warning("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
                 print(cost)
                 self.write({'purchase_price': cost, 'price_state': 'not_available'})
 

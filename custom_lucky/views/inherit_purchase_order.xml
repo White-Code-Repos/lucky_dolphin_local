@@ -23,7 +23,7 @@
                             <group>
                                 <field name="not_available"/>
                                 <field name="price_purchase" string="Purchase Price" attrs="{'readonly':[('price_state','=','price')]}" />
-                                <field name="currency_id" />
+                                <field name="currency" />
                                 <field name="overhead_cost" attrs="{'readonly':[('price_state','=','price')]}"/>
                                 <field name="overall_cost"/>
                                 <label for="date_start" string="Validity" />

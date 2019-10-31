@@ -172,7 +172,11 @@ class SaleOrderLine(models.Model):
     @api.multi
     def action_price(self):
         if self.not_available:
-            self.write({'purchase_price': self.overall_cost, 'price_state': 'not_available'})
+            if self.currency.id == self.currency_id.id:
+                self.write({'purchase_price': self.overall_cost, 'price_state': 'not_available'})
+                :  else
+                cost = self.currency.compute(self.overall_cost,self.currency_id)
+                self.write({'purchase_price': cost, 'price_state': 'not_available'})
 
         if self.overall_cost:
             if self.vendor_id:
@@ -182,10 +186,18 @@ class SaleOrderLine(models.Model):
 			'min_qty': self.min_qty,
 			'date_start': self.date_start,	
 			'date_end': self.date_end,
-			'currency_id' :self.currency_id.id,
+			'currency_id' :self.currency.id,
 
 				}
                 self.product_id.write({'variant_seller_ids': [(0,0,vals)]})
+            self.write({'purchase_price': self.overall_cost, 'price_state': 'price'})
+            if self.order_id:
+                request = False
+                for line in self.order_id.order_line:
+                    if line.price_state == 'request':
+                        request = True
+                if request == False:
+                    self.order_id.write({'state': 'draft'})
 #OLD_CODE_START
 #           if self.not_available:
 #                self.write({'purchase_price':self.overall_cost,'price_state':'not_available'})
@@ -202,14 +214,7 @@ class SaleOrderLine(models.Model):
             # if self.not_available:
             #     self.write({'purchase_price':self.overall_cost,'price_state':'not_available'})
             # else:
-            self.write({'purchase_price':self.overall_cost,'price_state':'price'})
-            if self.order_id:
-                request = False
-                for line in self.order_id.order_line:
-                    if line.price_state == 'request':
-                        request = True
-                if request == False:
-                   self.order_id.write({'state': 'draft'})
+
 #END_NEW_CODE
     @api.depends('order_id')
     def _get_line_price_state(self):

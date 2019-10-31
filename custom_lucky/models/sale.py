@@ -177,7 +177,7 @@ class SaleOrderLine(models.Model):
                 print(self.overall_cost)
                 self.write({'purchase_price': self.overall_cost, 'price_state': 'not_available'})
             else:
-                cost = self.currency.compute(self.overall_cost,self.currency_id)
+                cost = self.currency._compute(self.currency,self.currency_id,self.overall_cost)
                 print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
                 print(cost)
                 self.write({'purchase_price': cost, 'price_state': 'not_available'})

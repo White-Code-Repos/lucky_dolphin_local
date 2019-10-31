@@ -9,7 +9,7 @@ class AccountInvoice(models.Model):
 
     sale_purchase_id = fields.Many2one('purchase.order',string='Purchase Order', compute='_compute_purchase_order')
 
-    batch_id = fields.Many2one("sale.order.batch", string="Operation#",compute='compute_batch_id',store=True)
+    batch_id = fields.Many2one("sale.order.batch", string="Operation#",compute='compute_batch_id')
     eta = fields.Datetime("ETA",related='batch_id.eta')
     vessel_id = fields.Many2one("res.partner", string="Vessel", domain="[('is_vessel', '=', True)]"
                                 ,related='batch_id.vessel_id')
@@ -39,9 +39,8 @@ class AccountInvoice(models.Model):
             purchaseorder = self.env['purchase.order'].search([('name', '=', invoice.origin)], limit=1)
             if saleorder:
                 invoice.sale_order_id = saleorder.id
-                if saleorder.batch_id:
-                    invoice.batch_id = invoice.sale_order_id.batch_id.id
+                invoice.batch_id = invoice.sale_order_id.batch_id.id
 
-            if purchaseorder and purchaseorder.batch_id:
+            if purchaseorder :
                 invoice.batch_id = purchaseorder.batch_id.id
 

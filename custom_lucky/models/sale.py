@@ -191,6 +191,7 @@ class SaleOrderLine(models.Model):
                 currency_pool = self.env['res.currency']
                 cost = self.compute_purchase_price(self.currency,self.currency_id,self.overall_cost)
                 print(cost)
+                raise Warning(cost)
                 print(cost)
                 self.write({'purchase_price': cost, 'price_state': 'not_available'})
 

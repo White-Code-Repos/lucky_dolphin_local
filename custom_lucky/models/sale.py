@@ -168,6 +168,14 @@ class SaleOrder(models.Model):
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
+    @api.model
+    def compute_purchase_price(self, from_currency, to_currency, from_amount, round=True):
+        if (to_currency == from_currency):
+            amount = to_currency.round(from_amount) if round else from_amount
+        else:
+            rate = self._get_conversion_rate(from_currency, to_currency)
+            amount = to_currency.round(from_amount * rate) if round else from_amount * rate
+        return amount
 
     @api.multi
     def action_price(self):
@@ -178,7 +186,7 @@ class SaleOrderLine(models.Model):
                 self.write({'purchase_price': self.overall_cost, 'price_state': 'not_available'})
             else:
                 currency_pool = self.env['res.currency']
-                cost = currency_pool._compute(self.currency,self.currency_id,self.overall_cost)
+                cost = self.compute_purchase_price(self.currency,self.currency_id,self.overall_cost)
                 print(cost)
                 print(cost)
                 self.write({'purchase_price': cost, 'price_state': 'not_available'})

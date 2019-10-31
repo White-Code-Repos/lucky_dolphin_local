@@ -1,6 +1,6 @@
 {
     'name': 'Lucky Dolphin Sales',
-    'depends': ['sale', 'purchase', 'base', 'delivery','request_difference'],
+    'depends': ['sale', 'purchase', 'base', 'delivery'],
     'data': [
         'security/ir.model.access.csv',
         'data/ir_sequence_data.xml',

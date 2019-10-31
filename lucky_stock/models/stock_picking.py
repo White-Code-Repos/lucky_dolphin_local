@@ -13,12 +13,11 @@ class StockPickingInherit(models.Model):
 
     @api.depends('origin')
     def compute_batch_id(self):
-        for invoice in self:
-            saleorder = self.env['sale.order'].search([('name', '=', invoice.origin)], limit=1)
-            purchaseorder = self.env['purchase.order'].search([('name', '=', invoice.origin)], limit=1)
+        for obj in self:
+            saleorder = self.env['sale.order'].search([('name', '=', obj.origin)], limit=1)
+            purchaseorder = self.env['purchase.order'].search([('name', '=', obj.origin)], limit=1)
             if saleorder:
-                invoice.sale_order_id = saleorder.id
-                invoice.batch_id = invoice.sale_order_id.batch_id.id
+                invoice.batch_id = invoice.saleorder.batch_id.id
 
             if purchaseorder:
                 invoice.batch_id = purchaseorder.batch_id.id

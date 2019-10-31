@@ -7,6 +7,21 @@ class StockPickingInherit(models.Model):
     vessel_id = fields.Many2one(related="sale_id.vessel_id")
     delivery_port_id = fields.Many2one(related="sale_id.delivery_port_id")
     client_order_ref = fields.Char(related="sale_id.client_order_ref")
+    
+    batch_id = fields.Many2one("sale.order.batch", string="Operation#",compute='compute_batch_id')
+    commit_delivery_date = fields.Datetime("Commitment Delivery Date",related='batch_id.commit_delivery_date')
+
+    @api.depends('origin')
+    def compute_batch_id(self):
+        for invoice in self:
+            saleorder = self.env['sale.order'].search([('name', '=', invoice.origin)], limit=1)
+            purchaseorder = self.env['purchase.order'].search([('name', '=', invoice.origin)], limit=1)
+            if saleorder:
+                invoice.sale_order_id = saleorder.id
+                invoice.batch_id = invoice.sale_order_id.batch_id.id
+
+            if purchaseorder:
+                invoice.batch_id = purchaseorder.batch_id.id
 
 
 class StockQuantPackage(models.Model):

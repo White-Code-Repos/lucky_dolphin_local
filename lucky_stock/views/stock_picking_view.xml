@@ -11,6 +11,8 @@
                     <field name="vessel_id" attrs="{'invisible':[('sale_id','=',False)]}"/>
                     <field name="delivery_port_id" attrs="{'invisible':[('sale_id','=',False)]}"/>
                     <field name="client_order_ref" attrs="{'invisible':[('sale_id','=',False)]}"/>
+                    <field name="batch_id"/>
+                    <field name="commit_delivery_date" />
                 </xpath>
             </field>
         </record>

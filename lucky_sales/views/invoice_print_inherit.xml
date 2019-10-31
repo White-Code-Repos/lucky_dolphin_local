@@ -24,6 +24,17 @@
 				<strong>Delivery Port:</strong>
 				<p t-field="o.delivery_port_id.name"/>
 			</div>
+			<div name="commit_delivery_date" class="col-auto" t-if="o.commit_delivery_date">
+				<strong>Commit Delivery Date:</strong>
+				<p t-field="o.commit_delivery_date"/>
+			</div>
+
+			<div name="sale_purchase_number" class="col-auto" t-if="o.sale_purchase_number">
+				<strong>PO Number:</strong>
+				<p t-field="o.sale_purchase_number"/>
+			</div>
+
+
 		</xpath>
 	</template>
 	</data>

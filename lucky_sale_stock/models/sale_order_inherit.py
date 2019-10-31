@@ -41,8 +41,7 @@ class SaleOrderLine(models.Model):
 
                 # conditions part for stock qty
                 for pricelist_line in line.order_id.pricelist_id.product_pricelist_line_ids:
-                    if (
-                                    pricelist_line.product_id == line.product_id or pricelist_line.categ_id == line.product_id.categ_id) and pricelist_line.percentage_from <= product_percentage <= pricelist_line.percentage_to:
+                    if (pricelist_line.product_id == line.product_id or pricelist_line.categ_id == line.product_id.categ_id) and pricelist_line.percentage_from <= product_percentage <= pricelist_line.percentage_to:
                         if pricelist_line.apply_sign == 'minus':
                             pricelist_percentage = -1 * pricelist_line.apply_percentage
                         elif pricelist_line.apply_sign == 'plus':

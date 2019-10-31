@@ -16,6 +16,15 @@ class AccountInvoice(models.Model):
     arrival_port_id = fields.Many2one("delivery.carrier",related='batch_id.arrival_port_id')
     delivery_port_id = fields.Many2one("delivery.carrier",related='batch_id.delivery_port_id')
 
+    sale_purchase_number = fields.Many2one('purchase.order','Po Number', compute='_compute_sale_purchase_number')
+
+    @api.depends('sale_order_id')
+    def _compute_sale_purchase_number(self):
+        for invoice in self:
+            if invoice.sale_order_id:
+                purchaseorder = self.env['purchase.order'].search([('origin', '=', invoice.sale_order_id.name)], limit=1)
+                self.sale_purchase_number = purchaseorder.id
+
     @api.depends('origin')
     def _compute_sale_order(self):
         for invoice in self:

@@ -9,6 +9,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='team_id']" position="after">
                     <field name="batch_id"/>
+                    <field name="commit_delivery_date"/>
                     <field name="vessel_id"/>
                     <field name="eta"/>
                     <field name="arrival_port_id"/>
@@ -25,6 +26,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='vendor_bill_purchase_id']" position="after">
                     <field name="batch_id"/>
+                    <field name="commit_delivery_date"/>
                     <field name="vessel_id"/>
                     <field name="eta"/>
                     <field name="arrival_port_id"/>

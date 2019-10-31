@@ -32,16 +32,16 @@ class AccountInvoice(models.Model):
             if saleorder:
                 invoice.sale_order_id = saleorder.id
 
-    # @api.depends('origin')
-    # def compute_batch_id(self):
-    #     for invoice in self:
-    #         saleorder = self.env['sale.order'].search([('name', '=', invoice.origin)], limit=1)
-    #         purchaseorder = self.env['purchase.order'].search([('name', '=', invoice.origin)], limit=1)
-    #         if saleorder:
-    #             invoice.sale_order_id = saleorder.id
-    #             if saleorder.batch_id:
-    #                 invoice.batch_id = invoice.sale_order_id.batch_id.id
-    #
-    #         if purchaseorder and purchaseorder.batch_id:
-    #             invoice.batch_id = purchaseorder.batch_id.id
+    @api.depends('origin')
+    def compute_batch_id(self):
+        for invoice in self:
+            saleorder = self.env['sale.order'].search([('name', '=', invoice.origin)], limit=1)
+            purchaseorder = self.env['purchase.order'].search([('name', '=', invoice.origin)], limit=1)
+            if saleorder:
+                invoice.sale_order_id = saleorder.id
+                if saleorder.batch_id:
+                    invoice.batch_id = invoice.sale_order_id.batch_id.id
+
+            if purchaseorder and purchaseorder.batch_id:
+                invoice.batch_id = purchaseorder.batch_id.id
 

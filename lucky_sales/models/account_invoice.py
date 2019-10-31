@@ -5,11 +5,13 @@ from odoo import models, fields, api
 class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
 
+
+    batch_id = fields.Many2one("sale.order.batch", string="Operation#",compute='compute_batch_id')
+
     sale_order_id = fields.Many2one('sale.order',string='Sale Order', compute='_compute_sale_order')
 
     sale_purchase_id = fields.Many2one('purchase.order',string='Purchase Order', compute='_compute_purchase_order')
 
-    batch_id = fields.Many2one("sale.order.batch", string="Operation#",compute='compute_batch_id')
     eta = fields.Datetime("ETA",related='batch_id.eta')
     vessel_id = fields.Many2one("res.partner", string="Vessel", domain="[('is_vessel', '=', True)]"
                                 ,related='batch_id.vessel_id')

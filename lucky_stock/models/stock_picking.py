@@ -17,10 +17,10 @@ class StockPickingInherit(models.Model):
             saleorder = self.env['sale.order'].search([('name', '=', obj.origin)], limit=1)
             purchaseorder = self.env['purchase.order'].search([('name', '=', obj.origin)], limit=1)
             if saleorder:
-                invoice.batch_id = invoice.saleorder.batch_id.id
+                obj.batch_id = obj.saleorder.batch_id.id
 
             if purchaseorder:
-                invoice.batch_id = purchaseorder.batch_id.id
+                obj.batch_id = purchaseorder.batch_id.id
 
 
 class StockQuantPackage(models.Model):

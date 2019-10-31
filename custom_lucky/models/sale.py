@@ -171,14 +171,14 @@ class SaleOrderLine(models.Model):
     @api.multi
     def action_price(self):
         cost=0
+        if self.currency.id == self.currency_id.id:
+            cost = self.overall_cost
+        else:
+            currency_pool = self.env['res.currency']
+            cost = currency_pool._compute(self.currency, self.currency_id, self.overall_cost)
+
         if self.not_available:
-            if self.currency.id == self.currency_id.id:
-                self.write({'purchase_price': self.overall_cost, 'price_state': 'not_available'})
-                cost=self.overall_cost
-            else:
-                currency_pool = self.env['res.currency']
-                cost = currency_pool._compute(self.currency,self.currency_id,self.overall_cost)
-                self.write({'purchase_price': cost, 'price_state': 'not_available'})
+            self.write({'purchase_price': self.overall_cost, 'price_state': 'not_available'})
 
         if self.overall_cost:
             if self.vendor_id:

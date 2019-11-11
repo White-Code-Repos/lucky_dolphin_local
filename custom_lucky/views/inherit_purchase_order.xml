@@ -19,6 +19,7 @@
                                 <field name="vendor_id" required="1" domain="[('supplier','=',True)]" attrs="{'readonly':[('price_state','=','price')]}"/>
                                 <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
                                 <field name="min_qty" attrs="{'readonly':[('price_state','=','price')]}" />
+
                             </group>
                             <group>
                                 <field name="not_available"/>
@@ -49,6 +50,7 @@
                                 <field name="product_id" readonly="1"/>
                                 <field name="vendor_id"  domain="[('supplier','=',True)]" readonly="1"/>
                                 <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                                <field name="sale_create_date"/>
                             </group>
                             <group>
                                  <field name="price_purchase" string="Purchase Price" readonly="1"/>
@@ -69,6 +71,7 @@
                 <tree string="Sales Order Lines" create="false">
                     <field name="product_id"/>
                     <field name="vendor_id"/>
+                    <field name="sale_create_date"/>
 		     <field name="price_purchase" />
                     <field name="overhead_cost"/>
 		    <field name="overall_cost" />

@@ -17,7 +17,7 @@
     'data': [
 	 'security/ir.model.access.csv',
 	'views/inherit_product_template_view.xml',
-	'views/inherit_sale_order_view.xml',	
+	'views/inherit_sale_order_view.xml',
 	'views/inherit_product_pricelist_view.xml',
 	'views/inherit_sale_template_report.xml',
 	'views/inherit_purchase_order.xml',

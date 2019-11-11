@@ -271,5 +271,7 @@ class SaleOrderLine(models.Model):
     price_description = fields.Text("Description")
     prod_cate_id = fields.Many2one(related="product_id.categ_id", store=True)
     currency = fields.Many2one('res.currency', string='Currency')
+    
+    sale_create_date = fields.Datetime(string='Date', readonly=True,related='order_id.create_date')
 
 

@@ -112,6 +112,8 @@ class ProductPricelist(models.Model):
 
             def compute_price_ct(items):
                 price = product.price_compute('list_price')[product.id]
+                cur = product.currency_id
+                price = cur._convert(price, self.currency_id, self.env.user.company_id, date, round=False)
                 suitable_rule = False
                 for rule in items:
                     if rule.min_quantity and qty_in_product_uom < rule.min_quantity:
@@ -433,6 +435,9 @@ class ProductPricelist(models.Model):
                             if not self.currency_id == product.market_price_currency:
                                 cur = product.market_price_currency
                                 price = cur._convert(price, self.currency_id, self.env.user.company_id, date, round=False)
+                    elif suitable_rule.base == 'list_price':
+                        cur = product.currency_id
+                        price = cur._convert(price, self.currency_id, self.env.user.company_id, date, round=False)
 
                 # if product.market_price_currency.id != self.currency_id.id:
                 #     price = product.market_price_currency._convert(price, self.currency_id, self.env.user.company_id, date, round=False)

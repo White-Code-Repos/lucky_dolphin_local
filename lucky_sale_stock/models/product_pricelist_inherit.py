@@ -438,20 +438,27 @@ class ProductPricelist(models.Model):
                     elif suitable_rule.base == 'list_price':
                         cur = product.currency_id
                         price = cur._convert(price, self.currency_id, self.env.user.company_id, date, round=False)
-
                 # if product.market_price_currency.id != self.currency_id.id:
                 #     price = product.market_price_currency._convert(price, self.currency_id, self.env.user.company_id, date, round=False)
-
                 results[product.id] = (price, suitable_rule and suitable_rule.id or False)
             if dropship in product.route_ids.ids:
                 dropship_rules = items.filtered(lambda rule: rule.dropship)
-                compute_price_ct(dropship_rules)
+                if dropship_rules:
+                    compute_price_ct(dropship_rules)
+                else:
+                    compute_price_ct(items)
             elif product.last_purchase_price==0.00:
                 last_po_0_rules = items.filtered(lambda rule: rule.last_po_0)
-                compute_price_ct(last_po_0_rules)
+                if last_po_0_rules:
+                    compute_price_ct(last_po_0_rules)
+                else:
+                    compute_price_ct(items)
             elif product.available ==0.00:
                 available_rules = items.filtered(lambda rule: rule.available_is_0)
-                compute_price_ct(available_rules)
+                if available_rules:
+                    compute_price_ct(available_rules)
+                else:
+                    compute_price_ct(items)
             else:
                 compute_price_ct(items.filtered(lambda rule: rule.available_is_0==False and rule.dropship==False and rule.last_po_0==False))
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, api, fields, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError,UserError
 from odoo import tools
 
 class ProductPricelist(models.Model):

@@ -161,8 +161,7 @@ class SaleOrder(models.Model):
 			    uom=line.product_uom.id
 			)
                     line.price_unit = self.env['account.tax']._fix_tax_included_price_company(line._get_display_price(product), product.taxes_id, line.tax_id, line.company_id)
-
-
+                    line.update(line._get_purchase_price(self.pricelist_id, line.product_id, line.product_uom, fields.Date.context_today(self)))
 #sale order line
 #add requested and priced value stage
 class SaleOrderLine(models.Model):
